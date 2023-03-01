@@ -8,7 +8,7 @@ import AddContactScreen from "../containers/AddContact";
 
 export const BOTTOM_TAB_SCREENS = [
   {
-    name: "Suggestion",
+    name: "Reminders",
     component: SuggestionScreen,
     inactiveIcon: "Date_icon",
     activeIcon: "Recent_blue",
