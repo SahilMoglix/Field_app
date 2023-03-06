@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, TouchableOpacity,Platform } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { APP_STACK_SCREENS, BOTTOM_TAB_SCREENS } from "../constants/index";
-// import CustomeIcon from "../component/common/CustomeIcon";
+//import CustomeIcon from "../component/common/CustomeIcon";
 import colors from "../Theme/Colors";
 import Dimension from "../Theme/Dimension";
 
@@ -78,7 +78,7 @@ const Routes = (props) => {
             borderTopLeftRadius: 16,
             borderTopRightRadius: 16,
             backgroundColor: "#fff",
-            height: 80,
+            height: Platform.OS === 'ios'? 85:80,
             borderBottomWidth: 0,
           },
         })}
@@ -102,7 +102,7 @@ const Routes = (props) => {
         screenOptions={{
           headerShown: false,
         }}
-        initialRouteName="HomeApp"
+        initialRouteName="Splash"
       >
         <AppStack.Screen
           screenOptions={{
@@ -137,13 +137,16 @@ const styles = StyleSheet.create({
     fontFamily: Dimension.CustomMediumFont,
     marginTop: 4,
     color: colors.bottomTabColor,
+    paddingBottom:5
   },
 
   iconAlignment: {
     alignItems: "center",
     alignSelf: "center",
     paddingBottom: Dimension.padding5,
-    paddingHorizontal: Dimension.padding10,
+    paddingHorizontal: Dimension.padding5,
+    borderBottomWidth: 4,
+    borderBottomColor:"#fff"
   },
   ActiveIconBtn: {
     borderBottomColor: colors.CtaColor,
@@ -151,7 +154,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
     paddingBottom: Dimension.padding5,
-    paddingHorizontal: Dimension.padding10,
+    paddingHorizontal: Dimension.padding5,
   },
 });
 const tabBarOptions = {
