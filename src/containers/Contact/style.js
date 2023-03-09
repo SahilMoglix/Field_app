@@ -1,6 +1,7 @@
 import { StyleSheet,Platform} from "react-native";
 import Dimension from '../../Theme/Dimension';
 import colors from '../../Theme/Colors';
+import { DIFF_DELETE } from "jest-diff";
 const styles = StyleSheet.create({
   
   TopHeader:{
@@ -85,8 +86,8 @@ const styles = StyleSheet.create({
     borderColor:"#D3D3D3",
   },
   contactDat: {
-    flex: 1,
-    justifyContent: 'center',
+    //flex: 1,
+   // justifyContent: 'center',
     paddingLeft: 5,
   },
   txt: {
@@ -104,6 +105,37 @@ const styles = StyleSheet.create({
     fontFamily:Dimension.CustomRegularFont,
     color:colors.FontColor,
     justifyContent:"flex-start"
+  },
+  BtnWrap:{
+    borderWidth:1,
+    borderColor:"#1568E5",
+    borderRadius:50,
+    flexDirection:"row",
+    alignSelf:"flex-start",
+    paddingHorizontal:Dimension.padding5,
+    paddingVertical:2
+  },
+  TopBtn:{
+    paddingHorizontal:Dimension.padding20,
+    paddingVertical:Dimension.padding6,
+    backgroundColor:"#fff",
+    borderRadius:50
+  },
+  BtnTxt:{
+    fontSize:Dimension.font14,
+    fontFamily:Dimension.CustomMediumFont,
+    color:"#1568E5",
+  },
+  ActiveTopBtn:{
+    paddingHorizontal:Dimension.padding20,
+    paddingVertical:Dimension.padding6,
+    backgroundColor:"#1568E5",
+    borderRadius:50
+  },
+  ActiveBtnTxt:{
+    fontSize:Dimension.font14,
+    fontFamily:Dimension.CustomMediumFont,
+    color:"#fff",
   },
 });
 

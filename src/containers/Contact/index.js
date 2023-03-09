@@ -7,7 +7,8 @@ import {
   Platform,Image,
   StyleSheet,
   ActivityIndicator,
-  TextInput
+  TextInput,
+  TouchableOpacity
 } from 'react-native';
 import Contacts from 'react-native-contacts';
 import Dimension from '../../Theme/Dimension';
@@ -15,6 +16,7 @@ import styles from './style';
 
 const ContactScreen = props => {
   const [contacts, setContacts] = useState([]);
+  const [syncPhone,setSyncPhone] = useState(false)
   const [contactsLoader, setContactsLoader] = useState(false);
   useEffect(() => {
     setContactsLoader(true);
@@ -78,10 +80,11 @@ const ContactScreen = props => {
             {contact?.middleName && contact.middleName + ' '}
             {contact?.familyName}
           </Text>
-          <Text style={styles.name}>{contact?.company}</Text>
           <Text style={styles.phoneNumber}>
             {contact?.phoneNumbers[0]?.number}
           </Text>
+          <Text style={styles.name}>{contact?.company}</Text>
+         
           
         </View>
       </View>
@@ -110,7 +113,14 @@ const ContactScreen = props => {
 
       </View>
       <View style={styles.HeaderForBtn}>
-
+      <View style={styles.BtnWrap}>
+        <TouchableOpacity style={styles.TopBtn}>
+          <Text style={styles.BtnTxt}>Focused</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.ActiveTopBtn}>
+          <Text style={styles.ActiveBtnTxt}>Phone</Text>
+        </TouchableOpacity>
+      </View>
       </View>
       <View style={styles.searchWraper}>
       <TextInput
