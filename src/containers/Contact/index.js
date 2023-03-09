@@ -7,8 +7,11 @@ import {
   Platform,Image,
   StyleSheet,
   ActivityIndicator,
+  TextInput
 } from 'react-native';
 import Contacts from 'react-native-contacts';
+import Dimension from '../../Theme/Dimension';
+import styles from './style';
 
 const ContactScreen = props => {
   const [contacts, setContacts] = useState([]);
@@ -60,15 +63,15 @@ const ContactScreen = props => {
   const Contact = ({contact}) => {
     return (
       <View style={styles.contactCon}>
-        <View style={styles.imgCon}>
+        
           <View style={styles.placeholder}>
             {contact?.hasThumbnail?
-            <Image source={{uri:contact?.thumbnailPath}}  style={{width: 40, height: 40}}/>
+            <Image source={{uri:contact?.thumbnailPath}}  style={{width: 48, height: 48,borderRadius:48}}/>
             :<Text style={styles.txt}>
               {contact?.givenName[0]}
               </Text>}
           </View>
-        </View>
+        
         <View style={styles.contactDat}>
           <Text style={styles.name}>
             {contact?.givenName}{' '}
@@ -99,7 +102,29 @@ const ContactScreen = props => {
   };
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1,marginTop:Dimension.margin40,backgroundColor:"#fff"}}>
+      <View style={styles.headerWrap}>
+      <View style={styles.TopHeader}>
+        <Text style={styles.headingTxt}>Contacts</Text>
+
+
+      </View>
+      <View style={styles.HeaderForBtn}>
+
+      </View>
+      <View style={styles.searchWraper}>
+      <TextInput
+        placeholder={'Search by name, company'}
+        returnKeyType={'search'}
+        //onChangeText={onSearchText}
+       // value={inputValue}
+        ellipsizeMode="tail"
+        placeholderTextColor={'#8E8E93'}
+        numberOfLines={1}
+        style={styles.SearchInputCss}>
+     </TextInput>
+    </View>
+    </View>
       {contactsLoader ? (
         <ActivityIndicator
           color={'red'}
@@ -123,43 +148,6 @@ const ContactScreen = props => {
   );
 };
 
-const styles = StyleSheet.create({
-  list: {
-    flex: 1,
-  },
-  contactCon: {
-    flex: 1,
-    flexDirection: 'row',
-    padding: 5,
-    borderBottomWidth: 0.5,
-    borderBottomColor: '#d9d9d9',
-  },
-  imgCon: {},
-  placeholder: {
-    width: 55,
-    height: 55,
-    borderRadius: 30,
-    overflow: 'hidden',
-    backgroundColor: '#d9d9d9',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  contactDat: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingLeft: 5,
-  },
-  txt: {
-    fontSize: 18,
-  },
-  name: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#000',
-  },
-  phoneNumber: {
-    color: '#888',
-  },
-});
+
 
 export default ContactScreen;
