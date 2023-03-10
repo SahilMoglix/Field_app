@@ -8,7 +8,7 @@ const scale = SCREEN_WIDTH / 320;
 const normalize = size => {
   const newSize = size * scale;
   if (Platform.OS === 'ios') {
-    return Math.round(PixelRatio.roundToNearestPixel(newSize));
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 3;
   } else {
     return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2;
   }
@@ -23,8 +23,8 @@ const Dimension = {
   font12: normalize(11),
   font13: normalize(12),
   font14: normalize(13),
-  font16: normalize(15),
   font15: normalize(14),
+  font16: normalize(15),
   font18: normalize(17),
   font20: normalize(19),
   font22: normalize(20),
@@ -76,7 +76,7 @@ const Dimension = {
   margin60: normalize(60),
   margin25: normalize(25),
   margin28: normalize(28),
-  margin40: normalize(40),
+  
   margin50: normalize(50),
   margin60: normalize(60),
   margin70: normalize(70),

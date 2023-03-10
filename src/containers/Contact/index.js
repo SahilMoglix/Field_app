@@ -4,7 +4,7 @@ import {
   PermissionsAndroid,
   View,
   Text,
-  Platform,
+  Platform,Image,
   StyleSheet,
   ActivityIndicator,
 } from 'react-native';
@@ -41,6 +41,7 @@ const ContactScreen = props => {
   const readContacts = () => {
     Contacts.getAll()
       .then(contacts => {
+        console.log("all contacts list", contacts)
         setContacts(contacts);
         setContactsLoader(false);
       })
@@ -61,7 +62,11 @@ const ContactScreen = props => {
       <View style={styles.contactCon}>
         <View style={styles.imgCon}>
           <View style={styles.placeholder}>
-            <Text style={styles.txt}>{contact?.givenName[0]}</Text>
+            {contact?.hasThumbnail?
+            <Image source={{uri:contact?.thumbnailPath}}  style={{width: 40, height: 40}}/>
+            :<Text style={styles.txt}>
+              {contact?.givenName[0]}
+              </Text>}
           </View>
         </View>
         <View style={styles.contactDat}>
@@ -74,6 +79,7 @@ const ContactScreen = props => {
           <Text style={styles.phoneNumber}>
             {contact?.phoneNumbers[0]?.number}
           </Text>
+          
         </View>
       </View>
     );
