@@ -11,9 +11,10 @@ import {
   TouchableOpacity,
 } from "react-native";
 import Contacts from "react-native-contacts";
-//import { Icon } from "react-native-elements";
 import Dimension from "../../Theme/Dimension";
 import styles from "./style";
+import CustomeIcon from '../../component/CustomeIcon';
+
 
 const ContactScreen = (props) => {
   const flatListRef = React.useRef();
@@ -148,6 +149,7 @@ const ContactScreen = (props) => {
         </View>
 
         <View style={styles.searchWraper}>
+        <CustomeIcon name={'search'} size={20} color={'#8E8E93'} style={styles.searchIcon}></CustomeIcon>
           <View style={{ flex: 4 }}>
             <TextInput
               placeholder={"Search by name, company"}
@@ -161,14 +163,16 @@ const ContactScreen = (props) => {
               style={styles.SearchInputCss}
             ></TextInput>
           </View>
-          {searchValue.length > 0 && <View style={{ flex: 1 }}>
-          <TouchableOpacity onPress={()=>setSearch("")} activeOpacity={0.5}>
-            <Image
+          {searchValue.length > 0 && <>
+          <TouchableOpacity onPress={()=>setSearch("")} activeOpacity={0.5} style={styles.crossIcon}>
+            {/* <Icon name={'close-circle'} color={'#1568E5'} size={22} ></Icon> */}
+            <CustomeIcon name={'Cancel'} size={20} color={'#1568E5'}></CustomeIcon>
+            {/* <Image
               source={require("../../assets/images/cross-icon.png")}
               style={{ width: 25, height: 25 }}
-            />
+            /> */}
             </TouchableOpacity>
-          </View>}
+          </>}
         </View>
       </View>
       {contactsLoader ? (

@@ -42,12 +42,23 @@ const styles = StyleSheet.create({
     shadowRadius: 2.62,
     elevation: 4,
   },
+  crossIcon:{
+    position:"absolute",
+    top:10,
+    right:10,
+  },
+  searchIcon:{
+    position:"absolute",
+    top:10,
+    left:10, 
+  },
   SearchInputCss: {
     fontSize: Dimension.font14,
     color: colors.FontColor,
     fontFamily: Dimension.CustomRegularFont,
     height: Dimension.height40,
     width: '90%',
+    paddingHorizontal:Dimension.padding25
 
     // flex: 8,
   },
