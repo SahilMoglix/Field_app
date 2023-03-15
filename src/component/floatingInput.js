@@ -2,8 +2,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { TextInput, Text, StyleSheet, View, Animated } from "react-native";
 import CustomeIcon from './CustomeIcon';
-import Dimension from '../../Theme/Dimension';  
-import colors from '../../Theme/Colors';  
+import Dimension from '../Theme/Dimension';  
+import colors from '../Theme/Colors';  
 const styles = StyleSheet.create({
     WrapperStyle: {
       borderWidth: 1,

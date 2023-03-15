@@ -14,9 +14,10 @@ import Contacts from "react-native-contacts";
 import Dimension from "../../Theme/Dimension";
 import styles from "./style";
 import CustomeIcon from '../../component/CustomeIcon';
-
+import { useNavigation } from "@react-navigation/native";
 
 const ContactScreen = (props) => {
+  const navigation = useNavigation();
   const flatListRef = React.useRef();
   const [contacts, setContacts] = useState([]);
   const [searchValue, setSearch] = useState("");
@@ -125,6 +126,9 @@ const ContactScreen = (props) => {
     return mutateContacts;
   };
 
+  const AddContact =()=>{
+    navigation.navigate("AddContact")
+  }
   return (
     <View
       style={{
@@ -147,7 +151,11 @@ const ContactScreen = (props) => {
             </TouchableOpacity>
           </View>
         </View>
-
+      <View>
+      <TouchableOpacity onPress={AddContact}>
+              <Text >Add</Text>
+            </TouchableOpacity>
+      </View>
         <View style={styles.searchWraper}>
         <CustomeIcon name={'search'} size={20} color={'#8E8E93'} style={styles.searchIcon}></CustomeIcon>
           <View style={{ flex: 4 }}>

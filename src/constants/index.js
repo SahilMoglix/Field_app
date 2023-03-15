@@ -15,6 +15,12 @@ export const BOTTOM_TAB_SCREENS = [
     inactiveIcon: "Date_icon",
     activeIcon: "Recent_blue",
   },
+  {
+    name: "Communication",
+    component: ActivityScreen,
+    inactiveIcon: "Alerts_grey",
+    activeIcon: "Alerts_blue",
+  },
   // {
   //   name: "My Visit",
   //   component: MyVisitScreen,
@@ -27,12 +33,7 @@ export const BOTTOM_TAB_SCREENS = [
     inactiveIcon: "Contact_grey",
     activeIcon: "Contact_Blue",
   },
-  {
-    name: "Communication",
-    component: ActivityScreen,
-    inactiveIcon: "Alerts_grey",
-    activeIcon: "Alerts_blue",
-  },
+ 
 ];
 
 // export const AUTH_STACK_SCREENS = [
@@ -59,4 +60,5 @@ export const APP_STACK_SCREENS = [
     name: "Login",
     component: LoginScreen
   },
+  
 ];

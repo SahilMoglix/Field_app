@@ -1,16 +1,11 @@
 import React from "react";
 import { View, Text } from "react-native";
-import {
-  Calendar,
-  LocaleConfig,
-  CalendarList,
-  Agenda,
-} from "react-native-calendars";
+import Calendars from "../../component/Calendars";
 
 const CalendarScreen = () => {
   return (
     <View>
-      <Text>Suggestion</Text>
+      <Calendars></Calendars>
     </View>
   );
 };
