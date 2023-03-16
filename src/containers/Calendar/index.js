@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { View, Text,TouchableOpacity,Button } from "react-native";
 import Calendars from "../../component/Calendars";
 import EventList from "../../component/EventList";
@@ -6,6 +6,7 @@ import styles from './style';
 import Dimension from "../../Theme/Dimension";
 
 const CalendarScreen = () => {
+  const [type, setType] = useState("cal")
   return (
     <View
       style={{
@@ -19,12 +20,12 @@ const CalendarScreen = () => {
       <Text style={styles.headingTxt}>Calendar</Text>
     </View>
     <View>
-      <Button title="Cal" />
-      <Button title="List" />
+      <Button title="Cal" onPress={() => setType("cal")}/>
+      <Button title="List" onPress={() => setType("list")}/>
     </View>
   </View>
     <View>
-      <Calendars></Calendars>
+      {type=="cal"&& <Calendars></Calendars>}
       <EventList></EventList>
     </View>
     </View>
