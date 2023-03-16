@@ -159,8 +159,9 @@ const ContactScreen = (props) => {
             </TouchableOpacity>
           </View>
           <View>
-          <TouchableOpacity onPress={addContactModal}>
-              <Text style={styles.addBtnTxt}> + Add</Text>
+          <TouchableOpacity onPress={addContactModal} style={{flexDirection:"row"}}>
+            <CustomeIcon name={'Add-blue'} size={18} color={'#1568E5'}></CustomeIcon>
+              <Text style={styles.addBtnTxt}> Add</Text>
             </TouchableOpacity>
         </View>
         </View>

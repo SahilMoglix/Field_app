@@ -4,6 +4,8 @@ import Calendars from "../../component/Calendars";
 import EventList from "../../component/EventList";
 import styles from './style';
 import Dimension from "../../Theme/Dimension";
+import CustomeIcon from "../../component/CustomeIcon";
+import { ScrollView } from "react-native-gesture-handler";
 
 const CalendarScreen = () => {
   return (
@@ -18,15 +20,21 @@ const CalendarScreen = () => {
     <View style={styles.TopHeader}>
       <Text style={styles.headingTxt}>Calendar</Text>
     </View>
-    <View>
-      <Button title="Cal" />
-      <Button title="List" />
+    <View style={styles.rightWrap}>
+      <TouchableOpacity style={styles.activRightBtn}>
+      <CustomeIcon name={'Calendar-black'} size={18} color={'#1568E5'}></CustomeIcon>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.InactivRightBtn}>
+      <CustomeIcon name={'List-black'} size={18} color={'#3c3c3c'}></CustomeIcon>
+      </TouchableOpacity>
     </View>
   </View>
-    <View>
+    <ScrollView>
       <Calendars></Calendars>
       <EventList></EventList>
-    </View>
+      <EventList></EventList>
+
+    </ScrollView>
     </View>
   );
 };

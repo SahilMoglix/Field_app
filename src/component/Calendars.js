@@ -40,7 +40,7 @@ const Calendars = (props) => {
       const [currentDate, setCurrentDate] = useState(formatDate(new Date()));
       console.log(currentDate)
     return (
-        <View style={{ backgroundColor: "#fff", flex: 1,marginTop:30 }}>
+        <View style={{ backgroundColor: "#fff",}}>
         <Calendar
         // Initially visible month. Default = now
         current={currentDate}
@@ -127,13 +127,11 @@ const Calendars = (props) => {
         // Enable the option to swipe between months. Default = false
         enableSwipeMonths={true}
         style={{
-          marginTop: Dimension.margin10,
+         // marginTop: Dimension.margin10,
           marginBottom:Dimension.margin5,
           paddingBottom: Dimension.padding10,
           shadowColor: "#000",
-          borderWidth: 1,
-          borderColor: 'gray',
-          height: 350,
+         height: 320,
             shadowOffset: {
                 width: 0,
                 height: 5,

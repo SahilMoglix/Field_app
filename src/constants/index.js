@@ -12,14 +12,14 @@ export const BOTTOM_TAB_SCREENS = [
   {
     name: "Calender",
     component: CalendarScreen,
-    inactiveIcon: "Date_icon",
-    activeIcon: "Recent_blue",
+    inactiveIcon: "Calendar-Grey-Tab",
+    activeIcon: "Calendar-Blue-Tab",
   },
   {
     name: "Communication",
     component: ActivityScreen,
-    inactiveIcon: "Alerts_grey",
-    activeIcon: "Alerts_blue",
+    inactiveIcon: "Comm-grey",
+    activeIcon: "Comm-blue",
   },
   // {
   //   name: "My Visit",
@@ -30,8 +30,8 @@ export const BOTTOM_TAB_SCREENS = [
   {
     name: "Contact",
     component: ContactScreen,
-    inactiveIcon: "Contact_grey",
-    activeIcon: "Contact_Blue",
+    inactiveIcon: "Contact-grey-tab",
+    activeIcon: "Contact-blue-tab",
   },
  
 ];

@@ -19,9 +19,29 @@ const styles = StyleSheet.create({
     shadowRadius: 2.62,
     elevation: 4,
     paddingHorizontal:Dimension.padding15,
-    marginBottom:Dimension.margin10,
-    paddingVertical:Dimension.padding10,
-    backgroundColor:"#fff"
+    //marginBottom:Dimension.margin10,
+    paddingVertical:Dimension.padding15,
+    backgroundColor:"#fff",
+    flexDirection:"row",
+    justifyContent:"space-between"
+  },
+  rightWrap:{
+    flexDirection:"row",
+    borderWidth:1,
+    borderColor:"#EAF2FF",
+    borderRadius:4,
+    
+
+  },
+  activRightBtn:{
+    backgroundColor:"#EAF2FF",
+    paddingHorizontal:Dimension.padding8,
+    paddingVertical:Dimension.padding4
+  },
+  InactivRightBtn:{
+    paddingHorizontal:Dimension.padding8,
+    backgroundColor:"#FFFFFF",
+    paddingVertical:Dimension.padding4
   },
 });
 

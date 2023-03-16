@@ -197,6 +197,7 @@ const styles = StyleSheet.create({
     paddingVertical:Dimension.padding10,
     paddingHorizontal:Dimension.padding50,
     backgroundColor:colors.CtaColor,
+    
     alignSelf:"center"
   },
   disableBtnTxt:{
