@@ -43,6 +43,10 @@ const styles = StyleSheet.create({
     backgroundColor:"#FFFFFF",
     paddingVertical:Dimension.padding4
   },
+
+  filtertxt:{ fontFamily:Dimension.CustomMediumFont,
+    fontSize:Dimension.font16,
+    color:colors.CtaColor,}
 });
 
 export default styles;
