@@ -43,10 +43,21 @@ const styles = StyleSheet.create({
     backgroundColor:"#FFFFFF",
     paddingVertical:Dimension.padding4
   },
-
+  filterbtn:{
+    flexDirection:"row",
+    borderWidth:1,
+    borderColor:colors.CtaColor,
+    borderRadius:50,
+    paddingHorizontal:Dimension.padding20,
+    paddingVertical:Dimension.padding5,
+    alignSelf:'center',
+    marginTop:Dimension.margin10
+  },
   filtertxt:{ fontFamily:Dimension.CustomMediumFont,
     fontSize:Dimension.font16,
-    color:colors.CtaColor,}
+    color:colors.CtaColor,
+    marginLeft:Dimension.margin6
+  }
 });
 
 export default styles;

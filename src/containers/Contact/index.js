@@ -169,7 +169,7 @@ const ContactScreen = (props) => {
       
       </View>
         <View style={styles.searchWraper}>
-        <CustomeIcon name={'search'} size={20} color={'#8E8E93'} style={styles.searchIcon}></CustomeIcon>
+        <CustomeIcon name={'search-grey'} size={20} color={'#8E8E93'} style={styles.searchIcon}></CustomeIcon>
           <View style={{ flex: 4 }}>
             <TextInput
               placeholder={"Search by name, company"}
@@ -185,13 +185,9 @@ const ContactScreen = (props) => {
           </View>
           {searchValue.length > 0 && <>
           <TouchableOpacity onPress={()=>setSearch("")} activeOpacity={0.5} style={styles.crossIcon}>
-            {/* <Icon name={'close-circle'} color={'#1568E5'} size={22} ></Icon> */}
             <CustomeIcon name={'Cancel'} size={20} color={'#1568E5'}></CustomeIcon>
-            {/* <Image
-              source={require("../../assets/images/cross-icon.png")}
-              style={{ width: 25, height: 25 }}
-            /> */}
-            </TouchableOpacity>
+            
+           </TouchableOpacity>
           </>}
         </View>
       </View>

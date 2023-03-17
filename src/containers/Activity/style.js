@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     borderRightWidth:1,
     borderBottomWidth:.5,
     borderTopWidth:.5,
-    marginHorizontal:Dimension.margin15,
+    //marginHorizontal:Dimension.margin15,
     backgroundColor:"#fff"
   },
   imgCon: {},
@@ -116,6 +116,9 @@ const styles = StyleSheet.create({
     fontFamily:Dimension.CustomRegularFont,
     color:colors.FontColor,
     justifyContent:"flex-start"
+  },
+  datetxt:{
+    marginLeft:Dimension.margin10
   },
   BtnWrap:{
     borderWidth:1,

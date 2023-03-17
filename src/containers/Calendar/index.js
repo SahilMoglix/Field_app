@@ -23,21 +23,23 @@ const CalendarScreen = () => {
       <Text style={styles.headingTxt}>Calendar</Text>
     </View>
     <View style={styles.rightWrap}>
-      <TouchableOpacity onPress={() => setType("cal")} style={styles.activRightBtn}>
-      <CustomeIcon name={'Calendar-black'} size={18} color={'#1568E5'}></CustomeIcon>
+      <TouchableOpacity onPress={() => setType("cal")} style={type=="cal"?styles.activRightBtn:styles.InactivRightBtn}>
+      <CustomeIcon name={'Calendar-black'} size={18} color={type=="cal"?'#1568E5':"#3c3c3c"}></CustomeIcon>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => setType("list")} style={styles.InactivRightBtn}>
-      <CustomeIcon name={'List-black'} size={18} color={'#3c3c3c'}></CustomeIcon>
+      <TouchableOpacity onPress={() => setType("list")} style={type=="cal"?styles.InactivRightBtn:styles.activRightBtn}>
+      <CustomeIcon name={'List-black'} size={18} color={type!="cal"?'#1568E5':'#3c3c3c'}></CustomeIcon>
       </TouchableOpacity>
     </View>
   </View>
     <ScrollView>
       
     {type=="cal"? <Calendars></Calendars>:
-    <View style={{flexDirection:"row"}}>
-    <CustomeIcon name={'filter-blue'} color={Colors.CtaColor} size={20}></CustomeIcon>
-    <Text style={styles.filtertxt}>Filter</Text>
-  </View>}
+      <View>
+        <TouchableOpacity style={styles.filterbtn}>
+        <CustomeIcon name={'Filter-blue'} color={Colors.CtaColor} size={20}></CustomeIcon>
+        <Text style={styles.filtertxt}>Filter</Text>
+        </TouchableOpacity>
+    </View>}
       <EventList></EventList>
     </ScrollView>
     </View>
