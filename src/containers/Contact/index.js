@@ -11,10 +11,12 @@ import {
   TouchableOpacity,
 } from "react-native";
 import Contacts from "react-native-contacts";
+import Modal from "react-native-modal";
 import Dimension from "../../Theme/Dimension";
 import styles from "./style";
 import CustomeIcon from '../../component/CustomeIcon';
 import { useNavigation } from "@react-navigation/native";
+import MyInput from "../../component/floatingInput"
 
 const ContactScreen = (props) => {
   const navigation = useNavigation();
@@ -24,10 +26,16 @@ const ContactScreen = (props) => {
   const [FilterList, setFilter] = useState([]);
   const [syncPhone, setSyncPhone] = useState(false);
   const [contactsLoader, setContactsLoader] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [contactNum, setContactNum] = useState()
   useEffect(() => {
     setContactsLoader(true);
     getPhoneContacts();
   }, []);
+
+  const addContactModal = () => {
+    setModalVisible(!isModalVisible);
+  };
 
   const getPhoneContacts = () => {
     if (Platform.OS == "android") {
@@ -150,11 +158,15 @@ const ContactScreen = (props) => {
               <Text style={styles.ActiveBtnTxt}>Phone</Text>
             </TouchableOpacity>
           </View>
+          <View>
+          <TouchableOpacity onPress={addContactModal} style={{flexDirection:"row"}}>
+            <CustomeIcon name={'Add-blue'} size={18} color={'#1568E5'}></CustomeIcon>
+              <Text style={styles.addBtnTxt}> Add</Text>
+            </TouchableOpacity>
+        </View>
         </View>
       <View>
-      <TouchableOpacity onPress={AddContact}>
-              <Text >Add</Text>
-            </TouchableOpacity>
+      
       </View>
         <View style={styles.searchWraper}>
         <CustomeIcon name={'search'} size={20} color={'#8E8E93'} style={styles.searchIcon}></CustomeIcon>
@@ -207,6 +219,30 @@ const ContactScreen = (props) => {
           //style={styles.list}
         />
       )}
+
+    <Modal 
+    isVisible={isModalVisible}
+    style={styles.ModalBg}
+    >
+        <View style={styles.ModalContainer}>
+          <Text style={styles.ModalHeading}>Add Contact</Text>
+          <View style={styles.InputWrap}>
+          <MyInput 
+          label="Contact Number"  
+          keyboardType="number-pad" 
+          IconName={'Call_grey'} 
+          RightIconName={'Next_blue'}
+          onChangeText={newText => setContactNum(newText)}
+          />
+
+         </View>
+         {/* disableBtn css */}
+          <TouchableOpacity  onPress={addContactModal} style={styles.enableBtn}>
+            <Text style={styles.disableBtnTxt}>Continue</Text>
+          </TouchableOpacity>
+          
+        </View>
+      </Modal>
     </View>
   );
 };

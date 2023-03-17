@@ -117,9 +117,20 @@ const styles = StyleSheet.create({
     color:colors.FontColor,
     justifyContent:"flex-start"
   },
+  HeaderForBtn:{
+    flexDirection:"row",
+    justifyContent:"space-between",
+    alignItems:"center",
+    marginBottom:Dimension.margin5
+  },
+  addBtnTxt:{
+    fontSize:Dimension.font14,
+    fontFamily:Dimension.CustomRegularFont,
+    color:colors.CtaColor
+  },
   BtnWrap:{
     borderWidth:1,
-    borderColor:"#1568E5",
+    borderColor:colors.CtaColor,
     borderRadius:50,
     flexDirection:"row",
     alignSelf:"flex-start",
@@ -135,18 +146,68 @@ const styles = StyleSheet.create({
   BtnTxt:{
     fontSize:Dimension.font14,
     fontFamily:Dimension.CustomMediumFont,
-    color:"#1568E5",
+    color:colors.CtaColor,
   },
   ActiveTopBtn:{
     paddingHorizontal:Dimension.padding20,
     paddingVertical:Dimension.padding6,
-    backgroundColor:"#1568E5",
+    backgroundColor:colors.CtaColor,
     borderRadius:50
   },
   ActiveBtnTxt:{
     fontSize:Dimension.font14,
     fontFamily:Dimension.CustomMediumFont,
     color:"#fff",
+  },
+
+  ModalContainer:{
+    backgroundColor:'#fff',
+    justifyContent:"flex-end",
+    borderRadius:35,
+    borderWidth:1,
+    borderColor:"#D0D0D0",
+    paddingHorizontal:Dimension.padding8,
+    paddingVertical:Dimension.padding20,
+    position:"absolute", 
+    bottom:Dimension.padding10,
+    width:"100%",
+    left:Dimension.padding10,
+  },
+  ModalBg:{
+    padding:Dimension.padding10,
+    margin:0,
+    backgroundColor:'rgba(0,0,0,.4)',
+    position:"relative"
+  },
+  ModalHeading:{
+    fontSize:Dimension.font16,
+    fontFamily:Dimension.CustomMediumFont,
+    color:colors.FontColor, 
+    textAlign:"center"
+  },
+  disableBtn:{
+    borderRadius:50,
+    paddingVertical:Dimension.padding10,
+    paddingHorizontal:Dimension.padding50,
+    backgroundColor:"#C1C1C1",
+    alignSelf:"center"
+  },
+  enableBtn:{
+    borderRadius:50,
+    paddingVertical:Dimension.padding10,
+    paddingHorizontal:Dimension.padding50,
+    backgroundColor:colors.CtaColor,
+    
+    alignSelf:"center"
+  },
+  disableBtnTxt:{
+    fontSize:Dimension.font14,
+    fontFamily:Dimension.CustomBoldFont,
+    color:colors.WhiteColor, 
+  },
+  InputWrap:{
+    paddingTop:Dimension.padding20,
+    paddingBottom:Dimension.padding80,
   },
 });
 
