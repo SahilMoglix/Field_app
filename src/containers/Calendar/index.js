@@ -7,9 +7,13 @@ import Dimension from "../../Theme/Dimension";
 import CustomeIcon from "../../component/CustomeIcon";
 import { ScrollView } from "react-native-gesture-handler";
 import Colors from "../../Theme/Colors";
-
+import { useNavigation } from "@react-navigation/native";
 const CalendarScreen = () => {
-  const [type, setType] = useState("cal")
+  const [type, setType] = useState("cal");
+  const navigation = useNavigation();
+  const GotoFilter =()=>{
+    navigation.navigate("Filter")
+  }
   return (
     <View
       style={{
@@ -35,7 +39,7 @@ const CalendarScreen = () => {
       
     {type=="cal"? <Calendars></Calendars>:
       <View>
-        <TouchableOpacity style={styles.filterbtn}>
+        <TouchableOpacity style={styles.filterbtn} onPress={GotoFilter} >
         <CustomeIcon name={'Filter-blue'} color={Colors.CtaColor} size={20}></CustomeIcon>
         <Text style={styles.filtertxt}>Filter</Text>
         </TouchableOpacity>
