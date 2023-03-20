@@ -1,44 +1,48 @@
-import SuggestionScreen from "../containers/Suggestion";
+import CalendarScreen from "../containers/Calendar";
 import MyVisitScreen from "../containers/MyVisit";
 import ContactScreen from "../containers/Contact";
 import ActivityScreen from "../containers/Activity";
 import LoginScreen from "../containers/Login";
 import PlantVisitScreen from "../containers/PlantVisit";
 import AddContactScreen from "../containers/AddContact";
+import FilterScreen from "../containers/Filter";
+import Splash from "../containers/Login/splash";
+
 
 export const BOTTOM_TAB_SCREENS = [
   {
-    name: "Reminders",
-    component: SuggestionScreen,
-    inactiveIcon: "Date_icon",
-    activeIcon: "Recent_blue",
+    name: "Calender",
+    component: CalendarScreen,
+    inactiveIcon: "Calendar-Grey-Tab",
+    activeIcon: "Calendar-Blue-Tab",
   },
   {
-    name: "My Visit",
-    component: MyVisitScreen,
-    activeIcon: "Notes_grey",
-    inactiveIcon: "Notes_Blue",
+    name: "Communication",
+    component: ActivityScreen,
+    inactiveIcon: "Comm-grey",
+    activeIcon: "Comm-blue",
   },
+  // {
+  //   name: "My Visit",
+  //   component: MyVisitScreen,
+  //   activeIcon: "Notes_grey",
+  //   inactiveIcon: "Notes_Blue",
+  // },
   {
     name: "Contact",
     component: ContactScreen,
-    inactiveIcon: "Contact_grey",
-    activeIcon: "Contact_Blue",
+    inactiveIcon: "Contact-grey-tab",
+    activeIcon: "Contact-blue-tab",
   },
-  {
-    name: "Activity",
-    component: ActivityScreen,
-    inactiveIcon: "Alerts_grey",
-    activeIcon: "Alerts_blue",
-  },
+ 
 ];
 
-export const AUTH_STACK_SCREENS = [
-  {
-    name: "Login",
-    component: LoginScreen,
-  },
-];
+// export const AUTH_STACK_SCREENS = [
+//   {
+//     name: "Login",
+//     component: LoginScreen,
+//   },
+// ];
 
 export const APP_STACK_SCREENS = [
   {
@@ -49,4 +53,17 @@ export const APP_STACK_SCREENS = [
     name: "AddContact",
     component: AddContactScreen,
   },
+  {
+    name: "Splash",
+    component: Splash,
+  },
+  {
+    name: "Login",
+    component: LoginScreen
+  },
+  {
+    name: "Filter",
+    component: FilterScreen
+  },
+  
 ];

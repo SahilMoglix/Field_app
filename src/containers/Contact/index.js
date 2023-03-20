@@ -1,37 +1,56 @@
-import {FlashList} from '@shopify/flash-list';
-import React, {useEffect, useState} from 'react';
+import { FlashList } from "@shopify/flash-list";
+import React, { useEffect, useState } from "react";
 import {
   PermissionsAndroid,
   View,
   Text,
   Platform,
-  StyleSheet,
+  Image,
   ActivityIndicator,
-} from 'react-native';
-import Contacts from 'react-native-contacts';
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
+import Contacts from "react-native-contacts";
+import Modal from "react-native-modal";
+import Dimension from "../../Theme/Dimension";
+import styles from "./style";
+import CustomeIcon from '../../component/CustomeIcon';
+import { useNavigation } from "@react-navigation/native";
+import MyInput from "../../component/floatingInput"
 
-const ContactScreen = props => {
+const ContactScreen = (props) => {
+  const navigation = useNavigation();
+  const flatListRef = React.useRef();
   const [contacts, setContacts] = useState([]);
+  const [searchValue, setSearch] = useState("");
+  const [FilterList, setFilter] = useState([]);
+  const [syncPhone, setSyncPhone] = useState(false);
   const [contactsLoader, setContactsLoader] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [contactNum, setContactNum] = useState()
   useEffect(() => {
     setContactsLoader(true);
     getPhoneContacts();
   }, []);
 
+  const addContactModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
   const getPhoneContacts = () => {
-    if (Platform.OS == 'android') {
+    if (Platform.OS == "android") {
       try {
         PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS)
-          .then(res => {
-            console.log('Permission: ', res);
+          .then((res) => {
+            console.log("Permission: ", res);
             readContacts();
           })
-          .catch(error => {
-            console.error('Permission error: ', error);
+          .catch((error) => {
+            console.error("Permission error: ", error);
           });
       } catch (err) {
         setContactsLoader(false);
-        console.log('err', err);
+        console.log("err", err);
       }
     } else {
       readContacts();
@@ -40,40 +59,63 @@ const ContactScreen = props => {
 
   const readContacts = () => {
     Contacts.getAll()
-      .then(contacts => {
+      .then((contacts) => {
+        console.log("all contacts list", contacts);
         setContacts(contacts);
         setContactsLoader(false);
       })
-      .catch(e => {
+      .catch((e) => {
         setContactsLoader(false);
         console.log(e);
       });
   };
-  const renderItem = ({item, index}) => {
+  const renderItem = ({ item, index }) => {
     return <Contact contact={item} />;
   };
   const keyExtractor = (item, idx) => {
     return item?.recordID?.toString() || idx.toString();
   };
 
-  const Contact = ({contact}) => {
+  const onSearchText = (item) => {
+    console.log(searchValue)
+    setSearch(item);
+    flatListRef.current.scrollToOffset({ animated: true, offset: 0 });
+    let filteredData = contacts.filter(function (val) {
+      console.log(searchValue)
+      if (
+        val.displayName.toLowerCase().includes(item.toLowerCase()) ||
+        (val.company && val.company.toLowerCase().includes(item.toLowerCase()))
+      ) {
+        return val;
+      }
+    });
+    setFilter(filteredData);
+  };
+
+  const Contact = ({ contact }) => {
     return (
       <View style={styles.contactCon}>
-        <View style={styles.imgCon}>
-          <View style={styles.placeholder}>
+        <View style={styles.placeholder}>
+          {contact?.hasThumbnail ? (
+            <Image
+              source={{ uri: contact?.thumbnailPath }}
+              style={{ width: 48, height: 48, borderRadius: 48 }}
+            />
+          ) : (
             <Text style={styles.txt}>{contact?.givenName[0]}</Text>
-          </View>
+          )}
         </View>
+
         <View style={styles.contactDat}>
           <Text style={styles.name}>
-            {contact?.givenName}{' '}
-            {contact?.middleName && contact.middleName + ' '}
+            {contact?.givenName}{" "}
+            {contact?.middleName && contact.middleName + " "}
             {contact?.familyName}
           </Text>
-          <Text style={styles.name}>{contact?.company}</Text>
           <Text style={styles.phoneNumber}>
             {contact?.phoneNumbers[0]?.number}
           </Text>
+          <Text style={styles.name}>{contact?.company}</Text>
         </View>
       </View>
     );
@@ -92,68 +134,113 @@ const ContactScreen = props => {
     return mutateContacts;
   };
 
+  const AddContact =()=>{
+    navigation.navigate("AddContact")
+  }
   return (
-    <View style={{flex: 1}}>
+    <View
+      style={{
+        flex: 1,
+        marginTop: Dimension.margin40,
+        backgroundColor: "#fff",
+      }}
+    >
+      <View style={styles.headerWrap}>
+        <View style={styles.TopHeader}>
+          <Text style={styles.headingTxt}>Contacts</Text>
+        </View>
+        <View style={styles.HeaderForBtn}>
+          <View style={styles.BtnWrap}>
+            <TouchableOpacity style={styles.TopBtn}>
+              <Text style={styles.BtnTxt}>Focused</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.ActiveTopBtn}>
+              <Text style={styles.ActiveBtnTxt}>Phone</Text>
+            </TouchableOpacity>
+          </View>
+          <View>
+          <TouchableOpacity onPress={addContactModal} style={{flexDirection:"row"}}>
+            <CustomeIcon name={'Add-blue'} size={18} color={'#1568E5'}></CustomeIcon>
+              <Text style={styles.addBtnTxt}> Add</Text>
+            </TouchableOpacity>
+        </View>
+        </View>
+      <View>
+      
+      </View>
+        <View style={styles.searchWraper}>
+        <CustomeIcon name={'search-grey'} size={20} color={'#8E8E93'} style={styles.searchIcon}></CustomeIcon>
+          <View style={{ flex: 4 }}>
+            <TextInput
+              placeholder={"Search by name, company"}
+              returnKeyType={"search"}
+              onChangeText={(e)=>onSearchText(e)}
+              defaultValue={searchValue}
+              ellipsizeMode="tail"
+              placeholderTextColor={"#8E8E93"}
+              numberOfLines={1}
+              clearButtonMode="always"
+              style={styles.SearchInputCss}
+            ></TextInput>
+          </View>
+          {searchValue.length > 0 && <>
+          <TouchableOpacity onPress={()=>setSearch("")} activeOpacity={0.5} style={styles.crossIcon}>
+            <CustomeIcon name={'Cancel'} size={20} color={'#1568E5'}></CustomeIcon>
+            
+           </TouchableOpacity>
+          </>}
+        </View>
+      </View>
       {contactsLoader ? (
         <ActivityIndicator
-          color={'red'}
-          size={'large'}
+          color={"red"}
+          size={"large"}
           style={{
             marginTop: 100,
-            alignContent: 'center',
-            alignItems: 'center',
-            alignSelf: 'center',
+            alignContent: "center",
+            alignItems: "center",
+            alignSelf: "center",
           }}
         />
       ) : (
         <FlashList
-          data={getContactsData()}
+          ref={flatListRef}
+          data={
+            searchValue && searchValue.length > 0
+              ? FilterList
+              : getContactsData()
+          }
           renderItem={renderItem}
           keyExtractor={keyExtractor}
-          style={styles.list}
+          //style={styles.list}
         />
       )}
+
+    <Modal 
+    isVisible={isModalVisible}
+    style={styles.ModalBg}
+    >
+        <View style={styles.ModalContainer}>
+          <Text style={styles.ModalHeading}>Add Contact</Text>
+          <View style={styles.InputWrap}>
+          <MyInput 
+          label="Contact Number"  
+          keyboardType="number-pad" 
+          IconName={'Call_grey'} 
+          RightIconName={'Next_blue'}
+          onChangeText={newText => setContactNum(newText)}
+          />
+
+         </View>
+         {/* disableBtn css */}
+          <TouchableOpacity  onPress={addContactModal} style={styles.enableBtn}>
+            <Text style={styles.disableBtnTxt}>Continue</Text>
+          </TouchableOpacity>
+          
+        </View>
+      </Modal>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  list: {
-    flex: 1,
-  },
-  contactCon: {
-    flex: 1,
-    flexDirection: 'row',
-    padding: 5,
-    borderBottomWidth: 0.5,
-    borderBottomColor: '#d9d9d9',
-  },
-  imgCon: {},
-  placeholder: {
-    width: 55,
-    height: 55,
-    borderRadius: 30,
-    overflow: 'hidden',
-    backgroundColor: '#d9d9d9',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  contactDat: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingLeft: 5,
-  },
-  txt: {
-    fontSize: 18,
-  },
-  name: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#000',
-  },
-  phoneNumber: {
-    color: '#888',
-  },
-});
 
 export default ContactScreen;

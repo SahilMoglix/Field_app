@@ -25,6 +25,8 @@ const Colors = {
  bottomTabColor:"#898989",
  linkedinColor:"#013C95",
  graySahde1:'#D3D3D3',
+ brandColor:"#D9232D"
+ 
 
 
 
