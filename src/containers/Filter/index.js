@@ -196,7 +196,6 @@ const FilterModal = props => {
   };
 
   const applyFilters = fromReset => {
-    console.log(typeof startDate, typeof endDate);
     if (fromReset) {
       props.onApplyFilter({
         designation: 'all',

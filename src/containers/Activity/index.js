@@ -60,7 +60,6 @@ const ActivityScreen = () => {
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         CallLogs.load(99).then(c => {
-          console.log(c);
           setContacts(c);
         });
       } else {

@@ -17,10 +17,20 @@ import styles from './style';
 import CustomeIcon from '../../component/CustomeIcon';
 import {useNavigation} from '@react-navigation/native';
 import MyInput from '../../component/floatingInput';
+import {useDispatch, useSelector} from 'react-redux';
+import {STATE_STATUS} from '../../redux/constants';
+import {fetchContacts} from '../../redux/actions/contacts';
 
 const ContactScreen = props => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const flatListRef = React.useRef();
+
+  const contactsData = useSelector(state => state.contactsReducer.get('data'));
+  const contactsStatus = useSelector(state =>
+    state.contactsReducer.get('status'),
+  );
+
   const [contacts, setContacts] = useState([]);
   const [pagetype, setpageType] = useState('Focused');
   const [searchValue, setSearch] = useState('');
@@ -29,86 +39,26 @@ const ContactScreen = props => {
   const [contactsLoader, setContactsLoader] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
   const [contactNum, setContactNum] = useState();
+
   useEffect(() => {
     setContactsLoader(true);
     getPhoneContacts();
+    pullToRefresh();
   }, []);
+
+  const pullToRefresh = () => {
+    dispatch(fetchContacts());
+  };
 
   const addContactModal = () => {
     setModalVisible(!isModalVisible);
   };
-  const FocusedData = [
-    {
-      Name: 'Abhay Singh',
-      Team: 'Finance team',
-      CompanyDetail: 'Havells India Pvt. Ltd., Faridabad',
-      Position: 'Promoter',
-      backgroundColor: '#E2FCD0',
-      Eid: '1',
-    },
-    {
-      Name: 'Anees Gokhale',
-      Team: 'CEO',
-      CompanyDetail: '',
-      Position: 'Neutral',
-      backgroundColor: '#C1C1C1',
-      Eid: '2',
-    },
-    {
-      Name: 'Bahadur Saraf',
-      Team: 'Finance team',
-      CompanyDetail: 'Gupta & Sons Limited, Chandigarh',
-      Position: 'Detractors',
-      backgroundColor: '#FFD8D5',
-      Eid: '3',
-    },
-    {
-      Name: 'Abhay Singh',
-      Team: 'Finance team',
-      CompanyDetail: 'Havells India Pvt. Ltd., Faridabad',
-      Position: 'Promoter',
-      backgroundColor: '#E2FCD0',
-      Eid: '4',
-    },
-    {
-      Name: 'Abhay Singh',
-      Team: 'Finance team',
-      CompanyDetail: 'Havells India Pvt. Ltd., Faridabad',
-      Position: 'Promoter',
-      backgroundColor: '#E2FCD0',
-      Eid: '1',
-    },
-    {
-      Name: 'Anees Gokhale',
-      Team: 'CEO',
-      CompanyDetail: '',
-      Position: 'Neutral',
-      backgroundColor: '#C1C1C1',
-      Eid: '2',
-    },
-    {
-      Name: 'Bahadur Saraf',
-      Team: 'Finance team',
-      CompanyDetail: 'Gupta & Sons Limited, Chandigarh',
-      Position: 'Detractors',
-      backgroundColor: '#FFD8D5',
-      Eid: '3',
-    },
-    {
-      Name: 'Abhay Singh',
-      Team: 'Finance team',
-      CompanyDetail: 'Havells India Pvt. Ltd., Faridabad',
-      Position: 'Promoter',
-      backgroundColor: '#E2FCD0',
-      Eid: '4',
-    },
-  ];
 
   const renderFocusedData = ({item, index}) => {
     return (
       <View style={styles.contactCon}>
         <View style={styles.placeholder}>
-          <Text style={styles.txt}>{item?.Name[0]}</Text>
+          <Text style={styles.txt}>{item?.name[0]}</Text>
           {/* {contact?.hasThumbnail ? (
             <Image
               source={{uri: contact?.thumbnailPath}}
@@ -120,19 +70,17 @@ const ContactScreen = props => {
         </View>
 
         <View style={styles.contactDat}>
-          <Text style={styles.name}>{item?.Name} </Text>
-          <Text style={styles.phoneNumber}>{item?.Team}</Text>
+          <Text style={styles.name}>{item?.name} </Text>
+          <Text style={styles.phoneNumber}>{item?.designation}</Text>
           <Text style={styles.phoneNumber}>
-            {item?.CompanyDetail == ''
-              ? 'Company details missing'
-              : item?.CompanyDetail}
+            {!item.company ? 'Company details missing' : item?.company}
           </Text>
           <Text
             style={[
               styles.PositionWrap,
               {backgroundColor: item?.backgroundColor},
             ]}>
-            {item?.Position}
+            {item?.inclination}
           </Text>
         </View>
       </View>
@@ -177,11 +125,9 @@ const ContactScreen = props => {
   };
 
   const onSearchText = item => {
-    console.log(searchValue);
     setSearch(item);
     flatListRef.current.scrollToOffset({animated: true, offset: 0});
     let filteredData = contacts.filter(function (val) {
-      console.log(searchValue);
       if (
         val.displayName.toLowerCase().includes(item.toLowerCase()) ||
         (val.company && val.company.toLowerCase().includes(item.toLowerCase()))
@@ -320,13 +266,33 @@ const ContactScreen = props => {
         </View>
       </View>
       {pagetype == 'Focused' ? (
-        <FlashList
-          // ref={flatListRef}
-          data={FocusedData}
-          renderItem={renderFocusedData}
-          // keyExtractor={index}
-          //style={styles.list}
-        />
+        [STATE_STATUS.FETCHING, STATE_STATUS.UNFETCHED].includes(
+          contactsStatus,
+        ) ? (
+          <ActivityIndicator
+            color={'red'}
+            size={'large'}
+            style={{
+              marginTop: 100,
+              alignContent: 'center',
+              alignItems: 'center',
+              alignSelf: 'center',
+            }}
+          />
+        ) : (
+          <FlashList
+            // ref={flatListRef}
+            data={contactsData.toArray()}
+            renderItem={renderFocusedData}
+            refreshing={[
+              STATE_STATUS.FETCHING,
+              STATE_STATUS.UNFETCHED,
+            ].includes(contactsStatus)}
+            onRefresh={pullToRefresh}
+            // keyExtractor={index}
+            //style={styles.list}
+          />
+        )
       ) : null}
       {pagetype == 'Phone' && contactsLoader ? (
         <ActivityIndicator

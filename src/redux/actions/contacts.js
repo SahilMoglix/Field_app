@@ -1,12 +1,12 @@
 import {CONTACTS_ACTIONS} from '../constants/contacts';
 
-export const fetchHomepage = () => {
+export const fetchContacts = () => {
   return {
     type: CONTACTS_ACTIONS.FETCH_CONTACTS,
   };
 };
 
-export const fetchedHomepage = data => {
+export const fetchedContacts = data => {
   return {
     type: CONTACTS_ACTIONS.FETCHED_CONTACTS,
     payload: {
@@ -15,7 +15,7 @@ export const fetchedHomepage = data => {
   };
 };
 
-export const failedFetchHomepage = error => {
+export const failedFetchContacts = error => {
   return {
     type: CONTACTS_ACTIONS.FAILED_FETCH_CONTACTS,
     error,
