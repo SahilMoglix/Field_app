@@ -37,6 +37,107 @@ const ContactScreen = props => {
   const addContactModal = () => {
     setModalVisible(!isModalVisible);
   };
+  const FocusedData = [
+    {
+      Name: 'Abhay Singh',
+      Team: 'Finance team',
+      CompanyDetail: 'Havells India Pvt. Ltd., Faridabad',
+      Position: 'Promoter',
+      backgroundColor: '#E2FCD0',
+      Eid: '1',
+    },
+    {
+      Name: 'Anees Gokhale',
+      Team: 'CEO',
+      CompanyDetail: '',
+      Position: 'Neutral',
+      backgroundColor: '#C1C1C1',
+      Eid: '2',
+    },
+    {
+      Name: 'Bahadur Saraf',
+      Team: 'Finance team',
+      CompanyDetail: 'Gupta & Sons Limited, Chandigarh',
+      Position: 'Detractors',
+      backgroundColor: '#FFD8D5',
+      Eid: '3',
+    },
+    {
+      Name: 'Abhay Singh',
+      Team: 'Finance team',
+      CompanyDetail: 'Havells India Pvt. Ltd., Faridabad',
+      Position: 'Promoter',
+      backgroundColor: '#E2FCD0',
+      Eid: '4',
+    },
+    {
+      Name: 'Abhay Singh',
+      Team: 'Finance team',
+      CompanyDetail: 'Havells India Pvt. Ltd., Faridabad',
+      Position: 'Promoter',
+      backgroundColor: '#E2FCD0',
+      Eid: '1',
+    },
+    {
+      Name: 'Anees Gokhale',
+      Team: 'CEO',
+      CompanyDetail: '',
+      Position: 'Neutral',
+      backgroundColor: '#C1C1C1',
+      Eid: '2',
+    },
+    {
+      Name: 'Bahadur Saraf',
+      Team: 'Finance team',
+      CompanyDetail: 'Gupta & Sons Limited, Chandigarh',
+      Position: 'Detractors',
+      backgroundColor: '#FFD8D5',
+      Eid: '3',
+    },
+    {
+      Name: 'Abhay Singh',
+      Team: 'Finance team',
+      CompanyDetail: 'Havells India Pvt. Ltd., Faridabad',
+      Position: 'Promoter',
+      backgroundColor: '#E2FCD0',
+      Eid: '4',
+    },
+  ];
+
+  const renderFocusedData = ({item, index}) => {
+    return (
+      <View style={styles.contactCon}>
+        <View style={styles.placeholder}>
+          <Text style={styles.txt}>{item?.Name[0]}</Text>
+          {/* {contact?.hasThumbnail ? (
+            <Image
+              source={{uri: contact?.thumbnailPath}}
+              style={{width: 48, height: 48, borderRadius: 48}}
+            />
+          ) : (
+            <Text style={styles.txt}>{contact?.givenName[0]}</Text>
+          )} */}
+        </View>
+
+        <View style={styles.contactDat}>
+          <Text style={styles.name}>{item?.Name} </Text>
+          <Text style={styles.phoneNumber}>{item?.Team}</Text>
+          <Text style={styles.phoneNumber}>
+            {item?.CompanyDetail == ''
+              ? 'Company details missing'
+              : item?.CompanyDetail}
+          </Text>
+          <Text
+            style={[
+              styles.PositionWrap,
+              {backgroundColor: item?.backgroundColor},
+            ]}>
+            {item?.Position}
+          </Text>
+        </View>
+      </View>
+    );
+  };
 
   const getPhoneContacts = () => {
     if (Platform.OS == 'android') {
@@ -151,11 +252,27 @@ const ContactScreen = props => {
         </View>
         <View style={styles.HeaderForBtn}>
           <View style={styles.BtnWrap}>
-            <TouchableOpacity style={styles.TopBtn}>
-              <Text style={styles.BtnTxt}>Focused</Text>
+            <TouchableOpacity
+              style={
+                pagetype == 'Focused' ? styles.ActiveTopBtn : styles.TopBtn
+              }
+              onPress={() => setpageType('Focused')}>
+              <Text
+                style={
+                  pagetype == 'Focused' ? styles.ActiveBtnTxt : styles.BtnTxt
+                }>
+                Focused
+              </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.ActiveTopBtn}>
-              <Text style={styles.ActiveBtnTxt}>Phone</Text>
+            <TouchableOpacity
+              style={pagetype == 'Phone' ? styles.ActiveTopBtn : styles.TopBtn}
+              onPress={() => setpageType('Phone')}>
+              <Text
+                style={
+                  pagetype == 'Phone' ? styles.ActiveBtnTxt : styles.BtnTxt
+                }>
+                Phone
+              </Text>
             </TouchableOpacity>
           </View>
           <View>
@@ -204,8 +321,16 @@ const ContactScreen = props => {
           )}
         </View>
       </View>
-
-      {contactsLoader ? (
+      {pagetype == 'Focused' ? (
+        <FlashList
+          // ref={flatListRef}
+          data={FocusedData}
+          renderItem={renderFocusedData}
+          // keyExtractor={index}
+          //style={styles.list}
+        />
+      ) : null}
+      {pagetype == 'Phone' && contactsLoader ? (
         <ActivityIndicator
           color={'red'}
           size={'large'}
@@ -216,7 +341,7 @@ const ContactScreen = props => {
             alignSelf: 'center',
           }}
         />
-      ) : (
+      ) : pagetype == 'Phone' ? (
         <FlashList
           ref={flatListRef}
           data={
@@ -228,7 +353,7 @@ const ContactScreen = props => {
           keyExtractor={keyExtractor}
           //style={styles.list}
         />
-      )}
+      ) : null}
 
       <Modal isVisible={isModalVisible} style={styles.ModalBg}>
         <View style={styles.ModalContainer}>
@@ -237,13 +362,13 @@ const ContactScreen = props => {
             <MyInput
               label="Contact Number"
               keyboardType="number-pad"
-              IconName={'Call_grey'}
-              RightIconName={'Next_blue'}
+              IconName={'call-grey'}
+              RightIconName={'Go-blue'}
               onChangeText={newText => setContactNum(newText)}
             />
           </View>
           {/* disableBtn css */}
-          <TouchableOpacity onPress={addContactModal} style={styles.enableBtn}>
+          <TouchableOpacity onPress={AddContact} style={styles.enableBtn}>
             <Text style={styles.disableBtnTxt}>Continue</Text>
           </TouchableOpacity>
         </View>
