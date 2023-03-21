@@ -61,6 +61,7 @@ const ActivityScreen = () => {
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         CallLogs.load(99).then(c => {
+          console.log(c);
           setContacts(c);
         });
       } else {
@@ -92,7 +93,8 @@ const ActivityScreen = () => {
             <Text style={styles.datetxt}>
               <DateConvert
                 date={contact?.dateTime}
-                contactType={contact?.type}></DateConvert>
+                contactType={contact?.type}
+              />
               {/* {contact?.type} */}
             </Text>
           </View>

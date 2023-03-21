@@ -22,6 +22,7 @@ const ContactScreen = props => {
   const navigation = useNavigation();
   const flatListRef = React.useRef();
   const [contacts, setContacts] = useState([]);
+  const [pagetype, setpageType] = useState('Focused');
   const [searchValue, setSearch] = useState('');
   const [FilterList, setFilter] = useState([]);
   const [syncPhone, setSyncPhone] = useState(false);
@@ -75,9 +76,11 @@ const ContactScreen = props => {
   };
 
   const onSearchText = item => {
+    console.log(searchValue);
     setSearch(item);
     flatListRef.current.scrollToOffset({animated: true, offset: 0});
     let filteredData = contacts.filter(function (val) {
+      console.log(searchValue);
       if (
         val.displayName.toLowerCase().includes(item.toLowerCase()) ||
         (val.company && val.company.toLowerCase().includes(item.toLowerCase()))
@@ -199,6 +202,7 @@ const ContactScreen = props => {
           )}
         </View>
       </View>
+
       {contactsLoader ? (
         <ActivityIndicator
           color={'red'}

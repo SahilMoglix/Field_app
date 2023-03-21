@@ -1,3 +1,4 @@
+import {OrderedMap} from 'immutable';
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, View, Text, Modal, Platform} from 'react-native';
 import {Calendar, LocaleConfig} from 'react-native-calendars';
@@ -5,7 +6,7 @@ import Colors from '../Theme/Colors';
 import Dimension from '../Theme/Dimension';
 
 const Calendars = props => {
-  const {updateDate} = props;
+  const {updateDate, updateMonthData, meetingsMonthData} = props;
 
   LocaleConfig.locales['en'] = {
     monthNames: [
@@ -62,6 +63,7 @@ const Calendars = props => {
     'Nov',
     'Dec',
   ];
+
   const formatDate = date => {
     return `${date.getFullYear()}-${
       String(date.getMonth() + 1).length > 1
@@ -73,29 +75,74 @@ const Calendars = props => {
         : 0 + String(date.getDate())
     }`;
   };
+
   const [currentDate, setCurrentDate] = useState(formatDate(new Date()));
+  const [currentMonthYear, setCurrentMonthYear] = useState({
+    year: new Date().getFullYear(),
+    month: new Date().getMonth() + 1,
+  });
 
   useEffect(() => {
     updateDate(currentDate);
   }, [currentDate]);
 
-  console.log(formatDate(new Date(currentDate)));
+  useEffect(() => {
+    updateMonthData(currentMonthYear);
+  }, [currentMonthYear]);
+
+  const getDots = dotCount => {
+    let dots = [];
+    new Array(dotCount).fill({}).map(_ => {
+      dots.push({
+        key: 'vacation',
+        color: 'dodgerblue',
+        selectedDotColor: 'dodgerblue',
+      });
+    });
+    return dots;
+  };
+
+  const getMarkedDates = () => {
+    let obj = {};
+    meetingsMonthData.toArray().map(_ => {
+      obj[`${Object.keys(_)[0]}`] = {
+        selected: Object.keys(_)[0] == currentDate,
+        marked: Object.keys(_)[0] == currentDate,
+        selectedColor: Object.keys(_)[0] == currentDate ? '#ED6A60' : null,
+        dots: getDots(_[Object.keys(_)[0]]),
+      };
+    });
+    if (obj[currentDate]) {
+      obj[currentDate] = {
+        ...obj[currentDate],
+        selected: true,
+        marked: true,
+        selectedColor: '#ED6A60',
+      };
+    } else {
+      obj[currentDate] = {
+        selected: true,
+        marked: true,
+        selectedColor: '#ED6A60',
+      };
+    }
+    return obj;
+  };
+
   return (
     <View style={{backgroundColor: '#fff'}}>
       <Calendar
         current={currentDate}
         onDayPress={day => {
           setCurrentDate(day.dateString);
-          console.log('selecasted day', day);
         }}
         onDayLongPress={day => {
           setCurrentDate(day.dateString);
-          console.log('selected day', day);
         }}
         monthFormat={'yyyy MM'}
         onMonthChange={month => {
-          console.log('month changed', month);
           setCurrentDate(month.dateString);
+          setCurrentMonthYear(month);
         }}
         hideArrows={false}
         hideExtraDays={true}
@@ -136,13 +183,7 @@ const Calendars = props => {
             </Text>
           </>
         )}
-        markedDates={{
-          [`${currentDate}`]: {
-            selected: true,
-            marked: true,
-            selectedColor: 'dodgerblue',
-          },
-        }}
+        markedDates={getMarkedDates()}
         markingType={'multi-dot'}
         enableSwipeMonths={true}
         style={{

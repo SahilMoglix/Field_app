@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, {useEffect, useState} from 'react';
 import {
   View,
@@ -6,6 +7,10 @@ import {
   Button,
   ActivityIndicator,
 } from 'react-native';
+=======
+import React, {useState} from 'react';
+import {View, Text, TouchableOpacity, Button} from 'react-native';
+>>>>>>> 4edffaf4bf92e8cec0a16176bc0a3841296d71e4
 import Calendars from '../../component/Calendars';
 import EventList from '../../component/EventList';
 import styles from './style';
@@ -13,8 +18,13 @@ import Dimension from '../../Theme/Dimension';
 import CustomeIcon from '../../component/CustomeIcon';
 import {ScrollView} from 'react-native-gesture-handler';
 import Colors from '../../Theme/Colors';
+<<<<<<< HEAD
 import {useDispatch, useSelector} from 'react-redux';
-import {fetchCalendar, fetchCustomCalendar} from '../../redux/actions/calendar';
+import {
+  fetchCalendar,
+  fetchCustomCalendar,
+  fetchMonthCalendar,
+} from '../../redux/actions/calendar';
 import {STATE_STATUS} from '../../redux/constants';
 
 const CalendarScreen = () => {
@@ -33,6 +43,10 @@ const CalendarScreen = () => {
   );
   const meetingsCustomStatus = useSelector(state =>
     state.calendarReducer.getIn(['custom', 'status']),
+  );
+
+  const meetingsMonthData = useSelector(state =>
+    state.calendarReducer.getIn(['month', 'data']),
   );
 
   const dispatch = useDispatch();
@@ -60,6 +74,38 @@ const CalendarScreen = () => {
     );
   };
 
+<<<<<<< HEAD
+=======
+  const updateMonthData = monthYear => {
+    dispatch(
+      fetchMonthCalendar({
+        startDate: new Date(
+          `${monthYear.year}-${monthYear.month}-01` + ' 00:00:00',
+        ).getTime(),
+        endDate: new Date(
+          `${monthYear.year}-${monthYear.month}-${new Date(
+            monthYear.year,
+            monthYear.month,
+            0,
+          ).getDate()}` + ' 23:59:59',
+        ).getTime(),
+      }),
+    );
+  };
+
+=======
+import {useNavigation} from '@react-navigation/native';
+import FilterModal from '../Filter';
+const CalendarScreen = () => {
+  const [type, setType] = useState('cal');
+  const [filtersModal, setFiltersModal] = useState(false);
+  const navigation = useNavigation();
+  const GotoFilter = () => {
+    setFiltersModal(true);
+    console.log('jskdjsd' + filtersModal);
+  };
+>>>>>>> 4edffaf4bf92e8cec0a16176bc0a3841296d71e4
+>>>>>>> conflict-resolver
   return (
     <View
       style={{
@@ -96,10 +142,14 @@ const CalendarScreen = () => {
       </View>
       <ScrollView>
         {type == 'cal' ? (
-          <Calendars updateDate={updateDate} />
+          <Calendars
+            meetingsMonthData={meetingsMonthData}
+            updateDate={updateDate}
+            updateMonthData={updateMonthData}
+          />
         ) : (
           <View>
-            <TouchableOpacity style={styles.filterbtn}>
+            <TouchableOpacity style={styles.filterbtn} onPress={GotoFilter}>
               <CustomeIcon
                 name={'Filter-blue'}
                 color={Colors.CtaColor}
@@ -128,6 +178,12 @@ const CalendarScreen = () => {
           ))
         )}
       </ScrollView>
+      {filtersModal && (
+        <FilterModal
+          setFiltersModal={setFiltersModal}
+          filtersModal={filtersModal}
+        />
+      )}
     </View>
   );
 };

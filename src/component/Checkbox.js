@@ -13,8 +13,9 @@ const DotCheckbox = props => {
       {(data || []).map((_, i) => (
         <CheckBox
           title={_.title}
-         // onPress={() => onCheck(_.key)}
-         checkedIcon={
+          key={_.key}
+          // onPress={() => onCheck(_.key)}
+          checkedIcon={
             <Icon
               name={'radiobox-marked'}
               size={Dimension.font20}
@@ -31,10 +32,7 @@ const DotCheckbox = props => {
           checked={_.key == value ? true : false}
           textStyle={styles.checkboxTitle}
           fontFamily={Dimension.CustomMediumFont}
-          wrapperStyle={
-            
-             styles.checkboxwrapper
-          }
+          wrapperStyle={styles.checkboxwrapper}
           containerStyle={styles.checkboxContainer}
         />
       ))}
@@ -75,8 +73,8 @@ const styles = StyleSheet.create({
   },
   checkboxwrapper: {
     backgroundColor: colors.transparent,
-    paddingHorizontal:Dimension.padding10,
-    marginBottom:Dimension.padding10
+    paddingHorizontal: Dimension.padding10,
+    marginBottom: Dimension.padding10,
   },
   withMargincheckboxwrapper: {
     backgroundColor: colors.transparent,

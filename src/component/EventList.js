@@ -9,8 +9,6 @@ const EventList = props => {
   const [isOpen, setIsOpen] = useState(false);
   const [showMore, setShowMore] = useState(false);
 
-  console.log('dwjbedubeuwdbwub');
-
   return (
     <>
       <View>

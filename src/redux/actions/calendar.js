@@ -50,3 +50,28 @@ export const failedFetchCustomCalendar = error => {
     error,
   };
 };
+
+export const fetchMonthCalendar = params => {
+  return {
+    type: CALENDAR_ACTIONS.FETCH_CALENDAR_MONTH,
+    payload: {
+      params,
+    },
+  };
+};
+
+export const fetchedMonthCalendar = data => {
+  return {
+    type: CALENDAR_ACTIONS.FETCHED_CALENDAR_MONTH,
+    payload: {
+      data,
+    },
+  };
+};
+
+export const failedFetchMonthCalendar = error => {
+  return {
+    type: CALENDAR_ACTIONS.FAILED_FETCH_CALENDAR_MONTH,
+    error,
+  };
+};

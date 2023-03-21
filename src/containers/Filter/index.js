@@ -1,5 +1,5 @@
-import { FlashList } from "@shopify/flash-list";
-import React, { useEffect, useState } from "react";
+import {FlashList} from '@shopify/flash-list';
+import React, {useEffect, useState} from 'react';
 import {
   PermissionsAndroid,
   View,
@@ -9,106 +9,93 @@ import {
   ActivityIndicator,
   TextInput,
   TouchableOpacity,
-} from "react-native";
-import Contacts from "react-native-contacts";
-import Modal from "react-native-modal";
-import Dimension from "../../Theme/Dimension";
-import styles from "./style";
+  Dimensions,
+} from 'react-native';
+import Contacts from 'react-native-contacts';
+import Modal from 'react-native-modal';
+import Dimension from '../../Theme/Dimension';
+import styles from './style';
 import CustomeIcon from '../../component/CustomeIcon';
 
-import { useNavigation } from "@react-navigation/native";
-import MyInput from "../../component/floatingInput"
-import DotCheckbox from "../../component/Checkbox";
-import CustomeDatePicker from "../../component/Datepicker";
-
-const FilterScreen = (props) => {
+import {useNavigation} from '@react-navigation/native';
+import MyInput from '../../component/floatingInput';
+import DotCheckbox from '../../component/Checkbox';
+import CustomeDatePicker from '../../component/Datepicker';
+const deviceWidth = Dimensions.get('window').width;
+const deviceHeight = Dimensions.get('window').height;
+const FilterModal = props => {
   const navigation = useNavigation();
   const [filterFromDate, setfilterFromDate] = useState(new Date());
   const [filterToDate, setFilterToDate] = useState(new Date());
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
-  useEffect(() => {
-   
-  }, []);
-const filterRadioBtnData =[
-  {
-    title: 'All',
-    label: 'All',
-    key:'All'
-    
-  },
-  {
-    title: 'Procurement Manager',
-    label: 'Procurement Manager',
-    key:'Procurement Manager'
-    
-  },
-  {
-    title: 'CEO',
-    label: 'CEO',
-    key:'CEO'
-    
-  },
-  {
-    title: 'User',
-    label: 'User',
-    key:'User'
-    
-  },
-]
-const CompanyData =[
-  {
-    title: 'All',
-    label: 'All',
-    key:'All'
-    
-  },
-  {
-    title: 'Moglix',
-    label: 'Moglix',
-    key:'Moglix'
-    
-  },
-  {
-    title: 'TCS',
-    label: 'TCS',
-    key:'TCS'
-    
-  },
-  {
-    title: 'Infosys',
-    label: 'Infosys',
-    key:'Infosys'
-    
-  },
-]
-const PlantData =[
-  {
-    title: 'plant1',
-    label: 'plant1',
-    key:'plant1'
-    
-  },
-  {
-    title: 'plant2',
-    label: 'plant2',
-    key:'plant2'
-    
-  },
-  {
-    title: 'plant3',
-    label: 'plant3',
-    key:'plant3'
-    
-  },
-  {
-    title: 'plant4',
-    label: 'plant4',
-    key:'plant4'
-    
-  },
-]
-const FILTERS_DATA = {
-   
+  useEffect(() => {}, []);
+  const filterRadioBtnData = [
+    {
+      title: 'All',
+      label: 'All',
+      key: 'All',
+    },
+    {
+      title: 'Procurement Manager',
+      label: 'Procurement Manager',
+      key: 'Procurement Manager',
+    },
+    {
+      title: 'CEO',
+      label: 'CEO',
+      key: 'CEO',
+    },
+    {
+      title: 'User',
+      label: 'User',
+      key: 'User',
+    },
+  ];
+  const CompanyData = [
+    {
+      title: 'All',
+      label: 'All',
+      key: 'All',
+    },
+    {
+      title: 'Moglix',
+      label: 'Moglix',
+      key: 'Moglix',
+    },
+    {
+      title: 'TCS',
+      label: 'TCS',
+      key: 'TCS',
+    },
+    {
+      title: 'Infosys',
+      label: 'Infosys',
+      key: 'Infosys',
+    },
+  ];
+  const PlantData = [
+    {
+      title: 'plant1',
+      label: 'plant1',
+      key: 'plant1',
+    },
+    {
+      title: 'plant2',
+      label: 'plant2',
+      key: 'plant2',
+    },
+    {
+      title: 'plant3',
+      label: 'plant3',
+      key: 'plant3',
+    },
+    {
+      title: 'plant4',
+      label: 'plant4',
+      key: 'plant4',
+    },
+  ];
+  const FILTERS_DATA = {
     tabs: [
       {
         name: 'Designation',
@@ -118,10 +105,9 @@ const FILTERS_DATA = {
             title: 'Designation',
             label: 'Designation',
             placeholder: '',
-           // onChangeText: text => setPoId(text),
+            // onChangeText: text => setPoId(text),
             component: DotCheckbox,
-            data:filterRadioBtnData
-           
+            data: filterRadioBtnData,
           },
         ],
       },
@@ -133,12 +119,11 @@ const FILTERS_DATA = {
             title: 'Company',
             label: 'Company',
             placeholder: '',
-           // value: invoiceFromDate,
-           // onChange: date => setInvoiceFromDate(date),
-           component: DotCheckbox,
-           data:CompanyData
+            // value: invoiceFromDate,
+            // onChange: date => setInvoiceFromDate(date),
+            component: DotCheckbox,
+            data: CompanyData,
           },
-          
         ],
       },
       {
@@ -149,12 +134,11 @@ const FILTERS_DATA = {
             title: 'Plant',
             label: 'Plant',
             placeholder: '',
-           // value: invoiceFromDate,
-           // onChange: date => setInvoiceFromDate(date),
-           component: DotCheckbox,
-           data:PlantData
+            // value: invoiceFromDate,
+            // onChange: date => setInvoiceFromDate(date),
+            component: DotCheckbox,
+            data: PlantData,
           },
-          
         ],
       },
       {
@@ -166,59 +150,70 @@ const FILTERS_DATA = {
             label: 'From Date',
             placeholder: '',
             value: filterFromDate,
-            onChange : date => setfilterFromDate(date),
+            onChange: date => setfilterFromDate(date),
             component: CustomeDatePicker,
-           
           },
           {
             title: 'to Date',
             label: 'to Date',
             placeholder: '',
             value: filterToDate,
-            onChange : date => setFilterToDate(date),
+            onChange: date => setFilterToDate(date),
             component: CustomeDatePicker,
-           
           },
         ],
       },
     ],
-  
+  };
 
-};
-
-
-
-const goBack = () =>{
-  navigation.goBack();
-}
+  const goBack = () => {
+    navigation.goBack();
+  };
 
   return (
-    <View
-      style={{
-        flex: 1,
-        marginTop: Dimension.margin40,
-        backgroundColor: "#fff",
+    <Modal
+      overlayPointerEvents={'auto'}
+      isVisible={props.filtersModal}
+      onTouchOutside={() => {
+        props.setFiltersModal(false);
       }}
-    >
-      <View style={styles.headerWrap}>
-        <View style={styles.TopHeader}>
-          <TouchableOpacity onPress={goBack}>
-          <CustomeIcon name={"Back-black"} color={"#272727"} size={20}></CustomeIcon>
-          </TouchableOpacity>
-          <Text style={styles.headingTxt}>Filter</Text>
+      onDismiss={() => {
+        props.setFiltersModal(false);
+      }}
+      coverScreen={true}
+      style={{padding: 0, margin: 0, width: '100%', height: '100%'}}
+      deviceWidth={deviceWidth}
+      deviceHeight={deviceHeight}
+      hasBackdrop={true}
+      onBackdropPress={() => props.setFiltersModal(false)}
+      onBackButtonPress={() => props.setFiltersModal(false)}>
+      <View
+        style={{
+          height: deviceHeight,
+          width: deviceWidth,
+          backgroundColor: '#fff',
+        }}>
+        <View style={styles.headerWrap}>
+          <View style={styles.TopHeader}>
+            <TouchableOpacity onPress={() => props.setFiltersModal(false)}>
+              <CustomeIcon
+                name={'Back-black'}
+                color={'#272727'}
+                size={20}></CustomeIcon>
+            </TouchableOpacity>
+            <Text style={styles.headingTxt}>Filter</Text>
+          </View>
         </View>
-        </View>
-        
-      
-      <View style={styles.MidWrapper}>
+
+        <View style={styles.MidWrapper}>
           <View style={styles.leftPart}>
-          {FILTERS_DATA.tabs.map((_, k) => ( 
+            {FILTERS_DATA.tabs.map((_, k) => (
               <TouchableOpacity
                 onPress={() => setSelectedTabIndex(k)}
-               key={k}
+                key={k}
                 style={[
                   k == selectedTabIndex
-                     ? styles.activeBackground
+                    ? styles.activeBackground
                     : styles.inactiveBackground,
                 ]}>
                 <Text
@@ -230,8 +225,8 @@ const goBack = () =>{
                   {_.name}
                 </Text>
               </TouchableOpacity>
-          ))}
-              {/* <TouchableOpacity
+            ))}
+            {/* <TouchableOpacity
               
                 style={[styles.inactiveBackground,]}>
                 <Text
@@ -258,18 +253,14 @@ const goBack = () =>{
                   Date
                 </Text>
               </TouchableOpacity> */}
-         
           </View>
           <View style={styles.rightPart}>
-
-          {FILTERS_DATA.tabs[selectedTabIndex].fields.map(
-              (_, k) => (
-                <View key={k} style={{paddingHorizontal: Dimension.padding15}}>
-                  <_.component {..._} />
-                </View>
-              ),
-            )}
-                {/* <DotCheckbox data={filterRadioBtnData}></DotCheckbox>
+            {FILTERS_DATA.tabs[selectedTabIndex].fields.map((_, k) => (
+              <View key={k} style={{paddingHorizontal: Dimension.padding15}}>
+                <_.component {..._} />
+              </View>
+            ))}
+            {/* <DotCheckbox data={filterRadioBtnData}></DotCheckbox>
                 <DotCheckbox title={'Developer'}></DotCheckbox>
                 <CustomeDatePicker title={'from Date'} label={'from Date'} value= {filterFromDate}
               onChange = {date => setfilterFromDate(date)}></CustomeDatePicker> */}
@@ -277,7 +268,7 @@ const goBack = () =>{
         </View>
         <View style={styles.bottomAction}>
           <TouchableOpacity
-            onPress={() => goBack()}
+            onPress={() => props.setFiltersModal(false)}
             style={styles.cancelBtn}>
             <Text style={styles.canceltxt}>RESET</Text>
           </TouchableOpacity>
@@ -287,12 +278,9 @@ const goBack = () =>{
             <Text style={styles.acceptCtaTxt}>APPLY FILTERS</Text>
           </TouchableOpacity>
         </View>
-
-      
-      
-     
-    </View>
+      </View>
+    </Modal>
   );
 };
 
-export default FilterScreen;
+export default FilterModal;
