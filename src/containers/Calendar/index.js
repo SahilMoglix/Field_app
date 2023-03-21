@@ -77,6 +77,23 @@ const CalendarScreen = () => {
     );
   };
 
+  const updateMonthData = monthYear => {
+    dispatch(
+      fetchMonthCalendar({
+        startDate: new Date(
+          `${monthYear.year}-${monthYear.month}-01` + ' 00:00:00',
+        ).getTime(),
+        endDate: new Date(
+          `${monthYear.year}-${monthYear.month}-${new Date(
+            monthYear.year,
+            monthYear.month,
+            0,
+          ).getDate()}` + ' 23:59:59',
+        ).getTime(),
+      }),
+    );
+  };
+
   return (
     <View
       style={{
