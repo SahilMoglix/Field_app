@@ -5,6 +5,7 @@ import ActivityScreen from "../containers/Activity";
 import LoginScreen from "../containers/Login";
 import PlantVisitScreen from "../containers/PlantVisit";
 import AddContactScreen from "../containers/AddContact";
+import FilterScreen from "../containers/Filter";
 import Splash from "../containers/Login/splash";
 
 
@@ -59,6 +60,10 @@ export const APP_STACK_SCREENS = [
   {
     name: "Login",
     component: LoginScreen
+  },
+  {
+    name: "Filter",
+    component: FilterScreen
   },
   
 ];

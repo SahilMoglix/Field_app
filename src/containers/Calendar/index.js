@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, {useEffect, useState} from 'react';
 import {
   View,
@@ -6,6 +7,10 @@ import {
   Button,
   ActivityIndicator,
 } from 'react-native';
+=======
+import React, {useState} from 'react';
+import {View, Text, TouchableOpacity, Button} from 'react-native';
+>>>>>>> 4edffaf4bf92e8cec0a16176bc0a3841296d71e4
 import Calendars from '../../component/Calendars';
 import EventList from '../../component/EventList';
 import styles from './style';
@@ -13,6 +18,7 @@ import Dimension from '../../Theme/Dimension';
 import CustomeIcon from '../../component/CustomeIcon';
 import {ScrollView} from 'react-native-gesture-handler';
 import Colors from '../../Theme/Colors';
+<<<<<<< HEAD
 import {useDispatch, useSelector} from 'react-redux';
 import {
   fetchCalendar,
@@ -85,6 +91,18 @@ const CalendarScreen = () => {
     );
   };
 
+=======
+import {useNavigation} from '@react-navigation/native';
+import FilterModal from '../Filter';
+const CalendarScreen = () => {
+  const [type, setType] = useState('cal');
+  const [filtersModal, setFiltersModal] = useState(false);
+  const navigation = useNavigation();
+  const GotoFilter = () => {
+    setFiltersModal(true);
+    console.log('jskdjsd' + filtersModal);
+  };
+>>>>>>> 4edffaf4bf92e8cec0a16176bc0a3841296d71e4
   return (
     <View
       style={{
@@ -128,7 +146,7 @@ const CalendarScreen = () => {
           />
         ) : (
           <View>
-            <TouchableOpacity style={styles.filterbtn}>
+            <TouchableOpacity style={styles.filterbtn} onPress={GotoFilter}>
               <CustomeIcon
                 name={'Filter-blue'}
                 color={Colors.CtaColor}
@@ -157,6 +175,12 @@ const CalendarScreen = () => {
           ))
         )}
       </ScrollView>
+      {filtersModal && (
+        <FilterModal
+          setFiltersModal={setFiltersModal}
+          filtersModal={filtersModal}
+        />
+      )}
     </View>
   );
 };
