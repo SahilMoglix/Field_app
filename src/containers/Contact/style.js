@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 1,
     borderColor: '#D3D3D3',
+    position: 'relative',
   },
   contactDat: {
     //flex: 1,
@@ -217,6 +218,41 @@ const styles = StyleSheet.create({
     fontSize: Dimension.font12,
     fontFamily: Dimension.CustomRegularFont,
     color: colors.FontColor,
+  },
+  arrowBtn: {
+    position: 'absolute',
+    right: 0,
+    width: 24,
+    height: 24,
+    top: 10,
+  },
+  selectWrap: {
+    position: 'absolute',
+    right: 0,
+    top: 20,
+  },
+  checkboxTitle: {
+    fontSize: Dimension.font14,
+    color: colors.FontColor,
+    fontWeight: 'normal',
+    marginLeft: Dimension.margin10,
+  },
+  checkboxwrapper: {
+    backgroundColor: colors.transparent,
+    paddingHorizontal: Dimension.padding10,
+    marginBottom: Dimension.padding10,
+  },
+  withMargincheckboxwrapper: {
+    backgroundColor: colors.transparent,
+    marginBottom: Dimension.margin25,
+  },
+  checkboxContainer: {
+    backgroundColor: colors.transparent,
+    paddingVertical: 0,
+    paddingHorizontal: 0,
+    borderWidth: 0,
+    borderColor: colors.WhiteColor,
+    width: 'auto',
   },
 });
 

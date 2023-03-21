@@ -20,6 +20,8 @@ import MyInput from '../../component/floatingInput';
 import {useDispatch, useSelector} from 'react-redux';
 import {STATE_STATUS} from '../../redux/constants';
 import {fetchContacts} from '../../redux/actions/contacts';
+import Colors from '../../Theme/Colors';
+import {CheckBox} from 'react-native-elements';
 
 const ContactScreen = props => {
   const navigation = useNavigation();
@@ -36,6 +38,7 @@ const ContactScreen = props => {
   const [searchValue, setSearch] = useState('');
   const [FilterList, setFilter] = useState([]);
   const [syncPhone, setSyncPhone] = useState(false);
+  const [selectContact, setSelectContact] = useState(false);
   const [contactsLoader, setContactsLoader] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
   const [contactNum, setContactNum] = useState();
@@ -83,6 +86,14 @@ const ContactScreen = props => {
             {item?.inclination}
           </Text>
         </View>
+        <TouchableOpacity
+          style={styles.arrowBtn}
+          onPress={() => navigation.navigate('ContactDetail')}>
+          <CustomeIcon
+            name={'Arrow-black'}
+            color={Colors.FontColor}
+            size={20}></CustomeIcon>
+        </TouchableOpacity>
       </View>
     );
   };
@@ -161,8 +172,46 @@ const ContactScreen = props => {
           <Text style={styles.phoneNumber}>
             {contact?.phoneNumbers[0]?.number}
           </Text>
+          {selectContact ? null : (
+            <TouchableOpacity
+              onPress={addContactModal}
+              style={{flexDirection: 'row'}}>
+              <CustomeIcon
+                name={'Add-blue'}
+                size={18}
+                color={'#1568E5'}></CustomeIcon>
+              <Text style={styles.addBtnTxt}> Add</Text>
+            </TouchableOpacity>
+          )}
           <Text style={styles.name}>{contact?.company}</Text>
         </View>
+        {selectContact ? (
+          <TouchableOpacity style={styles.selectWrap}>
+            <CheckBox
+              //title={'yes'}
+              // onPress={() => onCheck(_.key)}
+              checkedIcon={
+                <CustomeIcon
+                  name={'Check-blue'}
+                  size={Dimension.font22}
+                  color={Colors.CtaColor}
+                />
+              }
+              uncheckedIcon={
+                <CustomeIcon
+                  name={'Check-blank'}
+                  size={Dimension.font22}
+                  color={Colors.FontColor}
+                />
+              }
+              checked={true}
+              textStyle={styles.checkboxTitle}
+              fontFamily={Dimension.CustomMediumFont}
+              wrapperStyle={styles.checkboxwrapper}
+              containerStyle={styles.checkboxContainer}
+            />
+          </TouchableOpacity>
+        ) : null}
       </View>
     );
   };
@@ -220,15 +269,25 @@ const ContactScreen = props => {
             </TouchableOpacity>
           </View>
           <View>
-            <TouchableOpacity
-              onPress={addContactModal}
-              style={{flexDirection: 'row'}}>
-              <CustomeIcon
-                name={'Add-blue'}
-                size={18}
-                color={'#1568E5'}></CustomeIcon>
-              <Text style={styles.addBtnTxt}> Add</Text>
-            </TouchableOpacity>
+            {pagetype == 'Focused' ? (
+              <TouchableOpacity
+                onPress={addContactModal}
+                style={{flexDirection: 'row'}}>
+                <CustomeIcon
+                  name={'Add-blue'}
+                  size={18}
+                  color={'#1568E5'}></CustomeIcon>
+                <Text style={styles.addBtnTxt}> Add</Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                onPress={() => setSelectContact(!selectContact)}
+                style={{flexDirection: 'row'}}>
+                <Text style={styles.addBtnTxt}>
+                  {selectContact ? 'Cancel' : 'Select'}
+                </Text>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
         <View></View>

@@ -6,18 +6,19 @@ import styles from './style';
 // import CreateEvent from '../../component/common/CreateEvent';
 //import Camera  from '../../component/common/Camera'
 // import DateTimePicker from '@react-native-community/datetimepicker';
-import CustomeIcon from '../../component/CustomeIcon';
+// import CustomeIcon from '../../component/common/CustomeIcon';
 import Dimension from '../../Theme/Dimension';
 import colors from '../../Theme/Colors';
 //import {ContactService} from '../../services/ContactService';
 import MyInput from '../../component/floatingInput';
+import CustomeIcon from '../../component/CustomeIcon';
 import {useNavigation} from '@react-navigation/native';
 // import { launchImageLibrary } from 'react-native-image-picker';
 //import RNFetchBlob from 'rn-fetch-blob';
 //import CONSTANTS from "../../services/constant";
 //import SyncStorage from 'sync-storage';
 
-const AddContact = props => {
+const ContactDetail = props => {
   const [name, setName] = useState();
   const [company, setCompany] = useState();
   const [designation, setDesignation] = useState();
@@ -208,4 +209,4 @@ const AddContact = props => {
   );
 };
 
-export default AddContact;
+export default ContactDetail;

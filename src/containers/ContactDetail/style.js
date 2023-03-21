@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     fontFamily: Dimension.CustomMediumFont,
     fontSize: Dimension.font18,
     color: colors.FontColor,
-    marginLeft: Dimension.margin12,
+    marginLeft: Dimension.margin10,
   },
   headerWrap: {
     shadowColor: '#000',
