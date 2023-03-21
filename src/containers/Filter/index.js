@@ -1,16 +1,5 @@
-import {FlashList} from '@shopify/flash-list';
 import React, {useEffect, useState} from 'react';
-import {
-  PermissionsAndroid,
-  View,
-  Text,
-  Platform,
-  Image,
-  ActivityIndicator,
-  TextInput,
-  TouchableOpacity,
-  Dimensions,
-} from 'react-native';
+import {View, Text, TouchableOpacity, Dimensions} from 'react-native';
 import Contacts from 'react-native-contacts';
 import Modal from 'react-native-modal';
 import Dimension from '../../Theme/Dimension';
@@ -21,19 +10,27 @@ import {useNavigation} from '@react-navigation/native';
 import MyInput from '../../component/floatingInput';
 import DotCheckbox from '../../component/Checkbox';
 import CustomeDatePicker from '../../component/Datepicker';
+
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
+
 const FilterModal = props => {
   const navigation = useNavigation();
   const [filterFromDate, setfilterFromDate] = useState(new Date());
   const [filterToDate, setFilterToDate] = useState(new Date());
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
+  const [designation, setDesignation] = useState(props.designation);
+  const [company, setCompany] = useState(props.company);
+  const [plant, setPlant] = useState(props.plant);
+  const [startDate, setStartDate] = useState(new Date(props.startDate));
+  const [endDate, setEndDate] = useState(new Date(props.endDate));
+
   useEffect(() => {}, []);
   const filterRadioBtnData = [
     {
       title: 'All',
       label: 'All',
-      key: 'All',
+      key: 'all',
     },
     {
       title: 'Procurement Manager',
@@ -60,39 +57,39 @@ const FilterModal = props => {
     {
       title: 'Moglix',
       label: 'Moglix',
-      key: 'Moglix',
+      key: '1',
     },
     {
       title: 'TCS',
       label: 'TCS',
-      key: 'TCS',
+      key: '2',
     },
     {
       title: 'Infosys',
       label: 'Infosys',
-      key: 'Infosys',
+      key: '3',
     },
   ];
   const PlantData = [
     {
       title: 'plant1',
       label: 'plant1',
-      key: 'plant1',
+      key: '1',
     },
     {
       title: 'plant2',
       label: 'plant2',
-      key: 'plant2',
+      key: '2',
     },
     {
       title: 'plant3',
       label: 'plant3',
-      key: 'plant3',
+      key: '3',
     },
     {
       title: 'plant4',
       label: 'plant4',
-      key: 'plant4',
+      key: '4',
     },
   ];
   const FILTERS_DATA = {
@@ -105,7 +102,8 @@ const FilterModal = props => {
             title: 'Designation',
             label: 'Designation',
             placeholder: '',
-            // onChangeText: text => setPoId(text),
+            value: designation,
+            onCheck: text => setDesignation(text),
             component: DotCheckbox,
             data: filterRadioBtnData,
           },
@@ -119,8 +117,8 @@ const FilterModal = props => {
             title: 'Company',
             label: 'Company',
             placeholder: '',
-            // value: invoiceFromDate,
-            // onChange: date => setInvoiceFromDate(date),
+            value: company,
+            onCheck: text => setCompany(text),
             component: DotCheckbox,
             data: CompanyData,
           },
@@ -134,8 +132,8 @@ const FilterModal = props => {
             title: 'Plant',
             label: 'Plant',
             placeholder: '',
-            // value: invoiceFromDate,
-            // onChange: date => setInvoiceFromDate(date),
+            value: plant,
+            onCheck: text => setPlant(text),
             component: DotCheckbox,
             data: PlantData,
           },
@@ -149,16 +147,16 @@ const FilterModal = props => {
             title: 'From Date',
             label: 'From Date',
             placeholder: '',
-            value: filterFromDate,
-            onChange: date => setfilterFromDate(date),
+            value: startDate,
+            onChange: date => setStartDate(date),
             component: CustomeDatePicker,
           },
           {
             title: 'to Date',
             label: 'to Date',
             placeholder: '',
-            value: filterToDate,
-            onChange: date => setFilterToDate(date),
+            value: endDate,
+            onChange: date => setEndDate(date),
             component: CustomeDatePicker,
           },
         ],
@@ -166,8 +164,58 @@ const FilterModal = props => {
     ],
   };
 
-  const goBack = () => {
-    navigation.goBack();
+  const dateConverter = (paramDate, dateType, fromTo) => {
+    if (paramDate) {
+      let updatedparams =
+        typeof paramDate == 'string' ? paramDate : paramDate.toDateString();
+      let date =
+        String(updatedparams.split('-')[0]).length > 2
+          ? updatedparams
+          : updatedparams.split('-')[1] +
+            '-' +
+            updatedparams.split('-')[0] +
+            '-' +
+            updatedparams.split('-')[2];
+      let month =
+        String(new Date(date).getMonth() + 1).length > 1
+          ? String(new Date(date).getMonth() + 1)
+          : 0 + String(new Date(date).getMonth() + 1);
+      let day =
+        String(new Date(date).getDate()).length > 1
+          ? String(new Date(date).getDate())
+          : 0 + String(new Date(date).getDate());
+      if (dateType == 'datetime') {
+        return `${new Date(date).getFullYear()}-${month}-${day} ${
+          fromTo == 'from' ? '00:00:00' : '23:59:59'
+        }`;
+      } else {
+        return `${new Date(date).getFullYear()}-${month}-${day}`;
+      }
+    }
+    return '';
+  };
+
+  const applyFilters = fromReset => {
+    console.log(typeof startDate, typeof endDate);
+    if (fromReset) {
+      props.onApplyFilter({
+        designation: 'all',
+        company: '',
+        plant: '',
+        startDate: new Date(new Date().toDateString() + ' 00:00:00').getTime(),
+        endDate: new Date(new Date().toDateString() + ' 23:59:59').getTime(),
+      });
+    } else {
+      props.onApplyFilter({
+        designation,
+        company,
+        plant,
+        startDate: new Date(
+          dateConverter(startDate, 'datetime', 'from'),
+        ).getTime(),
+        endDate: new Date(dateConverter(startDate, 'datetime', 'to')).getTime(),
+      });
+    }
   };
 
   return (
@@ -226,33 +274,6 @@ const FilterModal = props => {
                 </Text>
               </TouchableOpacity>
             ))}
-            {/* <TouchableOpacity
-              
-                style={[styles.inactiveBackground,]}>
-                <Text
-                  style={[styles.LeftInActiveTxt,
-                  ]}>
-                  Company
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-              
-                style={[styles.inactiveBackground,]}>
-                <Text
-                  style={[styles.LeftInActiveTxt,
-                  ]}>
-                  Plant
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-              
-                style={[styles.inactiveBackground,]}>
-                <Text
-                  style={[styles.LeftInActiveTxt,
-                  ]}>
-                  Date
-                </Text>
-              </TouchableOpacity> */}
           </View>
           <View style={styles.rightPart}>
             {FILTERS_DATA.tabs[selectedTabIndex].fields.map((_, k) => (
@@ -260,20 +281,16 @@ const FilterModal = props => {
                 <_.component {..._} />
               </View>
             ))}
-            {/* <DotCheckbox data={filterRadioBtnData}></DotCheckbox>
-                <DotCheckbox title={'Developer'}></DotCheckbox>
-                <CustomeDatePicker title={'from Date'} label={'from Date'} value= {filterFromDate}
-              onChange = {date => setfilterFromDate(date)}></CustomeDatePicker> */}
           </View>
         </View>
         <View style={styles.bottomAction}>
           <TouchableOpacity
-            onPress={() => props.setFiltersModal(false)}
+            onPress={() => applyFilters(true)}
             style={styles.cancelBtn}>
             <Text style={styles.canceltxt}>RESET</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            //onPress={() => applyFilters()}
+            onPress={() => applyFilters()}
             style={styles.acceptCtabtn}>
             <Text style={styles.acceptCtaTxt}>APPLY FILTERS</Text>
           </TouchableOpacity>
