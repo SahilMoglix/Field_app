@@ -156,7 +156,7 @@ const Calendars = props => {
         disableArrowRight={false}
         theme={{
           monthTextColor: 'white',
-          dotStyle: {width: 6, height: 6, marginTop: 10},
+          dotStyle: {width: 6, height: 6, marginTop: -2, borderRadius: 6},
           selectedDayBackgroundColor: Colors.BgColor1,
           arrowColor: Colors.FontColor,
           textDayFontFamily: Dimension.CustomMediumFont,
