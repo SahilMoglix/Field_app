@@ -4,6 +4,11 @@ import {AUTH_ACTIONS} from '../constants/auth';
 import {List, Map} from 'immutable';
 
 const initialState = new Map({
+  month: new Map({
+    status: STATE_STATUS.UNFETCHED,
+    data: new List([]),
+    error: null,
+  }),
   day: new Map({
     status: STATE_STATUS.UNFETCHED,
     data: new List([]),
@@ -52,6 +57,23 @@ export const calendarReducer = (state = initialState, action) => {
         .setIn(['custom', 'status'], STATE_STATUS.FAILED_FETCH)
         .setIn(['custom', 'data'], new List([]))
         .setIn(['custom', 'error'], error);
+
+    case CALENDAR_ACTIONS.FETCH_CALENDAR_MONTH:
+      return state
+        .setIn(['month', 'status'], STATE_STATUS.FETCHING)
+        .setIn(['month', 'data'], List([]))
+        .setIn(['month', 'error'], null);
+    case CALENDAR_ACTIONS.FETCHED_CALENDAR_MONTH:
+      return state
+        .setIn(['month', 'status'], STATE_STATUS.FETCHED)
+        .setIn(['month', 'data'], new List(payload.data || []))
+        .setIn(['month', 'error'], null);
+    case CALENDAR_ACTIONS.FAILED_FETCH_CALENDAR_MONTH:
+      return state
+        .setIn(['month', 'status'], STATE_STATUS.FAILED_FETCH)
+        .setIn(['month', 'data'], List([]))
+        .setIn(['month', 'error'], error);
+
     case AUTH_ACTIONS.LOGOUT:
       return initialState;
     default:

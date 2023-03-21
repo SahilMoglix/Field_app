@@ -14,7 +14,11 @@ import CustomeIcon from '../../component/CustomeIcon';
 import {ScrollView} from 'react-native-gesture-handler';
 import Colors from '../../Theme/Colors';
 import {useDispatch, useSelector} from 'react-redux';
-import {fetchCalendar, fetchCustomCalendar} from '../../redux/actions/calendar';
+import {
+  fetchCalendar,
+  fetchCustomCalendar,
+  fetchMonthCalendar,
+} from '../../redux/actions/calendar';
 import {STATE_STATUS} from '../../redux/constants';
 
 const CalendarScreen = () => {
@@ -33,6 +37,10 @@ const CalendarScreen = () => {
   );
   const meetingsCustomStatus = useSelector(state =>
     state.calendarReducer.getIn(['custom', 'status']),
+  );
+
+  const meetingsMonthData = useSelector(state =>
+    state.calendarReducer.getIn(['month', 'data']),
   );
 
   const dispatch = useDispatch();
@@ -57,6 +65,23 @@ const CalendarScreen = () => {
         new Date(date + ' 00:00:00').getTime(),
         new Date(date + ' 23:59:59').getTime(),
       ),
+    );
+  };
+
+  const updateMonthData = monthYear => {
+    dispatch(
+      fetchMonthCalendar({
+        startDate: new Date(
+          `${monthYear.year}-${monthYear.month}-01` + ' 00:00:00',
+        ).getTime(),
+        endDate: new Date(
+          `${monthYear.year}-${monthYear.month}-${new Date(
+            monthYear.year,
+            monthYear.month,
+            0,
+          ).getDate()}` + ' 23:59:59',
+        ).getTime(),
+      }),
     );
   };
 
@@ -96,7 +121,11 @@ const CalendarScreen = () => {
       </View>
       <ScrollView>
         {type == 'cal' ? (
-          <Calendars updateDate={updateDate} />
+          <Calendars
+            meetingsMonthData={meetingsMonthData}
+            updateDate={updateDate}
+            updateMonthData={updateMonthData}
+          />
         ) : (
           <View>
             <TouchableOpacity style={styles.filterbtn}>

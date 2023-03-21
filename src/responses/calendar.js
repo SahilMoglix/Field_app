@@ -198,3 +198,21 @@ export const meetings = {
     },
   ],
 };
+
+export const monthData = {
+  message: 'Data Fetched successfully',
+  result: [
+    {
+      '2023-03-01': 1,
+    },
+    {
+      '2023-03-10': 2,
+    },
+    {
+      '2023-03-15': 2,
+    },
+    {
+      '2023-03-29': 1,
+    },
+  ],
+};
