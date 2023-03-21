@@ -78,7 +78,7 @@ const MyInput = props => {
         <CustomeIcon
           name={props.RightIconName}
           size={Dimension.font18}
-          color={colors.DateBgColor}
+          color={colors.CtaColor}
           style={styles.RightIconCss}></CustomeIcon>
       ) : null}
     </View>

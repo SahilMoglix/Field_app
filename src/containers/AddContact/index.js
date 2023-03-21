@@ -7,8 +7,8 @@ import styles from './style';
 //import Camera  from '../../component/common/Camera'
 // import DateTimePicker from '@react-native-community/datetimepicker';
 // import CustomeIcon from '../../component/common/CustomeIcon';
-// import Dimension from '../../Theme/Dimension';
-// import colors from '../../Theme/Colors';
+import Dimension from '../../Theme/Dimension';
+import colors from '../../Theme/Colors';
 //import {ContactService} from '../../services/ContactService';
 import MyInput from '../../component/floatingInput';
 // import { launchImageLibrary } from 'react-native-image-picker';
@@ -85,82 +85,116 @@ const AddContact = props => {
 
   return (
     <>
-      {/* <APPHeader showBack={true}  showText={'Add User'} /> */}
-      <ScrollView style={styles.ScrollViewCss}>
-        <View>
-          <Card containerStyle={styles.UserDeatilCardWrapper}>
-            <Avatar
-              //size={64}
-              rounded
-              source={{uri: photo}}
-              avatarStyle={styles.UserImgIcon}
-              containerStyle={styles.UserimgContainer}
-            />
-            <TouchableOpacity
-              onPress={() => setCamera(visibleCamera => !visibleCamera)}
-              style={styles.addPhotoBtn}>
-              <Text style={styles.addPhotoText}>Add Photo</Text>
-            </TouchableOpacity>
-          </Card>
-          <MyInput
-            label="Name"
-            keyboardType="default"
-            IconName={'People_2'}
-            onChangeText={newText => setName(newText)}
-          />
+      <View
+        style={{
+          flex: 1,
+          marginTop: Dimension.margin40,
+          backgroundColor: '#fff',
+        }}>
+        <View style={styles.headerWrap}>
+          <View style={styles.TopHeader}>
+            <Text style={styles.headingTxt}>Add Contact</Text>
+          </View>
 
-          <MyInput
-            label="Contact"
-            keyboardType="phone-pad"
-            IconName={'Call'}
-            onChangeText={newText => setNumber(newText)}
-          />
-
-          <MyInput
-            label="Designation"
-            keyboardType="default"
-            IconName={'People'}
-            onChangeText={newText => setDesignation(newText)}
-          />
-
-          <MyInput
-            label="Plant"
-            keyboardType="default"
-            IconName={'People'}
-            onChangeText={newText => setDesignation(newText)}
-          />
-
-          <MyInput
-            label="Department"
-            keyboardType="default"
-            IconName={'People'}
-            onChangeText={newText => setDesignation(newText)}
-          />
-
-          <MyInput
-            label="Profile Synopsis"
-            keyboardType="default"
-            IconName={'Synopsis'}
-            onChangeText={newText => setProfile(newText)}
-          />
-
-          <MyInput
-            label="Whatsapp Number"
-            keyboardType="phone-pad"
-            IconName={'Whatsapp_icon'}
-            onChangeText={newText => setWhatsapp(newText)}
-          />
-
-          <Button
-            onPress={submitButton}
-            title="Save"
-            buttonStyle={styles.btnStyle}
-            titleStyle={styles.btntxt}
-            containerStyle={styles.btnContainer}
-          />
-          {/* {visibleCamera && <Camera onSelectCamera={handleCamera} onSelectGallery={handleGallery}/>}  */}
+          <View></View>
         </View>
-      </ScrollView>
+        <ScrollView
+          style={styles.ScrollViewCss}
+          contentContainerStyle={{paddingBottom: 180}}>
+          <View>
+            <Card containerStyle={styles.UserDeatilCardWrapper}>
+              <Avatar
+                //size={64}
+                rounded
+                source={{uri: photo}}
+                avatarStyle={styles.UserImgIcon}
+                containerStyle={styles.UserimgContainer}
+              />
+              <TouchableOpacity
+                onPress={() => setCamera(visibleCamera => !visibleCamera)}
+                style={styles.addPhotoBtn}>
+                <Text style={styles.addPhotoText}>Add Photo</Text>
+              </TouchableOpacity>
+            </Card>
+            <MyInput
+              label="Name"
+              keyboardType="default"
+              IconName={'People_2'}
+              onChangeText={newText => setName(newText)}
+            />
+
+            <MyInput
+              label="Contact"
+              keyboardType="phone-pad"
+              IconName={'call-grey'}
+              onChangeText={newText => setNumber(newText)}
+            />
+            <MyInput
+              label="Email"
+              keyboardType="phone-pad"
+              IconName={'Mail-grey'}
+              onChangeText={newText => setNumber(newText)}
+            />
+
+            <MyInput
+              label="Designation"
+              keyboardType="default"
+              IconName={'Designation-grey'}
+              onChangeText={newText => setDesignation(newText)}
+            />
+
+            <MyInput
+              label="Plant"
+              keyboardType="default"
+              IconName={'Plant-grey'}
+              onChangeText={newText => setDesignation(newText)}
+            />
+
+            <MyInput
+              label="Department"
+              keyboardType="default"
+              IconName={'Department-grey'}
+              onChangeText={newText => setDesignation(newText)}
+            />
+
+            <MyInput
+              label="Company"
+              keyboardType="default"
+              IconName={'company-grey'}
+              onChangeText={newText => setProfile(newText)}
+            />
+
+            <MyInput
+              label="Whatsapp Number"
+              keyboardType="phone-pad"
+              IconName={'Whatsaap-grey'}
+              onChangeText={newText => setWhatsapp(newText)}
+            />
+
+            {/* {visibleCamera && <Camera onSelectCamera={handleCamera} onSelectGallery={handleGallery}/>}  */}
+          </View>
+        </ScrollView>
+        <View style={styles.BtnWrapper}>
+          <View style={{flex: 1}}>
+            <Button
+              //onPress={submitButton}
+              title="Cancel"
+              buttonStyle={styles.CancelbtnStyle}
+              titleStyle={styles.Cancelbtntxt}
+              containerStyle={styles.btnContainer}
+            />
+          </View>
+          <View style={{flex: 1}}>
+            <Button
+              onPress={submitButton}
+              title="Save"
+              buttonStyle={styles.btnStyle}
+              titleStyle={styles.btntxt}
+              containerStyle={styles.btnContainer}
+            />
+          </View>
+        </View>
+      </View>
     </>
   );
 };
