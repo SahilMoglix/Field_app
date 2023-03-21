@@ -14,7 +14,7 @@ const DotCheckbox = props => {
         <CheckBox
           title={_.title}
           key={_.key}
-          // onPress={() => onCheck(_.key)}
+          onPress={() => onCheck(_.key)}
           checkedIcon={
             <Icon
               name={'radiobox-marked'}

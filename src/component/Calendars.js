@@ -92,9 +92,9 @@ const Calendars = props => {
 
   const getDots = dotCount => {
     let dots = [];
-    new Array(dotCount).fill({}).map(_ => {
+    new Array(dotCount).fill({}).map((_, k) => {
       dots.push({
-        key: 'vacation',
+        key: k,
         color: 'dodgerblue',
         selectedDotColor: 'dodgerblue',
       });

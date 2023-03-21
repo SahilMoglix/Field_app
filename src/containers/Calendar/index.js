@@ -53,7 +53,11 @@ const CalendarScreen = () => {
 
   const gotoFilter = () => {
     setFiltersModal(true);
-    console.log('jskdjsd' + filtersModal);
+  };
+
+  const applyFilters = params => {
+    setFiltersModal(false);
+    dispatch(fetchCustomCalendar(params));
   };
 
   useEffect(() => {
@@ -170,6 +174,8 @@ const CalendarScreen = () => {
         <FilterModal
           setFiltersModal={setFiltersModal}
           filtersModal={filtersModal}
+          onApplyFilter={applyFilters}
+          {...meetingsCustomParams}
         />
       )}
     </View>

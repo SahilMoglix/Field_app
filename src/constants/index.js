@@ -1,26 +1,25 @@
-import CalendarScreen from "../containers/Calendar";
-import MyVisitScreen from "../containers/MyVisit";
-import ContactScreen from "../containers/Contact";
-import ActivityScreen from "../containers/Activity";
-import LoginScreen from "../containers/Login";
-import PlantVisitScreen from "../containers/PlantVisit";
-import AddContactScreen from "../containers/AddContact";
-import FilterScreen from "../containers/Filter";
-import Splash from "../containers/Login/splash";
-
+import CalendarScreen from '../containers/Calendar';
+import MyVisitScreen from '../containers/MyVisit';
+import ContactScreen from '../containers/Contact';
+import ActivityScreen from '../containers/Activity';
+import LoginScreen from '../containers/Login';
+import PlantVisitScreen from '../containers/PlantVisit';
+import AddContactScreen from '../containers/AddContact';
+import FilterScreen from '../containers/Filter';
+import Splash from '../containers/Login/splash';
 
 export const BOTTOM_TAB_SCREENS = [
   {
-    name: "Calender",
+    name: 'Calender',
     component: CalendarScreen,
-    inactiveIcon: "Calendar-Grey-Tab",
-    activeIcon: "Calendar-Blue-Tab",
+    inactiveIcon: 'Calendar-Grey-Tab',
+    activeIcon: 'Calendar-Blue-Tab',
   },
   {
-    name: "Communication",
+    name: 'Communication',
     component: ActivityScreen,
-    inactiveIcon: "Comm-grey",
-    activeIcon: "Comm-blue",
+    inactiveIcon: 'Comm-grey',
+    activeIcon: 'Comm-blue',
   },
   // {
   //   name: "My Visit",
@@ -29,12 +28,11 @@ export const BOTTOM_TAB_SCREENS = [
   //   inactiveIcon: "Notes_Blue",
   // },
   {
-    name: "Contact",
+    name: 'Contact',
     component: ContactScreen,
-    inactiveIcon: "Contact-grey-tab",
-    activeIcon: "Contact-blue-tab",
+    inactiveIcon: 'Contact-grey-tab',
+    activeIcon: 'Contact-blue-tab',
   },
- 
 ];
 
 // export const AUTH_STACK_SCREENS = [
@@ -46,24 +44,23 @@ export const BOTTOM_TAB_SCREENS = [
 
 export const APP_STACK_SCREENS = [
   {
-    name: "PlantVisit",
+    name: 'PlantVisit',
     component: PlantVisitScreen,
   },
   {
-    name: "AddContact",
+    name: 'AddContact',
     component: AddContactScreen,
   },
   {
-    name: "Splash",
+    name: 'Splash',
     component: Splash,
   },
   {
-    name: "Login",
-    component: LoginScreen
+    name: 'Login',
+    component: LoginScreen,
   },
   {
-    name: "Filter",
-    component: FilterScreen
+    name: 'Filter',
+    component: FilterScreen,
   },
-  
 ];

@@ -10,7 +10,6 @@ import {
   TextInput,
 } from 'react-native';
 import CallLogs from 'react-native-call-log';
-import {FlashList} from '@shopify/flash-list';
 import CustomeIcon from '../../component/CustomeIcon';
 import Dimension from '../../Theme/Dimension';
 import styles from './style';
@@ -61,7 +60,6 @@ const ActivityScreen = () => {
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         CallLogs.load(99).then(c => {
-          console.log(c);
           setContacts(c);
         });
       } else {

@@ -216,3 +216,20 @@ export const monthData = {
     },
   ],
 };
+
+export const contacts = {
+  message: 'contacts fetched successfully',
+  data: [
+    {
+      name: 'Shashikant',
+      email: 'shashikant.baghel@moglix.com',
+      phone: '9540753012',
+      inclination: 'Neutral',
+      designation: 'CFO',
+      plant: 'dummyplant',
+      company: 'dummycompany',
+      department: 'dummydepartment',
+      whatsappContact: '9540753012',
+    },
+  ],
+};
