@@ -1,5 +1,11 @@
-import React, {useState} from 'react';
-import {View, Text, TouchableOpacity, Button} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Button,
+  ActivityIndicator,
+} from 'react-native';
 import Calendars from '../../component/Calendars';
 import EventList from '../../component/EventList';
 import styles from './style';
@@ -7,16 +13,87 @@ import Dimension from '../../Theme/Dimension';
 import CustomeIcon from '../../component/CustomeIcon';
 import {ScrollView} from 'react-native-gesture-handler';
 import Colors from '../../Theme/Colors';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  fetchCalendar,
+  fetchCustomCalendar,
+  fetchMonthCalendar,
+} from '../../redux/actions/calendar';
+import {STATE_STATUS} from '../../redux/constants';
 import {useNavigation} from '@react-navigation/native';
 import FilterModal from '../Filter';
+
 const CalendarScreen = () => {
+  const meetingsData = useSelector(state =>
+    state.calendarReducer.getIn(['day', 'data']),
+  );
+  const meetingsStatus = useSelector(state =>
+    state.calendarReducer.getIn(['day', 'status']),
+  );
+
+  const meetingsCustomData = useSelector(state =>
+    state.calendarReducer.getIn(['custom', 'data']),
+  );
+  const meetingsCustomParams = useSelector(state =>
+    state.calendarReducer.getIn(['custom', 'params']),
+  );
+  const meetingsCustomStatus = useSelector(state =>
+    state.calendarReducer.getIn(['custom', 'status']),
+  );
+
+  const meetingsMonthData = useSelector(state =>
+    state.calendarReducer.getIn(['month', 'data']),
+  );
+
+  const dispatch = useDispatch();
+
   const [type, setType] = useState('cal');
   const [filtersModal, setFiltersModal] = useState(false);
   const navigation = useNavigation();
-  const GotoFilter = () => {
+
+  const gotoFilter = () => {
     setFiltersModal(true);
     console.log('jskdjsd' + filtersModal);
   };
+
+  useEffect(() => {
+    dispatch(
+      fetchCustomCalendar({
+        designation: 'all',
+        company: 1,
+        plant: 1,
+        startDate: new Date(new Date().toDateString() + ' 00:00:00').getTime(),
+        endDate: new Date(new Date().toDateString() + ' 23:59:59').getTime(),
+      }),
+    );
+  }, []);
+
+  const updateDate = date => {
+    dispatch(
+      fetchCalendar(
+        new Date(date + ' 00:00:00').getTime(),
+        new Date(date + ' 23:59:59').getTime(),
+      ),
+    );
+  };
+
+  const updateMonthData = monthYear => {
+    dispatch(
+      fetchMonthCalendar({
+        startDate: new Date(
+          `${monthYear.year}-${monthYear.month}-01` + ' 00:00:00',
+        ).getTime(),
+        endDate: new Date(
+          `${monthYear.year}-${monthYear.month}-${new Date(
+            monthYear.year,
+            monthYear.month,
+            0,
+          ).getDate()}` + ' 23:59:59',
+        ).getTime(),
+      }),
+    );
+  };
+
   return (
     <View
       style={{
@@ -53,10 +130,14 @@ const CalendarScreen = () => {
       </View>
       <ScrollView>
         {type == 'cal' ? (
-          <Calendars></Calendars>
+          <Calendars
+            meetingsMonthData={meetingsMonthData}
+            updateDate={updateDate}
+            updateMonthData={updateMonthData}
+          />
         ) : (
           <View>
-            <TouchableOpacity style={styles.filterbtn} onPress={GotoFilter}>
+            <TouchableOpacity style={styles.filterbtn} onPress={gotoFilter}>
               <CustomeIcon
                 name={'Filter-blue'}
                 color={Colors.CtaColor}
@@ -65,7 +146,25 @@ const CalendarScreen = () => {
             </TouchableOpacity>
           </View>
         )}
-        <EventList></EventList>
+        {type == 'cal' ? (
+          [STATE_STATUS.FETCHING, STATE_STATUS.UNFETCHED].includes(
+            meetingsStatus,
+          ) ? (
+            <ActivityIndicator size={'small'} />
+          ) : (
+            meetingsData.map((data, dataKey) => (
+              <EventList data={data} key={dataKey} />
+            ))
+          )
+        ) : [STATE_STATUS.FETCHING, STATE_STATUS.UNFETCHED].includes(
+            meetingsCustomStatus,
+          ) ? (
+          <ActivityIndicator size={'small'} />
+        ) : (
+          meetingsCustomData.map((data, dataKey) => (
+            <EventList data={data} key={dataKey} />
+          ))
+        )}
       </ScrollView>
       {filtersModal && (
         <FilterModal

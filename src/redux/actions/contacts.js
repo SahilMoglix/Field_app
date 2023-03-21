@@ -1,14 +1,14 @@
-import {HOMEPAGE_ACTIONS} from '../constants/homepage';
+import {CONTACTS_ACTIONS} from '../constants/contacts';
 
 export const fetchHomepage = () => {
   return {
-    // type: HOMEPAGE_ACTIONS.FETCH_PRODUCTS,
+    type: CONTACTS_ACTIONS.FETCH_CONTACTS,
   };
 };
 
 export const fetchedHomepage = data => {
   return {
-    // type: HOMEPAGE_ACTIONS.FETCHED_PRODUCTS,
+    type: CONTACTS_ACTIONS.FETCHED_CONTACTS,
     payload: {
       data,
     },
@@ -17,7 +17,7 @@ export const fetchedHomepage = data => {
 
 export const failedFetchHomepage = error => {
   return {
-    // type: HOMEPAGE_ACTIONS.FAILED_FETCH_PRODUCTS,
+    type: CONTACTS_ACTIONS.FAILED_FETCH_CONTACTS,
     error,
   };
 };

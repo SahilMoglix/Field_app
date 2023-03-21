@@ -14,7 +14,6 @@ const MyInput = props => {
     }).start();
   };
   const onBlur = test => {
-    console.log(test);
     Animated.spring(labelAnim, {
       toValue: 0,
     }).start();

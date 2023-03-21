@@ -144,7 +144,6 @@ const ContactScreen = props => {
       try {
         PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS)
           .then(res => {
-            console.log('Permission: ', res);
             readContacts();
           })
           .catch(error => {
@@ -162,7 +161,6 @@ const ContactScreen = props => {
   const readContacts = () => {
     Contacts.getAll()
       .then(contacts => {
-        console.log('all contacts list', contacts);
         setContacts(contacts);
         setContactsLoader(false);
       })

@@ -17,7 +17,6 @@ import MyInput from '../../component/floatingInput';
 //import SyncStorage from 'sync-storage';
 
 const AddContact = props => {
-  console.log(props);
   const [name, setName] = useState();
   const [company, setCompany] = useState();
   const [designation, setDesignation] = useState();
@@ -44,7 +43,6 @@ const AddContact = props => {
         name: company,
       },
     });
-    console.log(finalData);
     // ContactService.AddContact(finalData).then(response => {
     //     console.log("image uplaod response ",response)
     //     if(response.code==200 && response.success){
@@ -74,14 +72,12 @@ const AddContact = props => {
   };
 
   const handleCamera = cam => {
-    console.log(cam);
     setPhoto(cam.assets[0].uri);
     setObject(cam.assets[0]);
     setCamera(visibleCamera => !visibleCamera);
   };
 
   const handleGallery = camDetail => {
-    console.log(camDetail);
     setPhoto(camDetail.assets[0].uri);
     setObject(camDetail.assets[0]);
     setCamera(visibleCamera => !visibleCamera);
