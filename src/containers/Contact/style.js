@@ -205,9 +205,23 @@ const styles = StyleSheet.create({
     fontFamily: Dimension.CustomBoldFont,
     color: colors.WhiteColor,
   },
+  searchingtxt: {
+    fontSize: Dimension.font12,
+    fontFamily: Dimension.CustomMediumFont,
+    color: '#C1C1C1',
+    alignSelf: 'center',
+    marginBottom: Dimension.margin10,
+  },
+  alreadyExistsTxt: {
+    fontSize: Dimension.font12,
+    fontFamily: Dimension.CustomMediumFont,
+    color: '#C1C1C1',
+    alignSelf: 'center',
+    marginBottom: Dimension.margin10,
+  },
   InputWrap: {
     paddingTop: Dimension.padding20,
-    paddingBottom: Dimension.padding80,
+    paddingBottom: Dimension.padding50,
   },
   PositionWrap: {
     backgroundColor: '#ccc',

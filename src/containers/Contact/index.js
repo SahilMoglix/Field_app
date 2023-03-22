@@ -23,7 +23,7 @@ import {fetchContacts} from '../../redux/actions/contacts';
 import Colors from '../../Theme/Colors';
 import {CheckBox} from 'react-native-elements';
 import {getNumberDetails} from '../../services/contacts';
-
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const ContactScreen = props => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -65,7 +65,7 @@ const ContactScreen = props => {
       const {data} = await getNumberDetails(contactNum);
       if (data?.result?.data?.length) {
         setContactExists(true);
-        setContactLoading(true);
+        setContactLoading(false);
       } else {
         setContactExists(false);
         setContactLoading(true);
@@ -427,25 +427,38 @@ const ContactScreen = props => {
               IconName={'call-grey'}
               defaultValue={contactNum}
               value={contactNum}
-              RightIconName={'Go-blue'}
               onChangeText={newText => setContactNum(newText)}
               onSubmitEditing={() => {
                 if (contactNum.length == 10) {
                   checkExistance();
                 }
               }}
+              RightIconView={() => (
+                <Icon
+                  name={'check-circle'}
+                  size={Dimension.font28}
+                  color={'#07AD0D'}></Icon>
+              )}
             />
           </View>
           {contactExists && contactNum.length == 10 ? (
-            <Text>Contact already exists</Text>
+            <Text style={styles.alreadyExistsTxt}>Contact already exists</Text>
           ) : null}
-          {contactLoading && <Text>Searching...</Text>}
+          {contactLoading && (
+            <Text style={styles.searchingtxt}>Searching...</Text>
+          )}
           {/* disableBtn css */}
-          {!contactExists && contactNum.length == 10 ? (
-            <TouchableOpacity onPress={AddContact} style={styles.enableBtn}>
-              <Text style={styles.disableBtnTxt}>Continue</Text>
-            </TouchableOpacity>
-          ) : null}
+
+          <TouchableOpacity
+            onPress={AddContact}
+            //disabled={!contactExists && contactNum.length == 10 ? false : true}
+            style={
+              !contactExists && contactNum.length == 10
+                ? styles.enableBtn
+                : styles.disableBtn
+            }>
+            <Text style={styles.disableBtnTxt}>Add to my Contact</Text>
+          </TouchableOpacity>
         </View>
       </Modal>
     </View>

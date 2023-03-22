@@ -3,7 +3,7 @@ import {TextInput, Text, StyleSheet, View, Animated} from 'react-native';
 import CustomeIcon from './CustomeIcon';
 import Dimension from '../Theme/Dimension';
 import colors from '../Theme/Colors';
-
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const MyInput = props => {
   const inEditing = useState(false);
   const labelAnim = useRef(new Animated.Value(0)).current;
@@ -77,12 +77,8 @@ const MyInput = props => {
           color={colors.DateBgColor}
           style={styles.iconCss}></CustomeIcon>
       ) : null}
-      {props.RightIconName ? (
-        <CustomeIcon
-          name={props.RightIconName}
-          size={Dimension.font18}
-          color={colors.CtaColor}
-          style={styles.RightIconCss}></CustomeIcon>
+      {props.RightIconView ? (
+        <View style={styles.RightIconCss}>{props.RightIconView()}</View>
       ) : null}
     </View>
   );
@@ -147,7 +143,7 @@ const styles = StyleSheet.create({
   },
   RightIconCss: {
     position: 'absolute',
-    top: Dimension.padding30,
+    top: Dimension.padding25,
     right: Dimension.padding15,
   },
 });

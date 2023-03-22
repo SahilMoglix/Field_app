@@ -13,6 +13,7 @@ import colors from '../../Theme/Colors';
 import MyInput from '../../component/floatingInput';
 import DropDown from '../../component/DropDown';
 import {useNavigation} from '@react-navigation/native';
+import DotCheckbox from '../../component/Checkbox';
 // import { launchImageLibrary } from 'react-native-image-picker';
 //import RNFetchBlob from 'rn-fetch-blob';
 //import CONSTANTS from "../../services/constant";
@@ -26,6 +27,23 @@ const AddContact = props => {
   const [number, setNumber] = useState();
   const [whatsapp, setWhatsapp] = useState();
   const [visibleCamera, setCamera] = useState(false);
+  const InclinationData = [
+    {
+      title: 'Promoter',
+      label: 'Promoter',
+      key: 'Promoter',
+    },
+    {
+      title: 'Detractor',
+      label: 'Detractor',
+      key: 'Detractor',
+    },
+    {
+      title: 'Neutral',
+      label: 'Neutral',
+      key: 'Neutral',
+    },
+  ];
   const [photo, setPhoto] = useState(
     'https://www.rattanhospital.in/wp-content/uploads/2020/03/user-dummy-pic.png',
   );
@@ -145,35 +163,20 @@ const AddContact = props => {
               IconName={'Mail-grey'}
               onChangeText={newText => setNumber(newText)}
             />
-
-            <MyInput
-              label="Designation"
-              keyboardType="default"
+            <DotCheckbox
+              IconName={'Inclination-grey'}
+              label={'Inclination'}
+              from={'addContact'}
+              data={InclinationData}
+              horizontalView={true}></DotCheckbox>
+            <DropDown
               IconName={'Designation-grey'}
-              onChangeText={newText => setDesignation(newText)}
-            />
-
-            <MyInput
-              label="Plant"
-              keyboardType="default"
-              IconName={'Plant-grey'}
-              onChangeText={newText => setDesignation(newText)}
-            />
-
-            <MyInput
-              label="Department"
-              keyboardType="default"
+              label="Designation"></DropDown>
+            <DropDown IconName={'Plant-grey'} label="Plant"></DropDown>
+            <DropDown
               IconName={'Department-grey'}
-              onChangeText={newText => setDesignation(newText)}
-            />
-
-            <MyInput
-              label="Company"
-              keyboardType="default"
-              IconName={'company-grey'}
-              onChangeText={newText => setProfile(newText)}
-            />
-            <DropDown></DropDown>
+              label="Department"></DropDown>
+            <DropDown IconName={'company-grey'} label="Company"></DropDown>
 
             <MyInput
               label="Whatsapp Number"

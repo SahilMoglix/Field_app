@@ -20,10 +20,10 @@ const DropDown = props => {
         <TouchableOpacity onPress={showMenu} style={styles.dropDownBtn}>
           <View style={{flexDirection: 'row', marginTop: 20}}>
             <CustomeIcon
-              name="Designation-grey"
+              name={props.IconName}
               size={Dimension.font18}
               color={colors.DateBgColor}></CustomeIcon>
-            <Text style={styles.labelStyle}>Show Menu</Text>
+            <Text style={styles.labelStyle}>{props.label}</Text>
           </View>
           <CustomeIcon
             name="icon_Below"
@@ -84,16 +84,16 @@ const styles = StyleSheet.create({
   },
   dropDownWrap: {
     borderWidth: 1,
-    borderColor: colors.eyeIcon,
+    borderColor: colors.borderColor,
     borderRadius: 4,
     backgroundColor: '#fff',
-    width: '70%',
+    width: '92%',
     shadowColor: 'rgba(0,0,0,0.5)',
     shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.3,
     shadowRadius: 2,
     elevation: 3,
-    marginTop: Dimension.margin35,
+    marginTop: Dimension.margin70,
     //padding:Dimension.padding10
     paddingLeft: 0,
     paddingRight: 0,
@@ -102,14 +102,14 @@ const styles = StyleSheet.create({
     marginVertical: 0,
   },
   dropdownval: {
-    fontSize: Dimension.font12,
+    fontSize: Dimension.font14,
     color: colors.FontColor,
     fontFamily: Dimension.CustomRegularFont,
     paddingLeft: 0,
     paddingRight: 0,
     paddingTop: 0,
-    paddingBottom: 0,
-    borderBottomColor: colors.eyeIcon,
+    paddingBottom: 10,
+    borderBottomColor: colors.borderColor,
     borderBottomWidth: 0.5,
     //width: '100%',
     paddingVertical: Dimension.padding5,
