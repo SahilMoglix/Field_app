@@ -5,7 +5,6 @@ import Dimension from '../Theme/Dimension';
 import colors from '../Theme/Colors';
 
 const ContactData = props => {
-  // console.log('yes agaya');
   const IconSet = {
     name: 'Mail-grey',
     email: 'Mail-grey',
@@ -18,7 +17,6 @@ const ContactData = props => {
     whatsappContact: 'Whatsaap-green',
   };
   const getIconName = () => {
-    console.log(props.icon, IconSet[props.icon]);
     return IconSet[props.icon];
   };
 
