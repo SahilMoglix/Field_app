@@ -25,7 +25,7 @@ const DotCheckbox = props => {
         <View
           style={
             props.horizontalView
-              ? {flexDirection: 'row', marginLeft: -20}
+              ? {flexDirection: 'row', marginLeft: -10, flexWrap: 'wrap'}
               : {flexDirection: 'column'}
           }>
           {(data || []).map((_, i) => (
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: Dimension.padding20,
     paddingVertical: Dimension.padding12,
-    height: Dimension.height70,
+    //  height: Dimension.height70,
     //backgroundColor:'#aaa',
     marginBottom: Dimension.margin10,
     position: 'relative',
