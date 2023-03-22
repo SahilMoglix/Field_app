@@ -233,3 +233,33 @@ export const contacts = {
     },
   ],
 };
+
+export const logs = {
+  message: 'data fetched successfully',
+  result: [
+    {
+      rawType: 2,
+      type: 'OUTGOING',
+      dateTime: '8 Mar 2023 07:55:51',
+      phoneNumber: '8800913130',
+      duration: 10,
+      timestamp: '1678242351458',
+      name: 'Reshma',
+      userId: 1,
+      userPhoneNumber: '9540753012',
+      createdAt: 1679307353000,
+    },
+    {
+      rawType: 2,
+      type: 'OUTGOING',
+      dateTime: '6 Sep 2022 12:27:21',
+      phoneNumber: '8800913130',
+      duration: 50,
+      timestamp: '1662447441341',
+      name: 'Reshma',
+      userId: 1,
+      userPhoneNumber: '9540753012',
+      createdAt: 1679307353000,
+    },
+  ],
+};
