@@ -11,6 +11,7 @@ import Dimension from '../../Theme/Dimension';
 import colors from '../../Theme/Colors';
 //import {ContactService} from '../../services/ContactService';
 import MyInput from '../../component/floatingInput';
+import DropDown from '../../component/DropDown';
 import {useNavigation} from '@react-navigation/native';
 // import { launchImageLibrary } from 'react-native-image-picker';
 //import RNFetchBlob from 'rn-fetch-blob';
@@ -128,7 +129,7 @@ const AddContact = props => {
             <MyInput
               label="Name"
               keyboardType="default"
-              IconName={'People_2'}
+              IconName={'Name-Icon-Grey'}
               onChangeText={newText => setName(newText)}
             />
 
@@ -172,6 +173,7 @@ const AddContact = props => {
               IconName={'company-grey'}
               onChangeText={newText => setProfile(newText)}
             />
+            <DropDown></DropDown>
 
             <MyInput
               label="Whatsapp Number"

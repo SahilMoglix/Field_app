@@ -7,7 +7,7 @@ import colors from '../Theme/Colors';
 const ContactData = props => {
   // console.log('yes agaya');
   const IconSet = {
-    name: 'Mail-grey',
+    name: 'Name-Icon-Grey',
     email: 'Mail-grey',
     phone: 'call-grey',
     inclination: 'Inclination-grey',
