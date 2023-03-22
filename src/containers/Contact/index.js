@@ -22,6 +22,7 @@ import {STATE_STATUS} from '../../redux/constants';
 import {fetchContacts} from '../../redux/actions/contacts';
 import Colors from '../../Theme/Colors';
 import {CheckBox} from 'react-native-elements';
+import {getNumberDetails} from '../../services/contacts';
 
 const ContactScreen = props => {
   const navigation = useNavigation();
@@ -41,13 +42,39 @@ const ContactScreen = props => {
   const [selectContact, setSelectContact] = useState(false);
   const [contactsLoader, setContactsLoader] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
-  const [contactNum, setContactNum] = useState();
+  const [contactNum, setContactNum] = useState('');
+  const [contactExists, setContactExists] = useState(false);
+  const [contactLoading, setContactLoading] = useState(false);
 
   useEffect(() => {
     setContactsLoader(true);
     getPhoneContacts();
     pullToRefresh();
   }, []);
+
+  useEffect(() => {
+    console.log('dwedwe', contactNum);
+    if (contactNum.length == 10) {
+      checkExistance();
+    }
+  }, [contactNum]);
+
+  const checkExistance = async () => {
+    try {
+      setContactLoading(true);
+      const {data} = await getNumberDetails(contactNum);
+      if (data?.result?.data?.length) {
+        setContactExists(true);
+        setContactLoading(true);
+      } else {
+        setContactExists(false);
+        setContactLoading(true);
+      }
+    } catch (e) {
+      setContactExists(false);
+      setContactLoading(false);
+    }
+  };
 
   const pullToRefresh = () => {
     dispatch(fetchContacts());
@@ -59,7 +86,11 @@ const ContactScreen = props => {
 
   const renderFocusedData = ({item, index}) => {
     return (
-      <View style={styles.contactCon}>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate('ContactDetail', {phone: item.phone})
+        }
+        style={styles.contactCon}>
         <View style={styles.placeholder}>
           <Text style={styles.txt}>{item?.name[0]}</Text>
           {/* {contact?.hasThumbnail ? (
@@ -86,15 +117,13 @@ const ContactScreen = props => {
             {item?.inclination}
           </Text>
         </View>
-        <TouchableOpacity
-          style={styles.arrowBtn}
-          onPress={() => navigation.navigate('ContactDetail')}>
+        <TouchableOpacity style={styles.arrowBtn}>
           <CustomeIcon
             name={'Arrow-black'}
             color={Colors.FontColor}
             size={20}></CustomeIcon>
         </TouchableOpacity>
-      </View>
+      </TouchableOpacity>
     );
   };
 
@@ -234,6 +263,7 @@ const ContactScreen = props => {
   const AddContact = () => {
     navigation.navigate('AddContact');
   };
+
   return (
     <View
       style={{
@@ -382,22 +412,40 @@ const ContactScreen = props => {
         />
       ) : null}
 
-      <Modal isVisible={isModalVisible} style={styles.ModalBg}>
+      <Modal
+        onBackButtonPress={() => setModalVisible(false)}
+        onBackdropPress={() => setModalVisible(false)}
+        isVisible={isModalVisible}
+        style={styles.ModalBg}>
         <View style={styles.ModalContainer}>
           <Text style={styles.ModalHeading}>Add Contact</Text>
           <View style={styles.InputWrap}>
             <MyInput
               label="Contact Number"
               keyboardType="number-pad"
+              maxLength={10}
               IconName={'call-grey'}
+              defaultValue={contactNum}
+              value={contactNum}
               RightIconName={'Go-blue'}
               onChangeText={newText => setContactNum(newText)}
+              onSubmitEditing={() => {
+                if (contactNum.length == 10) {
+                  checkExistance();
+                }
+              }}
             />
           </View>
+          {contactExists && contactNum.length == 10 ? (
+            <Text>Contact already exists</Text>
+          ) : null}
+          {contactLoading && <Text>Searching...</Text>}
           {/* disableBtn css */}
-          <TouchableOpacity onPress={AddContact} style={styles.enableBtn}>
-            <Text style={styles.disableBtnTxt}>Continue</Text>
-          </TouchableOpacity>
+          {!contactExists && contactNum.length == 10 ? (
+            <TouchableOpacity onPress={AddContact} style={styles.enableBtn}>
+              <Text style={styles.disableBtnTxt}>Continue</Text>
+            </TouchableOpacity>
+          ) : null}
         </View>
       </Modal>
     </View>

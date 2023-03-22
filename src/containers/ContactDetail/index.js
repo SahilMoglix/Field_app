@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Text,
   ScrollView,
@@ -21,36 +21,67 @@ import MyInput from '../../component/floatingInput';
 import CustomeIcon from '../../component/CustomeIcon';
 import ContactData from '../../component/contactDetailView';
 import {useNavigation} from '@react-navigation/native';
+import {getNumberDetails} from '../../services/contacts';
 // import { launchImageLibrary } from 'react-native-image-picker';
 //import RNFetchBlob from 'rn-fetch-blob';
 //import CONSTANTS from "../../services/constant";
 //import SyncStorage from 'sync-storage';
 
 const ContactDetail = props => {
-  const [name, setName] = useState();
-  const [company, setCompany] = useState();
-  const [designation, setDesignation] = useState();
-  const [profile, setProfile] = useState();
-  const [number, setNumber] = useState();
-  const [whatsapp, setWhatsapp] = useState();
-  const [visibleCamera, setCamera] = useState(false);
-  const [photo, setPhoto] = useState(
-    'https://www.rattanhospital.in/wp-content/uploads/2020/03/user-dummy-pic.png',
-  );
-  const [photoObject, setObject] = useState([
-    {type: 'image/jpeg', filename: 'dummy.jpg'},
-  ]);
+  const [contactData, setContactData] = useState({});
+  const photo =
+    'https://www.rattanhospital.in/wp-content/uploads/2020/03/user-dummy-pic.png';
+
   const navigation = useNavigation();
-  const detailData = {
-    name: 'Shashikant',
-    email: 'shashikant.baghel@moglix.com',
-    phone: '9540753012',
-    inclination: 'Neutral',
-    designation: 'CFO',
-    plant: 'dummyplant',
-    company: 'dummycompany',
-    department: 'dummydepartment',
-    whatsappContact: '9540753012',
+
+  const FIELDS = [
+    {
+      name: 'Name',
+      value: 'name',
+    },
+    {
+      name: 'Contact',
+      value: 'phone',
+    },
+    {
+      name: 'Email',
+      value: 'email',
+    },
+    {
+      name: 'Inclination with Moglix',
+      value: 'inclination',
+    },
+    {
+      name: 'Designation',
+      value: 'designation',
+    },
+    {
+      name: 'Plant',
+      value: 'plant',
+    },
+    {
+      name: 'Department',
+      value: 'department',
+    },
+    {
+      name: 'Company',
+      value: 'company',
+    },
+    {
+      name: 'WhatsApp Number',
+      value: 'whatsappContact',
+    },
+  ];
+
+  useEffect(() => {
+    onContactFetch();
+  }, []);
+
+  const onContactFetch = async () => {
+    const {data} = await getNumberDetails(props.route.params.phone);
+    if (data?.result?.data.length) {
+      setContactData(data.result.data[0]);
+    }
   };
 
   return (
@@ -100,15 +131,12 @@ const ContactDetail = props => {
                 containerStyle={styles.UserimgContainer}
               />
             </Card>
-            <MyInput
-              label="Name"
-              keyboardType="default"
-              IconName={'Name-Icon-Grey'}
-              onChangeText={newText => setName(newText)}
-            />
-
-            {Object.keys(detailData).map((key, index) => (
-              <ContactData label={key} value={detailData[key]}></ContactData>
+            {FIELDS.map((_, index) => (
+              <ContactData
+                key={index}
+                icon={_.value}
+                label={_.name}
+                value={contactData[_.value]}></ContactData>
             ))}
           </View>
         </ScrollView>

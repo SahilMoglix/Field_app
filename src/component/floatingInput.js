@@ -60,10 +60,13 @@ const MyInput = props => {
         ]}
         autoCapitalize="none"
         defaultValue={props.defaultValue}
+        value={props.value}
         onChangeText={props.onChangeText}
         keyboardType={props.keyboardType}
         editable={props.editable}
+        maxLength={props.maxLength}
         onFocus={onFocus}
+        onSubmitEditing={props.onSubmitEditing}
         //onBlur={(e)=>onBlur(e.target.value)}
         placeholder={props.Placeholder}
       />
