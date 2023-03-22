@@ -18,12 +18,8 @@ const ContactData = props => {
     whatsappContact: 'Whatsaap-green',
   };
   const getIconName = () => {
-    return 'Mail-grey';
-    Object.keys(IconSet).map((key, index) => {
-      if (props.label == key) {
-        console.log(IconSet[key]);
-      }
-    });
+    console.log(props.icon, IconSet[props.icon]);
+    return IconSet[props.icon];
   };
 
   return (

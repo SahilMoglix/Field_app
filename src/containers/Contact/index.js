@@ -86,7 +86,11 @@ const ContactScreen = props => {
 
   const renderFocusedData = ({item, index}) => {
     return (
-      <View style={styles.contactCon}>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate('ContactDetail', {phone: item.phone})
+        }
+        style={styles.contactCon}>
         <View style={styles.placeholder}>
           <Text style={styles.txt}>{item?.name[0]}</Text>
           {/* {contact?.hasThumbnail ? (
@@ -113,17 +117,13 @@ const ContactScreen = props => {
             {item?.inclination}
           </Text>
         </View>
-        <TouchableOpacity
-          style={styles.arrowBtn}
-          onPress={() =>
-            navigation.navigate('ContactDetail', {phone: contactNum})
-          }>
+        <TouchableOpacity style={styles.arrowBtn}>
           <CustomeIcon
             name={'Arrow-black'}
             color={Colors.FontColor}
             size={20}></CustomeIcon>
         </TouchableOpacity>
-      </View>
+      </TouchableOpacity>
     );
   };
 
