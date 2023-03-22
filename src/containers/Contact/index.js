@@ -128,9 +128,11 @@ const ContactScreen = props => {
         console.log(e);
       });
   };
+
   const renderItem = ({item, index}) => {
     return <Contact contact={item} />;
   };
+
   const keyExtractor = (item, idx) => {
     return item?.recordID?.toString() || idx.toString();
   };
@@ -341,6 +343,7 @@ const ContactScreen = props => {
         ) : (
           <FlashList
             // ref={flatListRef}
+            estimatedItemSize={106}
             data={contactsData.toArray()}
             renderItem={renderFocusedData}
             refreshing={[
@@ -367,6 +370,7 @@ const ContactScreen = props => {
       ) : pagetype == 'Phone' ? (
         <FlashList
           ref={flatListRef}
+          estimatedItemSize={106}
           data={
             searchValue && searchValue.length > 0
               ? FilterList

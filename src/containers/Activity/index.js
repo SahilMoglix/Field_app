@@ -14,12 +14,22 @@ import CustomeIcon from '../../component/CustomeIcon';
 import Dimension from '../../Theme/Dimension';
 import styles from './style';
 import DateConvert from '../../component/DateConvert';
+import {useDispatch, useSelector} from 'react-redux';
+import {STATE_STATUS} from '../../redux/constants';
+import {fetchLogs} from '../../redux/actions/communication';
 
 const ActivityScreen = () => {
-  const flatListRef = React.useRef();
-  const [contacts, setContacts] = useState([]);
+  const logsData = useSelector(state => state.communicationReducer.get('data'));
+  const logsStatus = useSelector(state =>
+    state.communicationReducer.get('status'),
+  );
+
+  const [searchValue, setSearchValue] = useState('');
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
+    onRefreshLogs();
     if (Platform.OS === 'android') {
       checkPermission();
       //requestPermission();
@@ -27,6 +37,11 @@ const ActivityScreen = () => {
       //fetchLogs()
     }
   }, []);
+
+  const onRefreshLogs = () => {
+    dispatch(fetchLogs());
+  };
+
   const setCallType = type => {
     let IconName;
     if (type == 'INCOMING') {
@@ -46,6 +61,7 @@ const ActivityScreen = () => {
         style={{marginTop: 4}}></CustomeIcon>
     );
   };
+
   const checkPermission = async () => {
     try {
       const granted = await PermissionsAndroid.request(
@@ -60,7 +76,7 @@ const ActivityScreen = () => {
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         CallLogs.load(99).then(c => {
-          setContacts(c);
+          // setContacts(c);
         });
       } else {
         console.log('Call Log permission denied');
@@ -103,9 +119,16 @@ const ActivityScreen = () => {
       </View>
     );
   };
+
   const renderItem = ({item, index}) => {
     return <Contact contact={item} />;
   };
+
+  let searchedData = logsData.filter(
+    _ =>
+      _.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+      _.phoneNumber.toLowerCase().includes(searchValue.toLowerCase()),
+  );
 
   return (
     <View
@@ -118,7 +141,7 @@ const ActivityScreen = () => {
         <View style={styles.TopHeader}>
           <Text style={styles.headingTxt}>Communication</Text>
         </View>
-        <View style={styles.HeaderForBtn}>
+        {/* <View style={styles.HeaderForBtn}>
           <View style={styles.BtnWrap}>
             <TouchableOpacity style={styles.ActiveTopBtn}>
               <Text style={styles.ActiveBtnTxt}>Call</Text>
@@ -128,12 +151,12 @@ const ActivityScreen = () => {
             </TouchableOpacity>
           </View>
           <View>
-            {/* <TouchableOpacity onPress={addContactModal} style={{flexDirection:"row"}}>
+          </View>
+        </View> */}
+        {/* <TouchableOpacity onPress={addContactModal} style={{flexDirection:"row"}}>
             <CustomeIcon name={'Add-blue'} size={18} color={'#1568E5'}></CustomeIcon>
               <Text style={styles.addBtnTxt}> Add</Text>
             </TouchableOpacity> */}
-          </View>
-        </View>
         <View></View>
         <View style={styles.searchWraper}>
           <CustomeIcon
@@ -145,8 +168,8 @@ const ActivityScreen = () => {
             <TextInput
               placeholder={'Search by name, company'}
               returnKeyType={'search'}
-              //  onChangeText={(e)=>onSearchText(e)}
-              // defaultValue={searchValue}
+              onChangeText={e => setSearchValue(e)}
+              value={searchValue}
               ellipsizeMode="tail"
               placeholderTextColor={'#8E8E93'}
               numberOfLines={1}
@@ -156,15 +179,25 @@ const ActivityScreen = () => {
           {/* {searchValue.length > 0 && <>
           <TouchableOpacity onPress={()=>setSearch("")} activeOpacity={0.5} style={styles.crossIcon}>
             <CustomeIcon name={'Cancel'} size={20} color={'#1568E5'}></CustomeIcon>
-            
            </TouchableOpacity>
           </>} */}
         </View>
       </View>
       <FlatList
-        data={contacts}
+        data={searchedData.toArray()}
+        refreshing={[STATE_STATUS.FETCHING, STATE_STATUS.UNFETCHED].includes(
+          logsStatus,
+        )}
+        onRefresh={onRefreshLogs}
         renderItem={renderItem}
         style={styles.list}
+        ListEmptyComponent={
+          STATE_STATUS.FETCHED && searchedData.size == 0 ? (
+            <Text style={{alignSelf: 'center', color: '#000'}}>
+              No records found
+            </Text>
+          ) : null
+        }
         keyExtractor={keyExtractor}
       />
     </View>
