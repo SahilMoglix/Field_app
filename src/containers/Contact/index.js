@@ -53,7 +53,6 @@ const ContactScreen = props => {
   }, []);
 
   useEffect(() => {
-    console.log('dwedwe', contactNum);
     if (contactNum.length == 10) {
       checkExistance();
     }
@@ -63,12 +62,11 @@ const ContactScreen = props => {
     try {
       setContactLoading(true);
       const {data} = await getNumberDetails(contactNum);
+      setContactLoading(false);
       if (data?.result?.data?.length) {
         setContactExists(true);
-        setContactLoading(false);
       } else {
         setContactExists(false);
-        setContactLoading(true);
       }
     } catch (e) {
       setContactExists(false);
