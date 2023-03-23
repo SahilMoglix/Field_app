@@ -33,7 +33,6 @@ const LoginScreen = ({navigation}) => {
 
   const onLogin = async () => {
     try {
-      console.log('mc yahana aarha hai!!');
       let tokens = await azureAuth.webAuth.authorize({
         scope: 'openid profile User.Read',
       });
@@ -54,11 +53,7 @@ const LoginScreen = ({navigation}) => {
 
   return (
     <>
-      <StatusBar
-        translucent
-        backgroundColor="transparent"
-        barStyle={'dark-content'}
-      />
+      <StatusBar translucent backgroundColor="#fff" barStyle={'dark-content'} />
       <ScrollView style={{flex: 1, backgroundColor: 'white'}}>
         <LinearGradient
           colors={['#EAF2FF', '#fff']}
@@ -89,32 +84,6 @@ const LoginScreen = ({navigation}) => {
             />
           </View>
           <View style={styles.formWrap}>
-            {/* <Text style={styles.loginHeading}>Login</Text>
-              <Input
-                placeholder="Phone no"
-                label="Phone Number"
-                keyboardType="number-pad"
-                onChangeText={(newNo) => setContact(newNo)}
-                autoCorrect={false}
-                containerStyle={styles.WrapperStyle}
-                inputContainerStyle={styles.inputContainerStyle}
-                inputStyle={styles.inputStyle}
-                labelStyle={styles.labelStyle}
-                rightIconContainerStyle={styles.iconStyle}
-                errorStyle={styles.errorText}
-              />
-              <Input
-                placeholder="Password"
-                label="Password"
-                secureTextEntry={true}
-                containerStyle={styles.WrapperStyle}
-                onChangeText={(newPass) => setPass(newPass)}
-                inputContainerStyle={styles.inputContainerStyle}
-                inputStyle={styles.inputStyle}
-                labelStyle={styles.labelStyle}
-                rightIconContainerStyle={styles.iconStyle}
-                errorStyle={styles.errorText}
-              /> */}
             <Button
               onPress={onLogin}
               title="Login with Microsoft"

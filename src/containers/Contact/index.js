@@ -1,5 +1,5 @@
-import { FlashList } from "@shopify/flash-list";
-import React, { useEffect, useState } from "react";
+import {FlashList} from '@shopify/flash-list';
+import React, {useEffect, useState} from 'react';
 import {
   PermissionsAndroid,
   View,
@@ -9,48 +9,135 @@ import {
   ActivityIndicator,
   TextInput,
   TouchableOpacity,
-} from "react-native";
-import Contacts from "react-native-contacts";
-import Modal from "react-native-modal";
-import Dimension from "../../Theme/Dimension";
-import styles from "./style";
+} from 'react-native';
+import Contacts from 'react-native-contacts';
+import Modal from 'react-native-modal';
+import Dimension from '../../Theme/Dimension';
+import styles from './style';
 import CustomeIcon from '../../component/CustomeIcon';
-import { useNavigation } from "@react-navigation/native";
-import MyInput from "../../component/floatingInput"
-
-const ContactScreen = (props) => {
+import {useNavigation} from '@react-navigation/native';
+import MyInput from '../../component/floatingInput';
+import {useDispatch, useSelector} from 'react-redux';
+import {STATE_STATUS} from '../../redux/constants';
+import {fetchContacts} from '../../redux/actions/contacts';
+import Colors from '../../Theme/Colors';
+import {CheckBox} from 'react-native-elements';
+import {getNumberDetails} from '../../services/contacts';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+const ContactScreen = props => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const flatListRef = React.useRef();
+
+  const contactsData = useSelector(state => state.contactsReducer.get('data'));
+  const contactsStatus = useSelector(state =>
+    state.contactsReducer.get('status'),
+  );
+
   const [contacts, setContacts] = useState([]);
-  const [searchValue, setSearch] = useState("");
+  const [pagetype, setpageType] = useState('Focused');
+  const [searchValue, setSearch] = useState('');
   const [FilterList, setFilter] = useState([]);
   const [syncPhone, setSyncPhone] = useState(false);
+  const [selectContact, setSelectContact] = useState(false);
   const [contactsLoader, setContactsLoader] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
-  const [contactNum, setContactNum] = useState()
+  const [contactNum, setContactNum] = useState('');
+  const [contactExists, setContactExists] = useState(false);
+  const [contactLoading, setContactLoading] = useState(false);
+
   useEffect(() => {
     setContactsLoader(true);
     getPhoneContacts();
+    pullToRefresh();
   }, []);
+
+  useEffect(() => {
+    if (contactNum.length == 10) {
+      checkExistance();
+    }
+  }, [contactNum]);
+
+  const checkExistance = async () => {
+    try {
+      setContactLoading(true);
+      const {data} = await getNumberDetails(contactNum);
+      setContactLoading(false);
+      if (data?.result?.data?.length) {
+        setContactExists(true);
+      } else {
+        setContactExists(false);
+      }
+    } catch (e) {
+      setContactExists(false);
+      setContactLoading(false);
+    }
+  };
+
+  const pullToRefresh = () => {
+    dispatch(fetchContacts());
+  };
 
   const addContactModal = () => {
     setModalVisible(!isModalVisible);
   };
 
+  const renderFocusedData = ({item, index}) => {
+    return (
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate('ContactDetail', {phone: item.phone})
+        }
+        style={styles.contactCon}>
+        <View style={styles.placeholder}>
+          <Text style={styles.txt}>{item?.name[0]}</Text>
+          {/* {contact?.hasThumbnail ? (
+            <Image
+              source={{uri: contact?.thumbnailPath}}
+              style={{width: 48, height: 48, borderRadius: 48}}
+            />
+          ) : (
+            <Text style={styles.txt}>{contact?.givenName[0]}</Text>
+          )} */}
+        </View>
+
+        <View style={styles.contactDat}>
+          <Text style={styles.name}>{item?.name} </Text>
+          <Text style={styles.phoneNumber}>{item?.designation}</Text>
+          <Text style={styles.phoneNumber}>
+            {!item.company ? 'Company details missing' : item?.company}
+          </Text>
+          <Text
+            style={[
+              styles.PositionWrap,
+              {backgroundColor: item?.backgroundColor},
+            ]}>
+            {item?.inclination}
+          </Text>
+        </View>
+        <TouchableOpacity style={styles.arrowBtn}>
+          <CustomeIcon
+            name={'Arrow-black'}
+            color={Colors.FontColor}
+            size={20}></CustomeIcon>
+        </TouchableOpacity>
+      </TouchableOpacity>
+    );
+  };
+
   const getPhoneContacts = () => {
-    if (Platform.OS == "android") {
+    if (Platform.OS == 'android') {
       try {
         PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS)
-          .then((res) => {
-            console.log("Permission: ", res);
+          .then(res => {
             readContacts();
           })
-          .catch((error) => {
-            console.error("Permission error: ", error);
+          .catch(error => {
+            console.error('Permission error: ', error);
           });
       } catch (err) {
         setContactsLoader(false);
-        console.log("err", err);
+        console.log('err', err);
       }
     } else {
       readContacts();
@@ -59,29 +146,28 @@ const ContactScreen = (props) => {
 
   const readContacts = () => {
     Contacts.getAll()
-      .then((contacts) => {
-        console.log("all contacts list", contacts);
+      .then(contacts => {
         setContacts(contacts);
         setContactsLoader(false);
       })
-      .catch((e) => {
+      .catch(e => {
         setContactsLoader(false);
         console.log(e);
       });
   };
-  const renderItem = ({ item, index }) => {
+
+  const renderItem = ({item, index}) => {
     return <Contact contact={item} />;
   };
+
   const keyExtractor = (item, idx) => {
     return item?.recordID?.toString() || idx.toString();
   };
 
-  const onSearchText = (item) => {
-    console.log(searchValue)
+  const onSearchText = item => {
     setSearch(item);
-    flatListRef.current.scrollToOffset({ animated: true, offset: 0 });
+    flatListRef.current.scrollToOffset({animated: true, offset: 0});
     let filteredData = contacts.filter(function (val) {
-      console.log(searchValue)
       if (
         val.displayName.toLowerCase().includes(item.toLowerCase()) ||
         (val.company && val.company.toLowerCase().includes(item.toLowerCase()))
@@ -92,14 +178,14 @@ const ContactScreen = (props) => {
     setFilter(filteredData);
   };
 
-  const Contact = ({ contact }) => {
+  const Contact = ({contact}) => {
     return (
       <View style={styles.contactCon}>
         <View style={styles.placeholder}>
           {contact?.hasThumbnail ? (
             <Image
-              source={{ uri: contact?.thumbnailPath }}
-              style={{ width: 48, height: 48, borderRadius: 48 }}
+              source={{uri: contact?.thumbnailPath}}
+              style={{width: 48, height: 48, borderRadius: 48}}
             />
           ) : (
             <Text style={styles.txt}>{contact?.givenName[0]}</Text>
@@ -108,15 +194,53 @@ const ContactScreen = (props) => {
 
         <View style={styles.contactDat}>
           <Text style={styles.name}>
-            {contact?.givenName}{" "}
-            {contact?.middleName && contact.middleName + " "}
+            {contact?.givenName}{' '}
+            {contact?.middleName && contact.middleName + ' '}
             {contact?.familyName}
           </Text>
           <Text style={styles.phoneNumber}>
             {contact?.phoneNumbers[0]?.number}
           </Text>
+          {selectContact ? null : (
+            <TouchableOpacity
+              onPress={addContactModal}
+              style={{flexDirection: 'row'}}>
+              <CustomeIcon
+                name={'Add-blue'}
+                size={18}
+                color={'#1568E5'}></CustomeIcon>
+              <Text style={styles.addBtnTxt}> Add</Text>
+            </TouchableOpacity>
+          )}
           <Text style={styles.name}>{contact?.company}</Text>
         </View>
+        {selectContact ? (
+          <TouchableOpacity style={styles.selectWrap}>
+            <CheckBox
+              //title={'yes'}
+              // onPress={() => onCheck(_.key)}
+              checkedIcon={
+                <CustomeIcon
+                  name={'Check-blue'}
+                  size={Dimension.font22}
+                  color={Colors.CtaColor}
+                />
+              }
+              uncheckedIcon={
+                <CustomeIcon
+                  name={'Check-blank'}
+                  size={Dimension.font22}
+                  color={Colors.FontColor}
+                />
+              }
+              checked={true}
+              textStyle={styles.checkboxTitle}
+              fontFamily={Dimension.CustomMediumFont}
+              wrapperStyle={styles.checkboxwrapper}
+              containerStyle={styles.checkboxContainer}
+            />
+          </TouchableOpacity>
+        ) : null}
       </View>
     );
   };
@@ -134,77 +258,147 @@ const ContactScreen = (props) => {
     return mutateContacts;
   };
 
-  const AddContact =()=>{
-    navigation.navigate("AddContact")
-  }
+  const AddContact = () => {
+    navigation.navigate('AddContact');
+  };
+
   return (
     <View
       style={{
         flex: 1,
         marginTop: Dimension.margin40,
-        backgroundColor: "#fff",
-      }}
-    >
+        backgroundColor: '#fff',
+      }}>
       <View style={styles.headerWrap}>
         <View style={styles.TopHeader}>
           <Text style={styles.headingTxt}>Contacts</Text>
         </View>
         <View style={styles.HeaderForBtn}>
           <View style={styles.BtnWrap}>
-            <TouchableOpacity style={styles.TopBtn}>
-              <Text style={styles.BtnTxt}>Focused</Text>
+            <TouchableOpacity
+              style={
+                pagetype == 'Focused' ? styles.ActiveTopBtn : styles.TopBtn
+              }
+              onPress={() => setpageType('Focused')}>
+              <Text
+                style={
+                  pagetype == 'Focused' ? styles.ActiveBtnTxt : styles.BtnTxt
+                }>
+                Focused
+              </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.ActiveTopBtn}>
-              <Text style={styles.ActiveBtnTxt}>Phone</Text>
+            <TouchableOpacity
+              style={pagetype == 'Phone' ? styles.ActiveTopBtn : styles.TopBtn}
+              onPress={() => setpageType('Phone')}>
+              <Text
+                style={
+                  pagetype == 'Phone' ? styles.ActiveBtnTxt : styles.BtnTxt
+                }>
+                Phone
+              </Text>
             </TouchableOpacity>
           </View>
           <View>
-          <TouchableOpacity onPress={addContactModal} style={{flexDirection:"row"}}>
-            <CustomeIcon name={'Add-blue'} size={18} color={'#1568E5'}></CustomeIcon>
-              <Text style={styles.addBtnTxt}> Add</Text>
-            </TouchableOpacity>
+            {pagetype == 'Focused' ? (
+              <TouchableOpacity
+                onPress={addContactModal}
+                style={{flexDirection: 'row'}}>
+                <CustomeIcon
+                  name={'Add-blue'}
+                  size={18}
+                  color={'#1568E5'}></CustomeIcon>
+                <Text style={styles.addBtnTxt}> Add</Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                onPress={() => setSelectContact(!selectContact)}
+                style={{flexDirection: 'row'}}>
+                <Text style={styles.addBtnTxt}>
+                  {selectContact ? 'Cancel' : 'Select'}
+                </Text>
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
-        </View>
-      <View>
-      
-      </View>
+        <View></View>
         <View style={styles.searchWraper}>
-        <CustomeIcon name={'search-grey'} size={20} color={'#8E8E93'} style={styles.searchIcon}></CustomeIcon>
-          <View style={{ flex: 4 }}>
+          <CustomeIcon
+            name={'search-grey'}
+            size={20}
+            color={'#8E8E93'}
+            style={styles.searchIcon}></CustomeIcon>
+          <View style={{flex: 4}}>
             <TextInput
-              placeholder={"Search by name, company"}
-              returnKeyType={"search"}
-              onChangeText={(e)=>onSearchText(e)}
+              placeholder={'Search by name, company'}
+              returnKeyType={'search'}
+              onChangeText={e => onSearchText(e)}
               defaultValue={searchValue}
               ellipsizeMode="tail"
-              placeholderTextColor={"#8E8E93"}
+              placeholderTextColor={'#8E8E93'}
               numberOfLines={1}
               clearButtonMode="always"
-              style={styles.SearchInputCss}
-            ></TextInput>
+              style={styles.SearchInputCss}></TextInput>
           </View>
-          {searchValue.length > 0 && <>
-          <TouchableOpacity onPress={()=>setSearch("")} activeOpacity={0.5} style={styles.crossIcon}>
-            <CustomeIcon name={'Cancel'} size={20} color={'#1568E5'}></CustomeIcon>
-            
-           </TouchableOpacity>
-          </>}
+          {searchValue.length > 0 && (
+            <>
+              <TouchableOpacity
+                onPress={() => setSearch('')}
+                activeOpacity={0.5}
+                style={styles.crossIcon}>
+                <CustomeIcon
+                  name={'Cancel'}
+                  size={20}
+                  color={'#1568E5'}></CustomeIcon>
+              </TouchableOpacity>
+            </>
+          )}
         </View>
       </View>
-      {contactsLoader ? (
+      {pagetype == 'Focused' ? (
+        [STATE_STATUS.FETCHING, STATE_STATUS.UNFETCHED].includes(
+          contactsStatus,
+        ) ? (
+          <ActivityIndicator
+            color={'red'}
+            size={'large'}
+            style={{
+              marginTop: 100,
+              alignContent: 'center',
+              alignItems: 'center',
+              alignSelf: 'center',
+            }}
+          />
+        ) : (
+          <FlashList
+            // ref={flatListRef}
+            estimatedItemSize={106}
+            data={contactsData.toArray()}
+            renderItem={renderFocusedData}
+            refreshing={[
+              STATE_STATUS.FETCHING,
+              STATE_STATUS.UNFETCHED,
+            ].includes(contactsStatus)}
+            onRefresh={pullToRefresh}
+            // keyExtractor={index}
+            //style={styles.list}
+          />
+        )
+      ) : null}
+      {pagetype == 'Phone' && contactsLoader ? (
         <ActivityIndicator
-          color={"red"}
-          size={"large"}
+          color={'red'}
+          size={'large'}
           style={{
             marginTop: 100,
-            alignContent: "center",
-            alignItems: "center",
-            alignSelf: "center",
+            alignContent: 'center',
+            alignItems: 'center',
+            alignSelf: 'center',
           }}
         />
-      ) : (
+      ) : pagetype == 'Phone' ? (
         <FlashList
           ref={flatListRef}
+          estimatedItemSize={106}
           data={
             searchValue && searchValue.length > 0
               ? FilterList
@@ -214,29 +408,55 @@ const ContactScreen = (props) => {
           keyExtractor={keyExtractor}
           //style={styles.list}
         />
-      )}
+      ) : null}
 
-    <Modal 
-    isVisible={isModalVisible}
-    style={styles.ModalBg}
-    >
+      <Modal
+        onBackButtonPress={() => setModalVisible(false)}
+        onBackdropPress={() => setModalVisible(false)}
+        isVisible={isModalVisible}
+        style={styles.ModalBg}>
         <View style={styles.ModalContainer}>
           <Text style={styles.ModalHeading}>Add Contact</Text>
           <View style={styles.InputWrap}>
-          <MyInput 
-          label="Contact Number"  
-          keyboardType="number-pad" 
-          IconName={'Call_grey'} 
-          RightIconName={'Next_blue'}
-          onChangeText={newText => setContactNum(newText)}
-          />
+            <MyInput
+              label="Contact Number"
+              keyboardType="number-pad"
+              maxLength={10}
+              IconName={'call-grey'}
+              defaultValue={contactNum}
+              value={contactNum}
+              onChangeText={newText => setContactNum(newText)}
+              onSubmitEditing={() => {
+                if (contactNum.length == 10) {
+                  checkExistance();
+                }
+              }}
+              RightIconView={() => (
+                <Icon
+                  name={'check-circle'}
+                  size={Dimension.font28}
+                  color={'#07AD0D'}></Icon>
+              )}
+            />
+          </View>
+          {contactExists && contactNum.length == 10 ? (
+            <Text style={styles.alreadyExistsTxt}>Contact already exists</Text>
+          ) : null}
+          {contactLoading && (
+            <Text style={styles.searchingtxt}>Searching...</Text>
+          )}
+          {/* disableBtn css */}
 
-         </View>
-         {/* disableBtn css */}
-          <TouchableOpacity  onPress={addContactModal} style={styles.enableBtn}>
-            <Text style={styles.disableBtnTxt}>Continue</Text>
+          <TouchableOpacity
+            onPress={AddContact}
+            //disabled={!contactExists && contactNum.length == 10 ? false : true}
+            style={
+              !contactExists && contactNum.length == 10
+                ? styles.enableBtn
+                : styles.disableBtn
+            }>
+            <Text style={styles.disableBtnTxt}>Add to my Contact</Text>
           </TouchableOpacity>
-          
         </View>
       </Modal>
     </View>

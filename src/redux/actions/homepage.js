@@ -1,4 +1,4 @@
-import { HOMEPAGE_ACTIONS } from "../constants/homepage";
+import {HOMEPAGE_ACTIONS} from '../constants/homepage';
 
 export const fetchHomepage = () => {
   return {
@@ -6,7 +6,7 @@ export const fetchHomepage = () => {
   };
 };
 
-export const fetchedHomepage = (data) => {
+export const fetchedHomepage = data => {
   return {
     // type: HOMEPAGE_ACTIONS.FETCHED_PRODUCTS,
     payload: {
@@ -15,7 +15,7 @@ export const fetchedHomepage = (data) => {
   };
 };
 
-export const failedFetchHomepage = (error) => {
+export const failedFetchHomepage = error => {
   return {
     // type: HOMEPAGE_ACTIONS.FAILED_FETCH_PRODUCTS,
     error,
