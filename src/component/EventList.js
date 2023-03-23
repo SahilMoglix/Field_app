@@ -60,9 +60,6 @@ const EventList = props => {
             <View
               style={{
                 flexDirection: 'column',
-                // alignItems: 'center',
-                // flex: 1,
-                // width: '100%',
               }}>
               <Text
                 style={styles.meetingval}

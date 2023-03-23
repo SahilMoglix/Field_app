@@ -20,7 +20,6 @@ const styles = StyleSheet.create({
     shadowRadius: 2.62,
     elevation: 4,
     paddingHorizontal: Dimension.padding15,
-    //marginBottom: Dimension.margin10,
     paddingVertical: Dimension.padding10,
     backgroundColor: '#fff',
   },
@@ -39,12 +38,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: Dimension.padding20,
     paddingVertical: Dimension.padding30,
     margin: 0,
-    //marginBottom:Dimension.margin10,
     elevation: 0,
-    //   justifyContent:"center",
-    //alignItems:"center",
     position: 'relative',
-    //backgroundColor:"#ccc"
   },
   NameCss: {
     fontFamily: Dimension.CustomMediumFont,
@@ -96,7 +91,6 @@ const styles = StyleSheet.create({
     color: colors.CtaColor,
     fontSize: Dimension.font14,
     alignSelf: 'flex-start',
-    //fontWeight:"normal"
   },
   EventCardWrapper: {
     borderRadius: 5,
@@ -147,7 +141,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Dimension.padding20,
     paddingVertical: Dimension.padding12,
     height: Dimension.height70,
-    //backgroundColor:'#aaa',
+
     marginBottom: Dimension.margin10,
   },
   labelStyle: {
@@ -155,7 +149,7 @@ const styles = StyleSheet.create({
     color: colors.DateBgColor,
     fontFamily: Dimension.CustomMediumFont,
     marginLeft: Dimension.margin8,
-    // marginBottom: Dimension.margin5,
+
     fontWeight: 'normal',
     position: 'absolute',
     left: 50,
@@ -222,7 +216,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     alignContent: 'center',
-    //marginBottom: Dimension.margin20,
   },
 
   btnContainer: {
@@ -231,8 +224,7 @@ const styles = StyleSheet.create({
   },
   CancelbtnStyle: {
     backgroundColor: '#FAFAFA',
-    // borderRadius: 50,
-    // paddingHorizontal: Dimension.padding30,
+
     alignItems: 'center',
     justifyContent: 'center',
     alignContent: 'center',

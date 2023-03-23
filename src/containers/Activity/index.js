@@ -104,13 +104,13 @@ const ActivityScreen = () => {
           </Text>
           <View style={{flexDirection: 'row'}}>
             <Text style={styles.phoneNumber}>{setCallType(contact?.type)}</Text>
-            <Text style={styles.datetxt}>
+            <View style={styles.datetxt}>
               <DateConvert
                 date={contact?.dateTime}
                 contactType={contact?.type}
               />
               {/* {contact?.type} */}
-            </Text>
+            </View>
           </View>
           {/* <Text style={styles.phoneNumber}>
             {contact?.dateTime}
@@ -134,7 +134,7 @@ const ActivityScreen = () => {
     <View
       style={{
         flex: 1,
-        marginTop: Dimension.margin40,
+        paddingTop: Dimension.padding30,
         backgroundColor: '#fff',
       }}>
       <View style={styles.headerWrap}>
@@ -193,9 +193,9 @@ const ActivityScreen = () => {
         style={styles.list}
         ListEmptyComponent={
           STATE_STATUS.FETCHED && searchedData.size == 0 ? (
-            <Text style={{alignSelf: 'center', color: '#000'}}>
-              No records found
-            </Text>
+            <View style={styles.NoDataFoundWrap}>
+              <Text style={styles.NoDataFoundTxt}>No records found</Text>
+            </View>
           ) : null
         }
         keyExtractor={keyExtractor}
