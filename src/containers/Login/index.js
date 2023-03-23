@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from 'react';
 import {
   Card,
   Button,
@@ -7,37 +7,49 @@ import {
   ListItem,
   Image,
   Input,
-} from "react-native-elements";
+} from 'react-native-elements';
 //import CONSTANTS from "../../services/constant";
-import styles from "./style";
-import Dimension from "../../Theme/Dimension";
+import styles from './style';
+import Dimension from '../../Theme/Dimension';
 //import { userService } from "../../services/homepage";
-import LinearGradient from "react-native-linear-gradient";
-import { Text, ScrollView, View, StatusBar } from "react-native";
+import LinearGradient from 'react-native-linear-gradient';
+import {Text, ScrollView, View, StatusBar} from 'react-native';
 import Toast from 'react-native-toast-message';
+import AzureAuth from 'react-native-azure-auth';
+import Client from 'react-native-azure-auth/src/networking';
+const CLIENT_ID = 'ac5fc872-17f9-4f59-af74-3abbe885956e'; // replace the string with YOUR client ID
 
-const LoginScreen = ({ navigation }) => {
+const azureAuth = new AzureAuth({
+  clientId: CLIENT_ID,
+});
+
+const LoginScreen = ({navigation}) => {
   const [myContact, setContact] = useState();
   const [myPass, setPass] = useState();
+  const [accessToken, setAccessToken] = useState(null);
+  const [user, setUser] = useState('');
+  const [mails, setMails] = useState([]);
+  const [userId, setUserId] = useState('');
 
-  const onLogin = () => {
-    navigation.navigate("HomeApp");
-    // userService
-    //   .UserLogin(myContact,myPass)
-    //   .then((data) => {
-    //     if (data.code == 200 && data.success) {
-    //       navigation.navigate("HomeApp");
-    //     } else {
-    //       Toast.show({
-    //         type: 'error',
-    //          position: 'top',
-    //         text1: data.message,
-    //       });
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.log("err", err);
-    //   });
+  const onLogin = async () => {
+    try {
+      console.log('mc yahana aarha hai!!');
+      let tokens = await azureAuth.webAuth.authorize({
+        scope: 'openid profile User.Read',
+      });
+      console.log('CRED>>>', tokens);
+      setAccessToken(tokens?.accessToken);
+      let info = await azureAuth.auth.msGraphRequest({
+        token: tokens.accessToken,
+        path: 'me',
+      });
+      console.log('info', info);
+      setUser(info.displayName);
+      setUserId(tokens?.userId);
+    } catch (error) {
+      console.log('Error during Azure operation', error);
+    }
+    // navigation.navigate('HomeApp');
   };
 
   return (
@@ -45,41 +57,39 @@ const LoginScreen = ({ navigation }) => {
       <StatusBar
         translucent
         backgroundColor="transparent"
-        barStyle={"dark-content"}
+        barStyle={'dark-content'}
       />
-      <ScrollView style={{flex:1,backgroundColor:"white"}}>
+      <ScrollView style={{flex: 1, backgroundColor: 'white'}}>
         <LinearGradient
-          colors={["#EAF2FF", "#fff"]}
-          style={{flex:1,position:"relative",justifyContent:"flex-end"}}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-        >
-          
-            <View style={styles.logoWrap}>
-              <Image
-                source={require("../../assets/images/Logo.png")}
-                style={{
-                  width: "100%",
-                  height: Dimension.height25,
-                  alignSelf: "center",
-                }}
-                resizeMode={"contain"}
-              />
-              <Text style={styles.AppName}>Key Account Manager</Text>
-            </View>
-            <View style={styles.imageWrap}>
-              <Image
-                source={require("../../assets/images/login.png")}
-                style={{
-                  width: "100%",
-                  height: Dimension.height200,
-                  alignSelf: "center",
-                }}
-                resizeMode={"contain"}
-              />
-            </View>
-            <View style={styles.formWrap}>
-              {/* <Text style={styles.loginHeading}>Login</Text>
+          colors={['#EAF2FF', '#fff']}
+          style={{flex: 1, position: 'relative', justifyContent: 'flex-end'}}
+          start={{x: 0, y: 0}}
+          end={{x: 1, y: 1}}>
+          <View style={styles.logoWrap}>
+            <Image
+              source={require('../../assets/images/Logo.png')}
+              style={{
+                width: '100%',
+                height: Dimension.height25,
+                alignSelf: 'center',
+              }}
+              resizeMode={'contain'}
+            />
+            <Text style={styles.AppName}>Key Account Manager</Text>
+          </View>
+          <View style={styles.imageWrap}>
+            <Image
+              source={require('../../assets/images/login.png')}
+              style={{
+                width: '100%',
+                height: Dimension.height200,
+                alignSelf: 'center',
+              }}
+              resizeMode={'contain'}
+            />
+          </View>
+          <View style={styles.formWrap}>
+            {/* <Text style={styles.loginHeading}>Login</Text>
               <Input
                 placeholder="Phone no"
                 label="Phone Number"
@@ -105,19 +115,18 @@ const LoginScreen = ({ navigation }) => {
                 rightIconContainerStyle={styles.iconStyle}
                 errorStyle={styles.errorText}
               /> */}
-              <Button
-               onPress={onLogin}
-                title="Login with Microsoft"
-                color="#272727"
-                buttonStyle={styles.btnStyle}
-                titleStyle={styles.btntxt}
-                containerStyle={styles.btnContainer}
-                raised
-              />
-            </View>
-          
+            <Button
+              onPress={onLogin}
+              title="Login with Microsoft"
+              color="#272727"
+              buttonStyle={styles.btnStyle}
+              titleStyle={styles.btntxt}
+              containerStyle={styles.btnContainer}
+              raised
+            />
+          </View>
         </LinearGradient>
-        </ScrollView>
+      </ScrollView>
     </>
   );
 };
