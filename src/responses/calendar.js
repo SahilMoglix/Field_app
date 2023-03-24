@@ -263,3 +263,33 @@ export const logs = {
     },
   ],
 };
+
+export const designations = {
+  message: 'designations fetched successfully',
+  result: ['CFO', 'CEO'],
+};
+
+export const plantCompanies = {
+  message: 'data fetched successfully',
+  status: 200,
+  data: {
+    company: {
+      1: 'dummycompany1',
+      2: 'dummycompany2',
+    },
+    plant: {
+      1: 'dummyplant1',
+      2: 'dummyplant2',
+      3: 'dummyplant3',
+      4: 'dummyplant4',
+    },
+    companyToBranch: [
+      {
+        1: [2, 3],
+      },
+      {
+        2: [3, 4],
+      },
+    ],
+  },
+};

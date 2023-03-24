@@ -10,12 +10,24 @@ import {useNavigation} from '@react-navigation/native';
 import MyInput from '../../component/floatingInput';
 import DotCheckbox from '../../component/Checkbox';
 import CustomeDatePicker from '../../component/Datepicker';
+import {useSelector} from 'react-redux';
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 
 const FilterModal = props => {
   const navigation = useNavigation();
+
+  const Designations = useSelector(state =>
+    state.homepageReducer.get('designations'),
+  );
+  const PlantsData = useSelector(state =>
+    state.homepageReducer.get('companyPlant'),
+  );
+  const CompanyData = useSelector(state =>
+    state.homepageReducer.get('company'),
+  );
+
   const [filterFromDate, setfilterFromDate] = useState(new Date());
   const [filterToDate, setFilterToDate] = useState(new Date());
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
@@ -25,73 +37,75 @@ const FilterModal = props => {
   const [startDate, setStartDate] = useState(new Date(props.startDate));
   const [endDate, setEndDate] = useState(new Date(props.endDate));
 
+  console.log(PlantsData);
+
   useEffect(() => {}, []);
-  const filterRadioBtnData = [
-    {
-      title: 'All',
-      label: 'All',
-      key: 'all',
-    },
-    {
-      title: 'Procurement Manager',
-      label: 'Procurement Manager',
-      key: 'Procurement Manager',
-    },
-    {
-      title: 'CEO',
-      label: 'CEO',
-      key: 'CEO',
-    },
-    {
-      title: 'User',
-      label: 'User',
-      key: 'User',
-    },
-  ];
-  const CompanyData = [
-    {
-      title: 'All',
-      label: 'All',
-      key: 'All',
-    },
-    {
-      title: 'Moglix',
-      label: 'Moglix',
-      key: '1',
-    },
-    {
-      title: 'TCS',
-      label: 'TCS',
-      key: '2',
-    },
-    {
-      title: 'Infosys',
-      label: 'Infosys',
-      key: '3',
-    },
-  ];
-  const PlantData = [
-    {
-      title: 'plant1',
-      label: 'plant1',
-      key: '1',
-    },
-    {
-      title: 'plant2',
-      label: 'plant2',
-      key: '2',
-    },
-    {
-      title: 'plant3',
-      label: 'plant3',
-      key: '3',
-    },
-    {
-      title: 'plant4',
-      label: 'plant4',
-      key: '4',
-    },
-  ];
+  // const Designations = [
+  //   {
+  //     title: 'All',
+  //     label: 'All',
+  //     key: 'all',
+  //   },
+  //   {
+  //     title: 'Procurement Manager',
+  //     label: 'Procurement Manager',
+  //     key: 'Procurement Manager',
+  //   },
+  //   {
+  //     title: 'CEO',
+  //     label: 'CEO',
+  //     key: 'CEO',
+  //   },
+  //   {
+  //     title: 'User',
+  //     label: 'User',
+  //     key: 'User',
+  //   },
+  // ];
+  // const CompanyData = [
+  //   {
+  //     title: 'All',
+  //     label: 'All',
+  //     key: 'All',
+  //   },
+  //   {
+  //     title: 'Moglix',
+  //     label: 'Moglix',
+  //     key: '1',
+  //   },
+  //   {
+  //     title: 'TCS',
+  //     label: 'TCS',
+  //     key: '2',
+  //   },
+  //   {
+  //     title: 'Infosys',
+  //     label: 'Infosys',
+  //     key: '3',
+  //   },
+  // ];
+  // const PlantData = [
+  //   {
+  //     title: 'plant1',
+  //     label: 'plant1',
+  //     key: '1',
+  //   },
+  //   {
+  //     title: 'plant2',
+  //     label: 'plant2',
+  //     key: '2',
+  //   },
+  //   {
+  //     title: 'plant3',
+  //     label: 'plant3',
+  //     key: '3',
+  //   },
+  //   {
+  //     title: 'plant4',
+  //     label: 'plant4',
+  //     key: '4',
+  //   },
+  // ];
   const FILTERS_DATA = {
     tabs: [
       {
@@ -105,7 +119,11 @@ const FilterModal = props => {
             value: designation,
             onCheck: text => setDesignation(text),
             component: DotCheckbox,
-            data: filterRadioBtnData,
+            data: Designations.toArray().map(_ => ({
+              key: _,
+              title: _,
+              label: _,
+            })),
           },
         ],
       },
@@ -120,7 +138,11 @@ const FilterModal = props => {
             value: company,
             onCheck: text => setCompany(text),
             component: DotCheckbox,
-            data: CompanyData,
+            data: CompanyData.toArray().map(_ => ({
+              ..._,
+              title: _.value,
+              label: _.value,
+            })),
           },
         ],
       },
@@ -135,7 +157,11 @@ const FilterModal = props => {
             value: plant,
             onCheck: text => setPlant(text),
             component: DotCheckbox,
-            data: PlantData,
+            data: (PlantsData.get(company) || []).map(_ => ({
+              ..._,
+              title: _.value,
+              label: _.value,
+            })),
           },
         ],
       },
@@ -198,7 +224,7 @@ const FilterModal = props => {
   const applyFilters = fromReset => {
     if (fromReset) {
       props.onApplyFilter({
-        designation: 'all',
+        designation: '',
         company: '',
         plant: '',
         startDate: new Date(new Date().toDateString() + ' 00:00:00').getTime(),

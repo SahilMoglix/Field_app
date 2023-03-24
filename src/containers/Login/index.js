@@ -15,29 +15,40 @@ import Dimension from '../../Theme/Dimension';
 import LinearGradient from 'react-native-linear-gradient';
 import {Text, ScrollView, View, StatusBar} from 'react-native';
 import Toast from 'react-native-toast-message';
+import AzureAuth from 'react-native-azure-auth';
+import Client from 'react-native-azure-auth/src/networking';
+const CLIENT_ID = 'ac5fc872-17f9-4f59-af74-3abbe885956e'; // replace the string with YOUR client ID
+
+const azureAuth = new AzureAuth({
+  clientId: CLIENT_ID,
+});
 
 const LoginScreen = ({navigation}) => {
   const [myContact, setContact] = useState();
   const [myPass, setPass] = useState();
+  const [accessToken, setAccessToken] = useState(null);
+  const [user, setUser] = useState('');
+  const [mails, setMails] = useState([]);
+  const [userId, setUserId] = useState('');
 
-  const onLogin = () => {
-    navigation.navigate('HomeApp');
-    // userService
-    //   .UserLogin(myContact,myPass)
-    //   .then((data) => {
-    //     if (data.code == 200 && data.success) {
-    //       navigation.navigate("HomeApp");
-    //     } else {
-    //       Toast.show({
-    //         type: 'error',
-    //          position: 'top',
-    //         text1: data.message,
-    //       });
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.log("err", err);
-    //   });
+  const onLogin = async () => {
+    try {
+      let tokens = await azureAuth.webAuth.authorize({
+        scope: 'openid profile User.Read',
+      });
+      console.log('CRED>>>', tokens);
+      setAccessToken(tokens?.accessToken);
+      let info = await azureAuth.auth.msGraphRequest({
+        token: tokens.accessToken,
+        path: 'me',
+      });
+      console.log('info', info);
+      setUser(info.displayName);
+      setUserId(tokens?.userId);
+    } catch (error) {
+      console.log('Error during Azure operation', error);
+    }
+    // navigation.navigate('HomeApp');
   };
 
   return (

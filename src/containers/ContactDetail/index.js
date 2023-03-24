@@ -74,8 +74,11 @@ const ContactDetail = props => {
   ];
 
   useEffect(() => {
-    onContactFetch();
-  }, []);
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      onContactFetch();
+    });
+    return unsubscribe;
+  }, [props.navigation]);
 
   const onContactFetch = async () => {
     const {data} = await getNumberDetails(props.route.params.phone);
@@ -106,7 +109,13 @@ const ContactDetail = props => {
               <Text style={styles.headingTxt}>Contact Detail</Text>
             </View>
             <View>
-              <TouchableOpacity style={{flexDirection: 'row'}}>
+              <TouchableOpacity
+                onPress={() =>
+                  props.navigation.navigate('AddContact', {
+                    ...contactData,
+                  })
+                }
+                style={{flexDirection: 'row'}}>
                 <CustomeIcon
                   name={'Edit-blue'}
                   color={colors.CtaColor}
@@ -140,26 +149,6 @@ const ContactDetail = props => {
             ))}
           </View>
         </ScrollView>
-        <View style={styles.BtnWrapper}>
-          <View style={{flex: 1}}>
-            <Button
-              //onPress={submitButton}
-              title="Cancel"
-              buttonStyle={styles.CancelbtnStyle}
-              titleStyle={styles.Cancelbtntxt}
-              containerStyle={styles.btnContainer}
-            />
-          </View>
-          <View style={{flex: 1}}>
-            <Button
-              // onPress={submitButton}
-              title="Save"
-              buttonStyle={styles.btnStyle}
-              titleStyle={styles.btntxt}
-              containerStyle={styles.btnContainer}
-            />
-          </View>
-        </View>
       </View>
     </>
   );

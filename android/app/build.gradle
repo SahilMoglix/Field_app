@@ -93,9 +93,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.kam_app"
+    namespace "com.moglix.field"
     defaultConfig {
-        applicationId "com.kam_app"
+        applicationId "com.moglix.field"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

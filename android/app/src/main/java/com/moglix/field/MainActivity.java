@@ -1,4 +1,4 @@
-package com.kam_app;
+package com.moglix.field;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

@@ -91,9 +91,12 @@ const Routes = props => {
       </Tab.Navigator>
     );
   };
+  const linking = {
+    prefixes: ['com.moglix.field://'],
+  };
 
   return (
-    <NavigationContainer>
+    <NavigationContainer linking={linking}>
       <AppStack.Navigator
         screenOptions={{
           headerShown: false,
