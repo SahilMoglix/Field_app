@@ -7,12 +7,13 @@ import CustomeIcon from './CustomeIcon';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Menu, MenuItem, MenuDivider} from 'react-native-material-menu';
 const DropDown = props => {
-  const {data, onCheck, toggleCheck, value} = props;
+  const {onValueChange, IconName, label, value, options} = props;
+
   const [visible, setVisible] = useState(false);
 
   const hideMenu = () => setVisible(false);
-
   const showMenu = () => setVisible(true);
+
   return (
     <Menu
       visible={visible}
@@ -20,10 +21,10 @@ const DropDown = props => {
         <TouchableOpacity onPress={showMenu} style={styles.dropDownBtn}>
           <View style={{flexDirection: 'row', marginTop: 20}}>
             <CustomeIcon
-              name={props.IconName}
+              name={IconName}
               size={Dimension.font18}
               color={colors.DateBgColor}></CustomeIcon>
-            <Text style={styles.labelStyle}>{props.label}</Text>
+            <Text style={styles.labelStyle}>{value || label}</Text>
           </View>
           <CustomeIcon
             name="icon_Below"
@@ -34,36 +35,17 @@ const DropDown = props => {
       }
       onRequestClose={hideMenu}
       style={styles.dropDownWrap}>
-      {/* {options.map((item, itemIndex) => (
+      {options.map((item, itemIndex) => (
         <MenuItem
-            onPress={() => {
-                onValueChange(item.value, item.label);
-                hideMenu();
-            }}
-            textStyle={styles.dropdownval}
-            style={styles.dropDowninnerWrap}>
-            {item.label}
+          onPress={() => {
+            onValueChange(item.value, item.label);
+            hideMenu();
+          }}
+          textStyle={styles.dropdownval}
+          style={styles.dropDowninnerWrap}>
+          {item.label}
         </MenuItem>
-         ))} */}
-      <MenuItem
-        onPress={hideMenu}
-        textStyle={styles.dropdownval}
-        style={styles.dropDowninnerWrap}>
-        Menu item 1
-      </MenuItem>
-      <MenuItem
-        onPress={hideMenu}
-        textStyle={styles.dropdownval}
-        style={styles.dropDowninnerWrap}>
-        Menu item 2
-      </MenuItem>
-
-      <MenuItem
-        onPress={hideMenu}
-        textStyle={styles.dropdownval}
-        style={styles.dropDowninnerWrap}>
-        Menu item 4
-      </MenuItem>
+      ))}
     </Menu>
   );
 };

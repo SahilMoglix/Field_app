@@ -19,6 +19,12 @@ const MyInput = props => {
     }).start();
   };
 
+  useEffect(() => {
+    if (props.value) {
+      onFocus();
+    }
+  }, [props.value]);
+
   return (
     <View style={styles.WrapperStyle}>
       <Animated.Text

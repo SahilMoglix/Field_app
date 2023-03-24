@@ -24,6 +24,7 @@ import Colors from '../../Theme/Colors';
 import {CheckBox} from 'react-native-elements';
 import {getNumberDetails} from '../../services/contacts';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
 const ContactScreen = props => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -39,6 +40,7 @@ const ContactScreen = props => {
   const [searchValue, setSearch] = useState('');
   const [FilterList, setFilter] = useState([]);
   const [syncPhone, setSyncPhone] = useState(false);
+  const [selectedContacts, setSelectedContacts] = useState([]);
   const [selectContact, setSelectContact] = useState(false);
   const [contactsLoader, setContactsLoader] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
@@ -156,6 +158,24 @@ const ContactScreen = props => {
       });
   };
 
+  const onSelectDeselectContact = detail => {
+    let currentData = [...selectedContacts];
+    const exists = currentData.find(
+      _ => _.recordID == detail.recordID,
+    )?.recordID;
+    if (exists) {
+      currentData = [...currentData.filter(_ => _.recordID != detail.recordID)];
+    } else {
+      currentData = [...currentData, detail];
+    }
+    console.log(
+      currentData.map(_ => _.recordID),
+      detail.recordID,
+      exists,
+    );
+    setSelectedContacts([...currentData]);
+  };
+
   const renderItem = ({item, index}) => {
     return <Contact contact={item} />;
   };
@@ -218,7 +238,7 @@ const ContactScreen = props => {
           <TouchableOpacity style={styles.selectWrap}>
             <CheckBox
               //title={'yes'}
-              // onPress={() => onCheck(_.key)}
+              onPress={() => onSelectDeselectContact(contact)}
               checkedIcon={
                 <CustomeIcon
                   name={'Check-blue'}
@@ -233,7 +253,9 @@ const ContactScreen = props => {
                   color={Colors.FontColor}
                 />
               }
-              checked={true}
+              checked={selectedContacts
+                .map(_ => _.recordID)
+                .includes(contact.recordID)}
               textStyle={styles.checkboxTitle}
               fontFamily={Dimension.CustomMediumFont}
               wrapperStyle={styles.checkboxwrapper}
@@ -446,10 +468,15 @@ const ContactScreen = props => {
             <Text style={styles.searchingtxt}>Searching...</Text>
           )}
           {/* disableBtn css */}
-
           <TouchableOpacity
-            onPress={AddContact}
-            //disabled={!contactExists && contactNum.length == 10 ? false : true}
+            onPress={() => {
+              props.navigation.navigate('AddContact', {
+                phone: contactNum,
+                newContact: true,
+              });
+              setModalVisible(false);
+            }}
+            disabled={!contactExists && contactNum.length == 10}
             style={
               !contactExists && contactNum.length == 10
                 ? styles.enableBtn

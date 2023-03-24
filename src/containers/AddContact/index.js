@@ -14,19 +14,42 @@ import MyInput from '../../component/floatingInput';
 import DropDown from '../../component/DropDown';
 import {useNavigation} from '@react-navigation/native';
 import DotCheckbox from '../../component/Checkbox';
+import {useDispatch, useSelector} from 'react-redux';
+import {createContact} from '../../services/contacts';
+import {fetchContacts} from '../../redux/actions/contacts';
 // import { launchImageLibrary } from 'react-native-image-picker';
 //import RNFetchBlob from 'rn-fetch-blob';
 //import CONSTANTS from "../../services/constant";
 //import SyncStorage from 'sync-storage';
 
 const AddContact = props => {
-  const [name, setName] = useState();
-  const [company, setCompany] = useState();
-  const [designation, setDesignation] = useState();
-  const [profile, setProfile] = useState();
-  const [number, setNumber] = useState();
-  const [whatsapp, setWhatsapp] = useState();
+  const disptch = useDispatch();
+  const {params} = props.route;
+
+  const Designations = useSelector(state =>
+    state.homepageReducer.get('designations'),
+  );
+  const PlantsData = useSelector(state =>
+    state.homepageReducer.get('companyPlant'),
+  );
+  const CompanyData = useSelector(state =>
+    state.homepageReducer.get('company'),
+  );
+
+  const [name, setName] = useState(params.name);
+  const [phone, setPhone] = useState(params.phone);
+  const [email, setEmail] = useState(params.email);
+  const [inclination, setInclination] = useState(props.inclination);
+  const [company, setCompany] = useState(params.company);
+  const [plant, setPlant] = useState(params.plant);
+  const [designation, setDesignation] = useState(params.designation);
+  const [department, setDepartment] = useState(params.department);
+  const [whatsappContact, setWhatsappContact] = useState(
+    params.whatsappContact,
+  );
   const [visibleCamera, setCamera] = useState(false);
+  const [loading, setLoading] = useState(true);
+
   const InclinationData = [
     {
       title: 'Promoter',
@@ -44,25 +67,167 @@ const AddContact = props => {
       key: 'Neutral',
     },
   ];
+
+  const FIELDS = [
+    {
+      component: MyInput,
+      label: 'Name',
+      RightIconName: '',
+      defaultValue: name,
+      value: name,
+      onChangeText: text => setName(text),
+      keyboardType: 'qwerty',
+      editable: true,
+      maxLength: null,
+      onSubmitEditing: () => {},
+      Placeholder: 'Name',
+      IconName: 'Name-Icon-Grey',
+      RightIconView: () => null,
+    },
+    {
+      component: MyInput,
+      label: 'Contact',
+      RightIconName: '',
+      defaultValue: phone,
+      value: phone,
+      onChangeText: text => setPhone(text),
+      keyboardType: 'number-pad',
+      editable: true,
+      maxLength: null,
+      onSubmitEditing: () => {},
+      Placeholder: 'Contact',
+      IconName: 'call-grey',
+      RightIconView: () => null,
+    },
+    {
+      component: MyInput,
+      label: 'Email',
+      RightIconName: '',
+      defaultValue: email,
+      value: email,
+      onChangeText: text => setEmail(text),
+      keyboardType: 'qwerty',
+      editable: true,
+      maxLength: null,
+      onSubmitEditing: () => {},
+      Placeholder: 'Email',
+      IconName: 'Mail-grey',
+      RightIconView: () => null,
+    },
+    {
+      component: DotCheckbox,
+      IconName: 'Inclination-grey',
+      label: 'Inclination',
+      from: 'addContact',
+      data: InclinationData,
+      horizontalView: false,
+      onCheck: val => setInclination(val),
+      value: inclination,
+    },
+    {
+      component: DropDown,
+      onValueChange: val => setDesignation(val),
+      IconName: 'Designation-grey',
+      label: 'Designation',
+      options: Designations.toArray().map(_ => ({
+        value: _,
+        label: _,
+      })),
+      value: designation,
+    },
+    {
+      component: DropDown,
+      onValueChange: val => {
+        setCompany(val);
+        setPlant('');
+      },
+      IconName: 'company-grey',
+      label: 'Company',
+      options: CompanyData.toArray().map(_ => ({
+        value: _.key,
+        label: _.value,
+      })),
+      value: (
+        CompanyData.toArray()
+          .map(_ => ({
+            value: _.key,
+            label: _.value,
+          }))
+          .find(_ => _.value == company) || {}
+      ).label,
+    },
+    {
+      component: DropDown,
+      onValueChange: val => setPlant(val),
+      IconName: 'Plant-grey',
+      label: 'Plant',
+      options: (PlantsData.get(company) || []).map(_ => ({
+        value: _.key,
+        label: _.value,
+      })),
+      value: (
+        (PlantsData.get(company) || [])
+          .map(_ => ({
+            value: _.key,
+            label: _.value,
+          }))
+          .find(_ => _.value == plant) || {}
+      ).label,
+    },
+    {
+      component: DropDown,
+      onValueChange: val => setDepartment(val),
+      IconName: 'Department-grey',
+      label: 'Department',
+      options: [],
+      value: department,
+    },
+    {
+      component: MyInput,
+      label: 'WhatsApp Number',
+      RightIconName: '',
+      defaultValue: whatsappContact,
+      value: whatsappContact,
+      onChangeText: text => setWhatsappContact(text),
+      keyboardType: 'qwerty',
+      editable: true,
+      maxLength: null,
+      onSubmitEditing: () => {},
+      Placeholder: 'WhatsApp Number',
+      IconName: 'Whatsaap-grey',
+      RightIconView: () => null,
+    },
+  ];
+
   const [photo, setPhoto] = useState(
     'https://www.rattanhospital.in/wp-content/uploads/2020/03/user-dummy-pic.png',
   );
+
   const [photoObject, setObject] = useState([
     {type: 'image/jpeg', filename: 'dummy.jpg'},
   ]);
+
   const navigation = useNavigation();
-  const submitButton = () => {
-    let finalData = JSON.stringify({
-      name: name,
-      contactNumber: number,
-      designation: designation,
-      profileSynopsis: profile,
-      whatsAppNumber: whatsapp,
-      linkedInAccount: null,
-      company: {
-        name: company,
-      },
+
+  const submitButton = async () => {
+    setLoading(true);
+    const {data} = await createContact({
+      name,
+      phone,
+      email,
+      inclination,
+      company,
+      plant,
+      designation,
+      department,
+      whatsappContact,
     });
+    console.log(data);
+    if (data.status) {
+      props.navigation.goBack();
+      disptch(fetchContacts());
+    }
+    setLoading(false);
     // ContactService.AddContact(finalData).then(response => {
     //     console.log("image uplaod response ",response)
     //     if(response.code==200 && response.success){
@@ -121,7 +286,10 @@ const AddContact = props => {
                 color={colors.FontColor}
                 size={Dimension.font20}></CustomeIcon>
             </TouchableOpacity>
-            <Text style={styles.headingTxt}>Add Contact</Text>
+            <Text style={styles.headingTxt}>
+              {props.route.params.hasOwnProperty('newContact') ? 'Add' : 'Edit'}{' '}
+              Contact
+            </Text>
           </View>
 
           <View></View>
@@ -144,47 +312,17 @@ const AddContact = props => {
                 <Text style={styles.addPhotoText}>Add Photo</Text>
               </TouchableOpacity>
             </Card>
-            <MyInput
-              label="Name"
-              keyboardType="default"
-              IconName={'Name-Icon-Grey'}
-              onChangeText={newText => setName(newText)}
-            />
-
-            <MyInput
-              label="Contact"
-              keyboardType="phone-pad"
-              IconName={'call-grey'}
-              onChangeText={newText => setNumber(newText)}
-            />
-            <MyInput
-              label="Email"
-              keyboardType="phone-pad"
-              IconName={'Mail-grey'}
-              onChangeText={newText => setNumber(newText)}
-            />
-            <DotCheckbox
+            {/* <DotCheckbox
               IconName={'Inclination-grey'}
               label={'Inclination'}
               from={'addContact'}
               data={InclinationData}
               horizontalView={true}></DotCheckbox>
-            <DropDown
-              IconName={'Designation-grey'}
-              label="Designation"></DropDown>
-            <DropDown IconName={'Plant-grey'} label="Plant"></DropDown>
-            <DropDown
-              IconName={'Department-grey'}
-              label="Department"></DropDown>
-            <DropDown IconName={'company-grey'} label="Company"></DropDown>
+             */}
 
-            <MyInput
-              label="Whatsapp Number"
-              keyboardType="phone-pad"
-              IconName={'Whatsaap-grey'}
-              onChangeText={newText => setWhatsapp(newText)}
-            />
-
+            {FIELDS.map((field, fieldKey) => (
+              <field.component {...field} key={fieldKey} />
+            ))}
             {/* {visibleCamera && <Camera onSelectCamera={handleCamera} onSelectGallery={handleGallery}/>}  */}
           </View>
         </ScrollView>
@@ -192,7 +330,9 @@ const AddContact = props => {
           <View style={{flex: 1}}>
             <Button
               //onPress={submitButton}
+              onPress={() => props.navigation.goBack()}
               title="Cancel"
+              disabled={loading}
               buttonStyle={styles.CancelbtnStyle}
               titleStyle={styles.Cancelbtntxt}
               containerStyle={styles.btnContainer}
@@ -202,6 +342,8 @@ const AddContact = props => {
             <Button
               onPress={submitButton}
               title="Save"
+              loading={loading}
+              disabled={loading}
               buttonStyle={styles.btnStyle}
               titleStyle={styles.btntxt}
               containerStyle={styles.btnContainer}
