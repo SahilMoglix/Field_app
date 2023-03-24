@@ -58,11 +58,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: Dimension.padding15,
     paddingVertical: Dimension.padding12,
     height: Dimension.height70,
-    //backgroundColor:'#aaa',
     marginBottom: Dimension.margin10,
     justifyContent: 'space-between',
     width: '100%',
-    //  backgroundColor: '#ccc',
   },
   dropDownWrap: {
     borderWidth: 1,
@@ -76,7 +74,6 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 3,
     marginTop: Dimension.margin70,
-    //padding:Dimension.padding10
     paddingLeft: 0,
     paddingRight: 0,
     paddingTop: 0,
@@ -93,11 +90,9 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     borderBottomColor: colors.borderColor,
     borderBottomWidth: 0.5,
-    //width: '100%',
+
     paddingVertical: Dimension.padding5,
     marginHorizontal: 5,
-    //backgroundColor:"#000"
-    // width:"100%"
   },
   labelStyle: {
     fontSize: Dimension.font16,
@@ -105,7 +100,7 @@ const styles = StyleSheet.create({
     fontFamily: Dimension.CustomMediumFont,
     // fontWeight:(Platform.OS === 'ios') ? "500" : "",
     marginLeft: Dimension.margin8,
-    // marginBottom: Dimension.margin5,
+
     fontWeight: 'normal',
     position: 'absolute',
     top: Dimension.padding2,
@@ -118,12 +113,9 @@ const styles = StyleSheet.create({
     paddingRight: 0,
     paddingTop: 0,
     paddingBottom: 0,
-
     marginVertical: 0,
-
     marginTop: 0,
     marginBottom: 0,
-    //height: Dimension.height20,
   },
   DropDownIcon: {
     marginTop: Dimension.margin20,

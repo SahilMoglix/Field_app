@@ -32,9 +32,9 @@ const DateConvert = props => {
         } else if (currentDate.getDate() - date.getDate() == 1) {
           return `Yesterday ${date.getHours()}:${date.getMinutes()}`;
         } else {
-          return `${date.getDate()} 
-           ${months[date.getMonth()]}
-           ${date.getFullYear()}`;
+          return `${date.getDate()} ${
+            months[date.getMonth()]
+          } ${date.getFullYear()}`;
         }
       } else {
         return `${date.getDate()} ${

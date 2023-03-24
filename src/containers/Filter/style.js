@@ -1,29 +1,27 @@
-import {StyleSheet,Dimensions} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 import Colors from '../../Theme/Colors';
 import Dimension from '../../Theme/Dimension';
 const deviceHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
-
-  TopHeader:{
-    flexDirection:"row",
-   // justifyContent:"space-between",
+  TopHeader: {
+    flexDirection: 'row',
   },
-  headingTxt:{
-    fontFamily:Dimension.CustomMediumFont,
-    fontSize:Dimension.font18,
-    color:Colors.FontColor,
-    marginLeft:Dimension.margin10
+  headingTxt: {
+    fontFamily: Dimension.CustomMediumFont,
+    fontSize: Dimension.font18,
+    color: Colors.FontColor,
+    marginLeft: Dimension.margin10,
   },
-  headerWrap:{
-    shadowColor: "#000",
+  headerWrap: {
+    shadowColor: '#000',
     shadowOffset: {width: -2, height: 4},
     shadowOpacity: 0.23,
     shadowRadius: 2.62,
     elevation: 4,
-    paddingHorizontal:Dimension.padding15,
-    marginBottom:Dimension.margin5,
-    paddingVertical:Dimension.padding10,
-    backgroundColor:"#fff"
+    paddingHorizontal: Dimension.padding15,
+    marginBottom: Dimension.margin5,
+    paddingVertical: Dimension.padding10,
+    backgroundColor: '#fff',
   },
   bottomAction: {
     borderTopWidth: 1,
@@ -36,9 +34,6 @@ const styles = StyleSheet.create({
 
     flexDirection: 'row',
   },
-
-
- 
 
   activeBackground: {
     backgroundColor: Colors.CallingBgColor,
@@ -61,13 +56,8 @@ const styles = StyleSheet.create({
     fontFamily: Dimension.CustomMediumFont,
   },
 
-
-
-
   MidWrapper: {
     flexDirection: 'row',
-    // borderTopColor: Colors.borderColor,
-    // borderTopWidth: 1,
     backgroundColor: '#fff',
     height: deviceHeight,
   },
@@ -81,32 +71,11 @@ const styles = StyleSheet.create({
   },
   rightPart: {
     flex: 6.5,
-    //alignItems:"flex-start"
+
     paddingTop: Dimension.padding25,
     height: deviceHeight,
   },
 
-  checkBoxTitle: {
-    color: Colors.blackColor,
-    fontSize: Dimension.font12,
-    fontFamily: Dimension.CustomMediumFont,
-    marginLeft: Dimension.margin10,
-    marginTop: Dimension.margin4,
-  },
-  checkboxWrap: {
-    flexDirection: 'row',
-    marginVertical: Dimension.padding10,
-    marginHorizontal: Dimension.margin25,
-  },
-  DateWrapper: {
-    paddingHorizontal: Dimension.padding15,
-  },
-  deliveryTypeTxt: {
-    color: Colors.FontColor,
-    fontSize: Dimension.font12,
-    fontFamily: Dimension.CustomMediumFont,
-    flex: 0.5,
-  },
   acceptCtabtn: {
     flex: 5,
     backgroundColor: Colors.CtaColor,
@@ -115,6 +84,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: Dimension.margin10,
+    shadowColor: 'rgba(21, 104, 229, .80)',
+    shadowOffset: {width: 2, height: 4},
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    elevation: 6,
   },
   acceptCtaTxt: {
     fontFamily: Dimension.CustomSemiBoldFont,

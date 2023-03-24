@@ -1,10 +1,9 @@
-import { StyleSheet } from 'react-native';
-import Dimension from "../../Theme/Dimension";
-import colors from "../../Theme/Colors"
+import {StyleSheet} from 'react-native';
+import Dimension from '../../Theme/Dimension';
+import colors from '../../Theme/Colors';
 
 const styles = StyleSheet.create({
   WrapperStyle: {
-    //marginBottom: Dimension.margin10,
     paddingHorizontal: 0,
   },
 
@@ -49,7 +48,6 @@ const styles = StyleSheet.create({
     fontSize: Dimension.font10,
     color: colors.BrandColor,
     fontFamily: Dimension.CustomMediumFont,
-    //bottom: 20
   },
   errorText: {
     fontSize: Dimension.font10,
@@ -63,7 +61,6 @@ const styles = StyleSheet.create({
     paddingLeft: Dimension.padding12,
     paddingRight: Dimension.padding12,
     backgroundColor: colors.DisableStateColor,
-    //paddingHorizontal: Dimension.padding12,
   },
 });
 

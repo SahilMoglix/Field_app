@@ -28,12 +28,10 @@ const styles = StyleSheet.create({
 
     position: 'relative',
     backgroundColor: '#fff',
-    // flex: 1,
     borderRadius: 50,
     borderWidth: 1,
     borderColor: '#D3D3D3',
     paddingHorizontal: Dimension.padding10,
-    //paddingVertical: Dimension.padding8,
     height: Dimension.height40,
     shadowColor: '#000',
     shadowOffset: {width: -2, height: 4},
@@ -97,8 +95,6 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   contactDat: {
-    //flex: 1,
-    // justifyContent: 'center',
     paddingLeft: 5,
   },
   txt: {

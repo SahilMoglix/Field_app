@@ -97,7 +97,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: Dimension.padding20,
     paddingVertical: Dimension.padding12,
     height: Dimension.height70,
-    //backgroundColor:'#aaa',
     marginBottom: Dimension.margin10,
     position: 'relative',
   },
@@ -127,8 +126,6 @@ const styles = StyleSheet.create({
     // fontWeight:(Platform.OS === 'ios') ? "500" : "",
     paddingLeft: 0,
     marginBottom: 0,
-
-    //backgroundColor:"#000",
     marginTop: Dimension.margin10,
   },
   iconStyle: {
