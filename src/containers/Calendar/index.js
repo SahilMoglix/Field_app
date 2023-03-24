@@ -23,6 +23,7 @@ import {STATE_STATUS} from '../../redux/constants';
 import {useNavigation} from '@react-navigation/native';
 import FilterModal from '../Filter';
 import {
+  fetchDepartments,
   fetchDesignations,
   fetchPlantCompanies,
 } from '../../redux/actions/homepage';
@@ -76,6 +77,7 @@ const CalendarScreen = () => {
     );
     dispatch(fetchDesignations());
     dispatch(fetchPlantCompanies());
+    dispatch(fetchDepartments());
   }, []);
 
   const updateDate = date => {

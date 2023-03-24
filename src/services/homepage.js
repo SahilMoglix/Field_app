@@ -22,3 +22,14 @@ export const getPlantCompnaies = async () =>
       'Content-Type': 'application/json',
     },
   });
+
+export const getDepartments = async () =>
+  axios.get(`${CONSTANTS.BASE_URL}/GetAllDepartments`, {
+    params: {
+      id: 1, //await AsyncStorage.getItem('userId')
+    },
+    headers: {
+      // 'Authorization': `Bearer ${await AsyncStorage.getItem('token')}`,
+      'Content-Type': 'application/json',
+    },
+  });
