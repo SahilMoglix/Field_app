@@ -266,7 +266,7 @@ const ContactScreen = props => {
     <View
       style={{
         flex: 1,
-        marginTop: Dimension.margin40,
+        paddingTop: Dimension.padding30,
         backgroundColor: '#fff',
       }}>
       <View style={styles.headerWrap}>

@@ -14,10 +14,11 @@ const styles = StyleSheet.create({
   },
   headerWrap: {
     shadowColor: '#000',
-    shadowOffset: {width: -2, height: 4},
+    shadowOffset: {width: -2, height: 2},
     shadowOpacity: 0.23,
     shadowRadius: 2.62,
-    elevation: 4,
+    elevation: 10,
+
     paddingHorizontal: Dimension.padding15,
     marginBottom: Dimension.margin10,
     paddingVertical: Dimension.padding10,
