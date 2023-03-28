@@ -17,6 +17,7 @@ import {Text, ScrollView, View, StatusBar} from 'react-native';
 import Toast from 'react-native-toast-message';
 import AzureAuth from 'react-native-azure-auth';
 import Client from 'react-native-azure-auth/src/networking';
+import {useLinkProps} from '@react-navigation/native';
 const CLIENT_ID = 'ac5fc872-17f9-4f59-af74-3abbe885956e'; // replace the string with YOUR client ID
 
 const azureAuth = new AzureAuth({
@@ -42,13 +43,9 @@ const LoginScreen = ({navigation}) => {
         token: tokens.accessToken,
         path: 'me',
       });
-      console.log('info', info);
-      setUser(info.displayName);
-      setUserId(tokens?.userId);
     } catch (error) {
       console.log('Error during Azure operation', error);
     }
-    // navigation.navigate('HomeApp');
   };
 
   return (

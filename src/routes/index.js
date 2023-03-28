@@ -102,6 +102,7 @@ const Routes = props => {
           headerShown: false,
         }}
         initialRouteName="Splash">
+        {/* {true ? MainStack(AppStack) : AuthStack(AppStack)} */}
         <AppStack.Screen
           screenOptions={{
             headerShown: false,
