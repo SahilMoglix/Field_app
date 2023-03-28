@@ -22,6 +22,11 @@ import {
 import {STATE_STATUS} from '../../redux/constants';
 import {useNavigation} from '@react-navigation/native';
 import FilterModal from '../Filter';
+import {
+  fetchDepartments,
+  fetchDesignations,
+  fetchPlantCompanies,
+} from '../../redux/actions/homepage';
 
 const CalendarScreen = () => {
   const meetingsData = useSelector(state =>
@@ -63,13 +68,16 @@ const CalendarScreen = () => {
   useEffect(() => {
     dispatch(
       fetchCustomCalendar({
-        designation: 'all',
-        company: 1,
-        plant: 1,
+        designation: '',
+        company: '',
+        plant: '',
         startDate: new Date(new Date().toDateString() + ' 00:00:00').getTime(),
         endDate: new Date(new Date().toDateString() + ' 23:59:59').getTime(),
       }),
     );
+    dispatch(fetchDesignations());
+    dispatch(fetchPlantCompanies());
+    dispatch(fetchDepartments());
   }, []);
 
   const updateDate = date => {

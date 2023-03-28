@@ -1,21 +1,24 @@
 // dependencies
 import {put, call, fork, takeEvery} from 'redux-saga/effects';
-import {getLogs} from '../../services/communication';
+import {getContacts} from '../../services/communication';
 import {logs} from '../../responses/calendar';
 import {COMMUNICATION_ACTIONS} from '../constants/communication';
 import {failedFetchLogs, fetchedLogs} from '../actions/communication';
 
 function* fetchCallLogs() {
   try {
-    // const {data, error} = yield call(getLogs);
+    // console.log('aarha hai!!');
+    // const {data, error} = yield call(getContacts);
+    // console.log(data, 'data in saga!!', error);
     const data = logs;
     const error = null;
     if (error) {
       yield put(failedFetchLogs(error));
     } else {
-      yield put(fetchedLogs(data.result));
+      yield put(fetchedLogs(data?.result));
     }
   } catch (error) {
+    console.log(error);
     yield put(failedFetchLogs(error));
   }
 }

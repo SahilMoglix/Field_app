@@ -11,6 +11,7 @@ const initialState = new Map({
 
 export const communicationReducer = (state = initialState, action) => {
   const {type, payload, error} = action;
+
   switch (type) {
     case COMMUNICATION_ACTIONS.FETCH_LOGS:
       return state
@@ -27,7 +28,13 @@ export const communicationReducer = (state = initialState, action) => {
         .set('status', STATE_STATUS.FAILED_FETCH)
         .set('data', new List([]))
         .set('error', error);
+    case COMMUNICATION_ACTIONS.UPDATE_LOGS:
+      return state
+        .set('status', STATE_STATUS.UPDATED)
+        .set('data', new List(payload.data))
+        .set('error', null);
     case AUTH_ACTIONS.LOGOUT:
+      d;
       return {
         ...initialState,
       };

@@ -11,3 +11,11 @@ export const getContacts = async () =>
       'Content-Type': 'application/json',
     },
   });
+
+export const createAllContacts = async data =>
+  axios.post(`${CONSTANTS.BASE_URL}/createAll`, data, {
+    headers: {
+      // 'Authorization': `Bearer ${await AsyncStorage.getItem('token')}`,
+      'Content-Type': 'application/json',
+    },
+  });

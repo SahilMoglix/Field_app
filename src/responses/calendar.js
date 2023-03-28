@@ -263,3 +263,87 @@ export const logs = {
     },
   ],
 };
+
+export const designations = {
+  message: 'designations fetched successfully',
+  result: ['CFO', 'CEO'],
+};
+
+export const plantCompanies = {
+  message: 'data fetched successfully',
+  status: 200,
+  data: {
+    company: {
+      1: 'dummycompany1',
+      2: 'dummycompany2',
+    },
+    plant: {
+      1: 'dummyplant1',
+      2: 'dummyplant2',
+      3: 'dummyplant3',
+      4: 'dummyplant4',
+    },
+    companyToBranch: [
+      {
+        1: [2, 3],
+      },
+      {
+        2: [3, 4],
+      },
+    ],
+  },
+};
+
+export const depaertments = {
+  message: 'data fetched successfully',
+  result: [
+    {
+      _id: '63748d47d9846c3394a6a6f7',
+      departmentName: 'Finance',
+      creationDate: 1668582720661,
+      modificationDate: 1668582720852,
+    },
+    {
+      _id: '63748d47d9846c3394a6a6fb',
+      departmentName: 'Others',
+      creationDate: 1668582726495,
+      modificationDate: 1668582726683,
+    },
+    {
+      _id: '63748d47d9846c3394a6a6f4',
+      departmentName: 'Purchase',
+      creationDate: 1668582716306,
+      modificationDate: 1668582716578,
+    },
+    {
+      _id: '63748d47d9846c3394a6a6f5',
+      departmentName: 'Strategy and Operations',
+      creationDate: 1668582718062,
+      modificationDate: 1668582718246,
+    },
+    {
+      _id: '63748d47d9846c3394a6a6f6',
+      departmentName: 'Supply Chain',
+      creationDate: 1668582719369,
+      modificationDate: 1668582719546,
+    },
+    {
+      _id: '63748d47d9846c3394a6a6fa',
+      departmentName: 'Information Technology',
+      creationDate: 1668582724916,
+      modificationDate: 1668582725313,
+    },
+    {
+      _id: '63748d47d9846c3394a6a6f8',
+      departmentName: 'Customer Success',
+      creationDate: 1668582722273,
+      modificationDate: 1668582722466,
+    },
+    {
+      _id: '63748d47d9846c3394a6a6f9',
+      departmentName: 'Sales',
+      creationDate: 1668582723591,
+      modificationDate: 1668582723766,
+    },
+  ],
+};

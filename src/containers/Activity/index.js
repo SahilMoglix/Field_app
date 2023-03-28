@@ -16,7 +16,8 @@ import styles from './style';
 import DateConvert from '../../component/DateConvert';
 import {useDispatch, useSelector} from 'react-redux';
 import {STATE_STATUS} from '../../redux/constants';
-import {fetchLogs} from '../../redux/actions/communication';
+import {fetchLogs, updateLogs} from '../../redux/actions/communication';
+import {createAllContacts} from '../../services/communication';
 
 const ActivityScreen = () => {
   const logsData = useSelector(state => state.communicationReducer.get('data'));
@@ -30,13 +31,16 @@ const ActivityScreen = () => {
 
   useEffect(() => {
     onRefreshLogs();
-    if (Platform.OS === 'android') {
-      checkPermission();
-      //requestPermission();
-    } else {
-      //fetchLogs()
-    }
   }, []);
+
+  useEffect(() => {
+    if (logsStatus == STATE_STATUS.FETCHED) {
+      if (Platform.OS === 'android') {
+        checkPermission();
+      } else {
+      }
+    }
+  }, [logsStatus]);
 
   const onRefreshLogs = () => {
     dispatch(fetchLogs());
@@ -76,13 +80,31 @@ const ActivityScreen = () => {
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         CallLogs.load(99).then(c => {
-          // setContacts(c);
+          console.log(logsData);
+          let recentCallCreatedAt = logsData.get(0).createdAt;
+          let filteredCallLogs = ([...c] || []).filter(
+            __ => Number(__.timestamp) >= recentCallCreatedAt,
+          );
+          createRecentContacts(filteredCallLogs);
         });
       } else {
         console.log('Call Log permission denied');
       }
     } catch (e) {
       console.log(e);
+    }
+  };
+
+  const createRecentContacts = async recentCallLogs => {
+    try {
+      let limitCallLogs = [...recentCallLogs].slice(0, 100);
+      const {data} = await createAllContacts(limitCallLogs);
+      if (data?.result) {
+        console.log(data?.result);
+        dispatch(updateLogs(data?.result));
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
