@@ -1,5 +1,27 @@
 import {HOMEPAGE_ACTIONS} from '../constants/homepage';
 
+export const fetchDepartments = () => {
+  return {
+    type: HOMEPAGE_ACTIONS.FETCH_DEPARTMENTS,
+  };
+};
+
+export const fetchedDepartments = data => {
+  return {
+    type: HOMEPAGE_ACTIONS.FETCHED_DEPARTMENTS,
+    payload: {
+      data,
+    },
+  };
+};
+
+export const failedFetchDepartments = error => {
+  return {
+    type: HOMEPAGE_ACTIONS.FAILED_FETCH_DEPARTMENTS,
+    error,
+  };
+};
+
 export const fetchDesignations = () => {
   return {
     type: HOMEPAGE_ACTIONS.FETCH_DESIGNATIONS,

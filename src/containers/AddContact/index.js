@@ -29,6 +29,9 @@ const AddContact = props => {
   const Designations = useSelector(state =>
     state.homepageReducer.get('designations'),
   );
+  const DepartmentData = useSelector(state =>
+    state.homepageReducer.get('department'),
+  );
   const PlantsData = useSelector(state =>
     state.homepageReducer.get('companyPlant'),
   );
@@ -179,8 +182,12 @@ const AddContact = props => {
       onValueChange: val => setDepartment(val),
       IconName: 'Department-grey',
       label: 'Department',
-      options: [],
-      value: department,
+      options: DepartmentData.toArray().map(_ => ({
+        value: _._id,
+        label: _.departmentName,
+      })),
+      value: (DepartmentData.toArray().find(_ => _._id == department) || {})
+        .departmentName,
     },
     {
       component: MyInput,

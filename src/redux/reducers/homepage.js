@@ -7,6 +7,7 @@ const initialState = new Map({
   companyPlant: new Map({}),
   company: new List([]),
   plant: new List([]),
+  departments: new List([]),
 });
 
 export const homepageReducer = (state = initialState, action) => {
@@ -14,6 +15,8 @@ export const homepageReducer = (state = initialState, action) => {
   switch (type) {
     case HOMEPAGE_ACTIONS.FETCHED_DESIGNATIONS:
       return state.set('designations', new List(payload.data));
+    case HOMEPAGE_ACTIONS.FETCHED_DEPARTMENTS:
+      return state.set('departments', new List(payload.data));
     case HOMEPAGE_ACTIONS.FETCHED_PLANT_COMPANIES:
       let companies = Object.keys(payload.data.company).map(_ => {
         return {key: _, value: payload.data.company[_]};

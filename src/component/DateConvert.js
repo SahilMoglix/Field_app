@@ -22,9 +22,12 @@ const DateConvert = props => {
   ];
 
   const getTime = time => {
-    let date = new Date(time);
+    const dateSplit = time.split(' ');
+    let actualDate = `${dateSplit[2]}-${
+      months.findIndex(_ => _ == dateSplit[1]) + 1
+    }-${dateSplit[0]} ${dateSplit[3]}`;
+    let date = new Date(actualDate);
     let currentDate = new Date();
-
     if (currentDate.getFullYear() == date.getFullYear()) {
       if (currentDate.getMonth() == date.getMonth()) {
         if (currentDate.getDate() == date.getDate()) {
@@ -32,9 +35,9 @@ const DateConvert = props => {
         } else if (currentDate.getDate() - date.getDate() == 1) {
           return `Yesterday ${date.getHours()}:${date.getMinutes()}`;
         } else {
-          return `${date.getDate()} ${
-            months[date.getMonth()]
-          } ${date.getFullYear()}`;
+          return `${date.getDate()} 
+           ${months[date.getMonth()]}
+           ${date.getFullYear()}`;
         }
       } else {
         return `${date.getDate()} ${
