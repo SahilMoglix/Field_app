@@ -33,20 +33,20 @@ const LoginScreen = ({navigation}) => {
   const [userId, setUserId] = useState('');
 
   const onLogin = async () => {
-    try {
-      // let tokens = await azureAuth.webAuth.authorize({
-      //   scope: 'openid profile User.Read',
-      // });
-      // console.log('CRED>>>', tokens);
-      // setAccessToken(tokens?.accessToken);
-      // let info = await azureAuth.auth.msGraphRequest({
-      //   token: tokens.accessToken,
-      //   path: 'me',
-      // });
-      navigation.navigate('HomeApp');
-    } catch (error) {
-      console.log('Error during Azure operation', error);
-    }
+    // try {
+    //   let tokens = await azureAuth.webAuth.authorize({
+    //     scope: 'openid profile User.Read',
+    //   });
+    //   console.log('CRED>>>', tokens);
+    //   setAccessToken(tokens?.accessToken);
+    //   let info = await azureAuth.auth.msGraphRequest({
+    //     token: tokens.accessToken,
+    //     path: 'me',
+    //   });
+    navigation.navigate('HomeApp');
+    // } catch (error) {
+    //   console.log('Error during Azure operation', error);
+    // }
   };
 
   return (

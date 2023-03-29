@@ -30,7 +30,7 @@ const AddContact = props => {
     state.homepageReducer.get('designations'),
   );
   const DepartmentData = useSelector(state =>
-    state.homepageReducer.get('department'),
+    state.homepageReducer.get('departments'),
   );
   const PlantsData = useSelector(state =>
     state.homepageReducer.get('companyPlant'),

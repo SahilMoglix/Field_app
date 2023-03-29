@@ -189,8 +189,9 @@ const ContactScreen = props => {
     flatListRef.current.scrollToOffset({animated: true, offset: 0});
     let filteredData = contacts.filter(function (val) {
       if (
-        val.displayName.toLowerCase().includes(item.toLowerCase()) ||
-        (val.company && val.company.toLowerCase().includes(item.toLowerCase()))
+        val.displayName?.toLowerCase()?.includes(item?.toLowerCase()) ||
+        (val.company &&
+          val.company?.toLowerCase()?.includes(item?.toLowerCase()))
       ) {
         return val;
       }
@@ -453,12 +454,12 @@ const ContactScreen = props => {
                   checkExistance();
                 }
               }}
-              RightIconView={() => (
-                <Icon
-                  name={'check-circle'}
-                  size={Dimension.font28}
-                  color={'#07AD0D'}></Icon>
-              )}
+              // RightIconView={() => (
+              //   <Icon
+              //     name={'check-circle'}
+              //     size={Dimension.font28}
+              //     color={'#07AD0D'}></Icon>
+              // )}
             />
           </View>
           {contactExists && contactNum.length == 10 ? (
