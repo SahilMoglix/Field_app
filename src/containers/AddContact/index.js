@@ -280,7 +280,7 @@ const AddContact = props => {
       <View
         style={{
           flex: 1,
-          marginTop: Dimension.margin40,
+          // marginTop: Dimension.margin40,
           backgroundColor: '#fff',
         }}>
         <View style={styles.headerWrap}>

@@ -57,8 +57,8 @@ const Routes = props => {
   }, []);
 
   const init = async () => {
-    let userToken = await AsyncStorage.getItem('@microsoftLogin');
-    let parsedToken = JSON.parse(userToken);
+    let userData = await AsyncStorage.getItem('@microsoftLogin');
+    let parsedToken = JSON.parse(userData);
     if (parsedToken) {
       if (Object.keys(parsedToken).length) {
         await dispatch(fetchedAuth(parsedToken));
@@ -67,6 +67,9 @@ const Routes = props => {
         // setTimeout(() => {
 
         // }, 2000);
+      } else {
+        setIsLoggedIn(false);
+        setLoading(false);
       }
     } else {
       setIsLoggedIn(false);
@@ -76,8 +79,9 @@ const Routes = props => {
 
   if (loading) {
     return (
-      <View style={{flex: 1, justifyContent: 'center'}}>
-        <ActivityIndicator size={'large'} color={'red'} />
+      <View
+        style={{flex: 1, justifyContent: 'center', backgroundColor: '#fefefe'}}>
+        <ActivityIndicator size={'large'} color={'dodgerblue'} />
       </View>
     );
   }
@@ -110,6 +114,7 @@ const Routes = props => {
   const TabNavigator = () => {
     return (
       <Tab.Navigator
+        options={navOptionHandler}
         screenOptions={({route, ...rest}) => ({
           headerShown: false,
           tabBarIcon: ({focused, color}) =>
@@ -134,6 +139,10 @@ const Routes = props => {
             lazy={false}
             name={screen.name}
             component={screen.component}
+            options={navOptionHandler}
+            screenOptions={{
+              headerShown: false,
+            }}
           />
         ))}
       </Tab.Navigator>
@@ -182,7 +191,7 @@ const Routes = props => {
             headerShown: false,
           }}
           component={LoginScreen}
-          // options={navOptionHandler}
+          options={navOptionHandler}
         />
       </AppStack.Navigator>
     );
@@ -232,6 +241,7 @@ const tabBarOptions = {
   activeTintColor: '#0066FF',
   inactiveTintColor: '#898989',
   showLabel: false,
+  headerShown: false,
   lazy: false,
   style: styles.tabBar,
   safeAreaInsets: {bottom: 0},
