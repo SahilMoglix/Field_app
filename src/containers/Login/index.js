@@ -27,7 +27,7 @@ const azureAuth = new AzureAuth({
   clientId: CLIENT_ID,
 });
 
-const LoginScreen = ({navigation}) => {
+const LoginScreen = props => {
   const [myContact, setContact] = useState();
   const [myPass, setPass] = useState();
   const [accessToken, setAccessToken] = useState(null);
@@ -65,8 +65,7 @@ const LoginScreen = ({navigation}) => {
           JSON.stringify(microsoftTokens),
         );
       }
-
-      // navigation.navigate('HomeApp');
+      props.route.params.setIsLoggedIn(true);
     } catch (error) {
       console.log('Error during Azure operation', error);
     }

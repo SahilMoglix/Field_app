@@ -48,10 +48,8 @@ const navOptionHandler = () => ({
 });
 
 const Routes = props => {
-  const userId = useSelector(
-    state => ((state.authReducer || {}).data || {}).id || '',
-  );
   const [loading, setLoading] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -64,11 +62,14 @@ const Routes = props => {
     if (parsedToken) {
       if (Object.keys(parsedToken).length) {
         await dispatch(fetchedAuth(parsedToken));
-        setTimeout(() => {
-          setLoading(false);
-        }, 2000);
+        setIsLoggedIn(true);
+        setLoading(false);
+        // setTimeout(() => {
+
+        // }, 2000);
       }
     } else {
+      setIsLoggedIn(false);
       setLoading(false);
     }
   };
@@ -158,7 +159,7 @@ const Routes = props => {
               headerShown: false,
             }}
             component={screen.component}
-            // options={navOptionHandler}
+            options={navOptionHandler}
           />
         ))}
       </AppStack.Navigator>
@@ -172,6 +173,9 @@ const Routes = props => {
           headerShown: false,
         }}>
         <AppStack.Screen
+          initialParams={{
+            setIsLoggedIn,
+          }}
           key={'Login'}
           name={'Login'}
           screenOptions={{
@@ -187,7 +191,7 @@ const Routes = props => {
   const RootNavigation = () => {
     return (
       <NavigationContainer linking={linking}>
-        {!userId ? <AuthStack /> : <MainStack />}
+        {!isLoggedIn ? <AuthStack /> : <MainStack />}
       </NavigationContainer>
     );
   };
