@@ -1,5 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, Text, TouchableOpacity, Platform} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  Platform,
+  View,
+  ActivityIndicator,
+} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -7,6 +14,10 @@ import {APP_STACK_SCREENS, BOTTOM_TAB_SCREENS} from '../constants/index';
 import CustomeIcon from '../component/CustomeIcon';
 import colors from '../Theme/Colors';
 import Dimension from '../Theme/Dimension';
+import LoginScreen from '../containers/Login';
+import {useDispatch, useSelector} from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {fetchedAuth} from '../redux/actions/auth';
 
 const AppStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -37,6 +48,39 @@ const navOptionHandler = () => ({
 });
 
 const Routes = props => {
+  const userId = useSelector(
+    state => ((state.authReducer || {}).data || {}).id || '',
+  );
+  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    init();
+  }, []);
+
+  const init = async () => {
+    let userToken = await AsyncStorage.getItem('@microsoftLogin');
+    let parsedToken = JSON.parse(userToken);
+    if (parsedToken) {
+      if (Object.keys(parsedToken).length) {
+        await dispatch(fetchedAuth(parsedToken));
+        setTimeout(() => {
+          setLoading(false);
+        }, 2000);
+      }
+    } else {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <View style={{flex: 1, justifyContent: 'center'}}>
+        <ActivityIndicator size={'large'} color={'red'} />
+      </View>
+    );
+  }
+
   const tabBarIcon = (focused, color, route, rest) => {
     let currentScreen = BOTTOM_TAB_SCREENS.find(
       screen => screen.name === route.name,
@@ -59,6 +103,9 @@ const Routes = props => {
     );
   };
 
+  const linking = {
+    prefixes: ['com.moglix.field://'],
+  };
   const TabNavigator = () => {
     return (
       <Tab.Navigator
@@ -91,18 +138,10 @@ const Routes = props => {
       </Tab.Navigator>
     );
   };
-  const linking = {
-    prefixes: ['com.moglix.field://'],
-  };
 
-  return (
-    <NavigationContainer linking={linking}>
-      <AppStack.Navigator
-        screenOptions={{
-          headerShown: false,
-        }}
-        initialRouteName="Splash">
-        {/* {true ? MainStack(AppStack) : AuthStack(AppStack)} */}
+  const MainStack = () => {
+    return (
+      <AppStack.Navigator>
         <AppStack.Screen
           screenOptions={{
             headerShown: false,
@@ -123,8 +162,37 @@ const Routes = props => {
           />
         ))}
       </AppStack.Navigator>
-    </NavigationContainer>
-  );
+    );
+  };
+
+  const AuthStack = () => {
+    return (
+      <AppStack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}>
+        <AppStack.Screen
+          key={'Login'}
+          name={'Login'}
+          screenOptions={{
+            headerShown: false,
+          }}
+          component={LoginScreen}
+          // options={navOptionHandler}
+        />
+      </AppStack.Navigator>
+    );
+  };
+
+  const RootNavigation = () => {
+    return (
+      <NavigationContainer linking={linking}>
+        {!userId ? <AuthStack /> : <MainStack />}
+      </NavigationContainer>
+    );
+  };
+
+  return <RootNavigation />;
 };
 const styles = StyleSheet.create({
   tabBar: {

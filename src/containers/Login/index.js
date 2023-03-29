@@ -18,6 +18,9 @@ import Toast from 'react-native-toast-message';
 import AzureAuth from 'react-native-azure-auth';
 import Client from 'react-native-azure-auth/src/networking';
 import {useLinkProps} from '@react-navigation/native';
+import {fetchedAuth} from '../../redux/actions/auth';
+import {useDispatch, useSelector} from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const CLIENT_ID = 'ac5fc872-17f9-4f59-af74-3abbe885956e'; // replace the string with YOUR client ID
 
 const azureAuth = new AzureAuth({
@@ -31,19 +34,39 @@ const LoginScreen = ({navigation}) => {
   const [user, setUser] = useState('');
   const [mails, setMails] = useState([]);
   const [userId, setUserId] = useState('');
+  const dispatch = useDispatch();
 
   const onLogin = async () => {
     try {
-      // let tokens = await azureAuth.webAuth.authorize({
-      //   scope: 'openid profile User.Read',
-      // });
-      // console.log('CRED>>>', tokens);
-      // setAccessToken(tokens?.accessToken);
-      // let info = await azureAuth.auth.msGraphRequest({
-      //   token: tokens.accessToken,
-      //   path: 'me',
-      // });
-      navigation.navigate('HomeApp');
+      let tokens = await azureAuth.webAuth.authorize({
+        scope: 'openid profile User.Read',
+      });
+      console.log('CRED>>>', tokens);
+      setAccessToken(tokens?.accessToken);
+      let info = await azureAuth.auth.msGraphRequest({
+        token: tokens.accessToken,
+        path: 'me',
+      });
+      console.log('CRED>>>', tokens, info);
+      if (tokens?.tenantId && info?.id) {
+        let microsoftRes = {
+          ...info,
+          tenantId: tokens?.tenantId,
+        };
+        dispatch(fetchedAuth(microsoftRes));
+        let microsoftTokens = {
+          id: info?.id,
+          email: info?.mail,
+          userName: info?.displayName,
+          phoneNumber: info?.mobilePhone,
+        };
+        await AsyncStorage.setItem(
+          '@microsoftLogin',
+          JSON.stringify(microsoftTokens),
+        );
+      }
+
+      // navigation.navigate('HomeApp');
     } catch (error) {
       console.log('Error during Azure operation', error);
     }
