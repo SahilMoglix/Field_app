@@ -21,7 +21,7 @@ import {useLinkProps} from '@react-navigation/native';
 import {fetchedAuth} from '../../redux/actions/auth';
 import {useDispatch, useSelector} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const CLIENT_ID = 'ac5fc872-17f9-4f59-af74-3abbe885956e'; // replace the string with YOUR client ID
+const CLIENT_ID = 'ff1fe9da-d218-4ceb-a11f-05ea54a985fb'; // replace the string with YOUR client ID
 
 const azureAuth = new AzureAuth({
   clientId: CLIENT_ID,
@@ -65,7 +65,6 @@ const LoginScreen = ({navigation}) => {
           JSON.stringify(microsoftTokens),
         );
       }
-
       // navigation.navigate('HomeApp');
     } catch (error) {
       console.log('Error during Azure operation', error);
