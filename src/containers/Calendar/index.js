@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Button,
   ActivityIndicator,
+  StatusBar,
 } from 'react-native';
 import Calendars from '../../component/Calendars';
 import EventList from '../../component/EventList';
@@ -110,9 +111,10 @@ const CalendarScreen = () => {
     <View
       style={{
         flex: 1,
-        // paddingTop: Dimension.padding30,
+        paddingTop: Dimension.padding30,
         backgroundColor: '#fff',
       }}>
+      <StatusBar translucent backgroundColor="#fff" barStyle={'dark-content'} />
       <View style={styles.headerWrap}>
         <View style={styles.TopHeader}>
           <Text style={styles.headingTxt}>Calendar</Text>

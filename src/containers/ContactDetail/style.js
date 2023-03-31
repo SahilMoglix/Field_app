@@ -13,6 +13,12 @@ const styles = StyleSheet.create({
     color: colors.FontColor,
     marginLeft: Dimension.margin10,
   },
+  blueHeadingtxt: {
+    fontFamily: Dimension.CustomRegularFont,
+    fontSize: Dimension.font14,
+    color: colors.CtaColor,
+    marginLeft: Dimension.margin10,
+  },
   headerWrap: {
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 4},

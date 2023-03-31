@@ -248,8 +248,8 @@ const ContactScreen = props => {
                 />
               }
               uncheckedIcon={
-                <CustomeIcon
-                  name={'Check-blank'}
+                <Icon
+                  name={'radiobox-blank'}
                   size={Dimension.font22}
                   color={Colors.FontColor}
                 />

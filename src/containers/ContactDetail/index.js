@@ -115,12 +115,12 @@ const ContactDetail = props => {
                     ...contactData,
                   })
                 }
-                style={{flexDirection: 'row'}}>
+                style={{flexDirection: 'row', marginTop: 5}}>
                 <CustomeIcon
                   name={'Edit-blue'}
                   color={colors.CtaColor}
                   size={Dimension.font20}></CustomeIcon>
-                <Text style={styles.headingTxt}>Edit</Text>
+                <Text style={styles.blueHeadingtxt}>Edit</Text>
               </TouchableOpacity>
             </View>
           </View>

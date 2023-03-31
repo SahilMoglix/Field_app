@@ -123,7 +123,7 @@ const AddContact = props => {
       label: 'Inclination',
       from: 'addContact',
       data: InclinationData,
-      horizontalView: false,
+      horizontalView: true,
       onCheck: val => setInclination(val),
       value: inclination,
     },
@@ -280,7 +280,7 @@ const AddContact = props => {
       <View
         style={{
           flex: 1,
-          // marginTop: Dimension.margin40,
+          // paddingTop: Dimension.margin40,
           backgroundColor: '#fff',
         }}>
         <View style={styles.headerWrap}>
@@ -298,9 +298,19 @@ const AddContact = props => {
               Contact
             </Text>
           </View>
-
-          <View></View>
+          {props.route.params.hasOwnProperty('newContact') ? null : (
+            <View>
+              <TouchableOpacity style={{flexDirection: 'row', marginTop: 5}}>
+                <CustomeIcon
+                  name={'Save-blue'}
+                  color={colors.CtaColor}
+                  size={Dimension.font20}></CustomeIcon>
+                <Text style={styles.blueHeadingtxt}>Save</Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
+
         <ScrollView
           style={styles.ScrollViewCss}
           contentContainerStyle={{paddingBottom: 180}}>
@@ -332,31 +342,47 @@ const AddContact = props => {
             ))}
             {/* {visibleCamera && <Camera onSelectCamera={handleCamera} onSelectGallery={handleGallery}/>}  */}
           </View>
+          {props.route.params.hasOwnProperty('newContact') ? null : (
+            <View style={{flex: 1}}>
+              <Button
+                // onPress={submitButton}
+                title="Remove"
+                //loading={loading}
+                //disabled={loading}
+                buttonStyle={styles.RemoveBtnStyle}
+                titleStyle={styles.RemoveBtntxt}
+                containerStyle={styles.btnContainer}
+              />
+            </View>
+          )}
         </ScrollView>
-        <View style={styles.BtnWrapper}>
-          <View style={{flex: 1}}>
-            <Button
-              //onPress={submitButton}
-              onPress={() => props.navigation.goBack()}
-              title="Cancel"
-              disabled={loading}
-              buttonStyle={styles.CancelbtnStyle}
-              titleStyle={styles.Cancelbtntxt}
-              containerStyle={styles.btnContainer}
-            />
+
+        {props.route.params.hasOwnProperty('newContact') ? (
+          <View style={styles.BtnWrapper}>
+            <View style={{flex: 1}}>
+              <Button
+                //onPress={submitButton}
+                onPress={() => props.navigation.goBack()}
+                title="Cancel"
+                disabled={loading}
+                buttonStyle={styles.CancelbtnStyle}
+                titleStyle={styles.Cancelbtntxt}
+                containerStyle={styles.btnContainer}
+              />
+            </View>
+            <View style={{flex: 1}}>
+              <Button
+                onPress={submitButton}
+                title="Save"
+                loading={loading}
+                disabled={loading}
+                buttonStyle={styles.btnStyle}
+                titleStyle={styles.btntxt}
+                containerStyle={styles.btnContainer}
+              />
+            </View>
           </View>
-          <View style={{flex: 1}}>
-            <Button
-              onPress={submitButton}
-              title="Save"
-              loading={loading}
-              disabled={loading}
-              buttonStyle={styles.btnStyle}
-              titleStyle={styles.btntxt}
-              containerStyle={styles.btnContainer}
-            />
-          </View>
-        </View>
+        ) : null}
       </View>
     </>
   );

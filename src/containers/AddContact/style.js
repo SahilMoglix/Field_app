@@ -13,6 +13,12 @@ const styles = StyleSheet.create({
     color: colors.FontColor,
     marginLeft: Dimension.margin12,
   },
+  blueHeadingtxt: {
+    fontFamily: Dimension.CustomRegularFont,
+    fontSize: Dimension.font14,
+    color: colors.CtaColor,
+    marginLeft: Dimension.margin10,
+  },
   headerWrap: {
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 4},
@@ -22,6 +28,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: Dimension.padding15,
     paddingVertical: Dimension.padding10,
     backgroundColor: '#fff',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   ScrollViewCss: {
     backgroundColor: colors.WhiteColor,
@@ -229,6 +237,27 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignContent: 'center',
   },
+
+  RemoveBtnStyle: {
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignContent: 'center',
+  },
+  RemoveBtntxt:
+    Platform.OS === 'ios'
+      ? {
+          color: '#ED6A60',
+          fontSize: Dimension.font14,
+          fontFamily: Dimension.CustomBoldFont,
+          fontWeight: '700',
+        }
+      : {
+          color: '#ED6A60',
+          fontSize: Dimension.font14,
+          fontFamily: Dimension.CustomBoldFont,
+        },
+
   Cancelbtntxt:
     Platform.OS === 'ios'
       ? {

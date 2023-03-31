@@ -71,6 +71,7 @@ const LoginScreen = props => {
             '@microsoftLogin',
             JSON.stringify(storeRes),
           );
+          console.log(setIsLoggedIn);
           props.route.params.setIsLoggedIn(true);
         }
       } else {
