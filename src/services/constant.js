@@ -17,6 +17,7 @@ const CONSTANTS = {
     RECENT_ACTIVITY: '/api/user/activity/',
     USERS_BY_USER_ID: '/api/user/users/',
     CONTACT_PIC_VIEW: '/viewContactPicture?download=0',
+    CREATE_ALL: '/createAll',
   },
   TOKEN: 'abcd',
 };

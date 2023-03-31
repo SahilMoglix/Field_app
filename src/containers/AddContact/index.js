@@ -30,7 +30,7 @@ const AddContact = props => {
     state.homepageReducer.get('designations'),
   );
   const DepartmentData = useSelector(state =>
-    state.homepageReducer.get('department'),
+    state.homepageReducer.get('departments'),
   );
   const PlantsData = useSelector(state =>
     state.homepageReducer.get('companyPlant'),
@@ -280,7 +280,7 @@ const AddContact = props => {
       <View
         style={{
           flex: 1,
-          marginTop: Dimension.margin40,
+          // marginTop: Dimension.margin40,
           backgroundColor: '#fff',
         }}>
         <View style={styles.headerWrap}>

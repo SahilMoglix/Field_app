@@ -17,38 +17,68 @@ import {Text, ScrollView, View, StatusBar} from 'react-native';
 import Toast from 'react-native-toast-message';
 import AzureAuth from 'react-native-azure-auth';
 import Client from 'react-native-azure-auth/src/networking';
-const CLIENT_ID = 'ac5fc872-17f9-4f59-af74-3abbe885956e'; // replace the string with YOUR client ID
+import {useLinkProps} from '@react-navigation/native';
+import {fetchedAuth} from '../../redux/actions/auth';
+import {useDispatch, useSelector} from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {login} from '../../services/auth';
+// 'ff1fe9da-d218-4ceb-a11f-05ea54a985fb'
+const CLIENT_ID = 'ac5fc872-17f9-4f59-af74-3abbe885956e'; // sai
 
 const azureAuth = new AzureAuth({
   clientId: CLIENT_ID,
 });
 
-const LoginScreen = ({navigation}) => {
+const LoginScreen = props => {
   const [myContact, setContact] = useState();
   const [myPass, setPass] = useState();
   const [accessToken, setAccessToken] = useState(null);
   const [user, setUser] = useState('');
   const [mails, setMails] = useState([]);
   const [userId, setUserId] = useState('');
+  const dispatch = useDispatch();
 
   const onLogin = async () => {
-    // try {
-    //   let tokens = await azureAuth.webAuth.authorize({
-    //     scope: 'openid profile User.Read',
-    //   });
-    //   console.log('CRED>>>', tokens);
-    //   setAccessToken(tokens?.accessToken);
-    //   let info = await azureAuth.auth.msGraphRequest({
-    //     token: tokens.accessToken,
-    //     path: 'me',
-    //   });
-    //   console.log('info', info);
-    //   setUser(info.displayName);
-    //   setUserId(tokens?.userId);
-    // } catch (error) {
-    //   console.log('Error during Azure operation', error);
-    // }
-    navigation.navigate('HomeApp');
+    try {
+      let tokens = await azureAuth.webAuth.authorize({
+        scope: 'openid profile User.Read offline_access Calendars.Read',
+      });
+      setAccessToken(tokens?.accessToken);
+      let info = await azureAuth.auth.msGraphRequest({
+        token: tokens.accessToken,
+        path: 'me',
+        scope: 'openid profile User.Read offline_access Calendars.Read',
+      });
+      console.log('CRED>>>', tokens, info);
+      if (tokens?.accessToken && tokens?.refreshToken) {
+        let loginPayload = {
+          tokenType: 'Bearer',
+          scope: 'Calendars.Read openid profile User.Read email',
+          expires_in: tokens?.expiresIn,
+          ext_expires_in: tokens?.extExpiresIn,
+          access_token: tokens?.accessToken,
+          refresh_token: tokens?.refreshToken,
+          email: info?.mail,
+        };
+        let loginResponse = await login(loginPayload);
+        if (loginResponse?.data?.result?.access_token) {
+          let storeRes = {
+            access_token: loginResponse?.data?.result?.access_token,
+            email: loginResponse?.data?.result?.email,
+          };
+          dispatch(fetchedAuth(storeRes));
+          await AsyncStorage.setItem(
+            '@microsoftLogin',
+            JSON.stringify(storeRes),
+          );
+          props.route.params.setIsLoggedIn(true);
+        }
+      } else {
+        console.log('something went wrong!!');
+      }
+    } catch (error) {
+      console.log('Error during Azure operation', error);
+    }
   };
 
   return (
