@@ -18,7 +18,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {STATE_STATUS} from '../../redux/constants';
 import {fetchLogs, updateLogs} from '../../redux/actions/communication';
 import {createAllContacts} from '../../services/communication';
-
+import NoDataFound from '../../component/NoDataFound';
 const ActivityScreen = () => {
   const logsData = useSelector(state => state.communicationReducer.get('data'));
   const logsStatus = useSelector(state =>
@@ -158,7 +158,7 @@ const ActivityScreen = () => {
     <View
       style={{
         flex: 1,
-        // paddingTop: Dimension.padding30,
+        paddingTop: Dimension.padding30,
         backgroundColor: '#fff',
       }}>
       <View style={styles.headerWrap}>
@@ -217,9 +217,7 @@ const ActivityScreen = () => {
         style={styles.list}
         ListEmptyComponent={
           STATE_STATUS.FETCHED && searchedData.size == 0 ? (
-            <View style={styles.NoDataFoundWrap}>
-              <Text style={styles.NoDataFoundTxt}>No Records Found</Text>
-            </View>
+            <NoDataFound text={'No Records Found'}></NoDataFound>
           ) : null
         }
         keyExtractor={keyExtractor}

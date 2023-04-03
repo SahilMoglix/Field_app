@@ -28,6 +28,7 @@ import {
   fetchDesignations,
   fetchPlantCompanies,
 } from '../../redux/actions/homepage';
+import NoDataFound from '../../component/NoDataFound';
 
 const CalendarScreen = () => {
   const meetingsData = useSelector(state =>
@@ -167,14 +168,7 @@ const CalendarScreen = () => {
           ) ? (
             <ActivityIndicator size={'small'} />
           ) : meetingsData.size == 0 ? (
-            <Text
-              style={{
-                alignSelf: 'center',
-                marginTop: Dimension.margin10,
-                color: '#000',
-              }}>
-              No Events Found
-            </Text>
+            <NoDataFound text={'No event found for the day'}></NoDataFound>
           ) : (
             meetingsData.map((data, dataKey) => (
               <EventList data={data} key={dataKey} />
@@ -185,14 +179,7 @@ const CalendarScreen = () => {
           ) ? (
           <ActivityIndicator size={'small'} />
         ) : meetingsData.size == 0 ? (
-          <Text
-            style={{
-              alignSelf: 'center',
-              marginTop: Dimension.margin10,
-              color: '#000',
-            }}>
-            No Events Found
-          </Text>
+          <NoDataFound text={'No event found for the day'}></NoDataFound>
         ) : (
           meetingsCustomData.map((data, dataKey) => (
             <EventList data={data} key={dataKey} />
