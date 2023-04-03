@@ -22,11 +22,11 @@ const DateConvert = props => {
   ];
 
   const getTime = time => {
-    const dateSplit = time.split(' ');
-    let actualDate = `${dateSplit[2]}-${
-      months.findIndex(_ => _ == dateSplit[1]) + 1
-    }-${dateSplit[0]} ${dateSplit[3]}`;
-    let date = new Date(actualDate);
+    // const dateSplit = time?.split(' ') || '';
+    // let actualDate = `${dateSplit?.[2]}-${
+    //   months.findIndex(_ => _ == dateSplit?.[1]) + 1
+    // }-${dateSplit?.[0]} ${dateSplit?.[3]}`;
+    let date = new Date(time);
     let currentDate = new Date();
     if (currentDate.getFullYear() == date.getFullYear()) {
       if (currentDate.getMonth() == date.getMonth()) {

@@ -80,13 +80,15 @@ const ActivityScreen = () => {
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         CallLogs.load(99).then(c => {
-          console.log(logsData);
-          let recentCallCreatedAt = logsData?.get(0)?.createdAt;
+          console.log(logsData, 'cewcwecwecewcew');
+          let recentCallCreatedAt = logsData?.get(0)?.timestamp;
           if (recentCallCreatedAt) {
             let filteredCallLogs = ([...c] || []).filter(
-              __ => Number(__.timestamp) >= recentCallCreatedAt,
+              __ => Number(__.timestamp) > recentCallCreatedAt,
             );
             createRecentContacts(filteredCallLogs);
+          } else {
+            createRecentContacts(c);
           }
         });
       } else {
@@ -103,7 +105,7 @@ const ActivityScreen = () => {
       const {data} = await createAllContacts(limitCallLogs);
       if (data?.result) {
         console.log(data?.result);
-        dispatch(updateLogs(data?.result));
+        dispatch(updateLogs([...data?.result, ...logsData.toArray()]));
       }
     } catch (error) {
       console.log(error);
@@ -130,7 +132,7 @@ const ActivityScreen = () => {
             <Text style={styles.phoneNumber}>{setCallType(contact?.type)}</Text>
             <View style={styles.datetxt}>
               <DateConvert
-                date={contact?.dateTime}
+                date={contact?.timestamp}
                 contactType={contact?.type}
               />
               {/* {contact?.type} */}
