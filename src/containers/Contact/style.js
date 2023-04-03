@@ -114,6 +114,12 @@ const styles = StyleSheet.create({
     color: colors.FontColor,
     justifyContent: 'flex-start',
   },
+  redtxt: {
+    fontSize: Dimension.font14,
+    fontFamily: Dimension.CustomRegularFont,
+    color: '#ED6A60',
+    justifyContent: 'flex-start',
+  },
   HeaderForBtn: {
     flexDirection: 'row',
     justifyContent: 'space-between',
