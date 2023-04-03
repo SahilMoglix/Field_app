@@ -402,6 +402,18 @@ const ContactScreen = props => {
               STATE_STATUS.UNFETCHED,
             ].includes(contactsStatus)}
             onRefresh={pullToRefresh}
+            ListEmptyComponent={
+              contactsStatus == STATE_STATUS.FETCHED ? (
+                <Text
+                  style={{
+                    alignSelf: 'center',
+                    marginTop: Dimension.margin10,
+                    color: '#000',
+                  }}>
+                  No Contacts Found
+                </Text>
+              ) : null
+            }
             // keyExtractor={index}
             //style={styles.list}
           />

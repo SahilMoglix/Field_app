@@ -17,6 +17,7 @@ import DotCheckbox from '../../component/Checkbox';
 import {useDispatch, useSelector} from 'react-redux';
 import {createContact} from '../../services/contacts';
 import {fetchContacts} from '../../redux/actions/contacts';
+import {deleteContact} from 'react-native-contacts';
 // import { launchImageLibrary } from 'react-native-image-picker';
 //import RNFetchBlob from 'rn-fetch-blob';
 //import CONSTANTS from "../../services/constant";
@@ -51,7 +52,7 @@ const AddContact = props => {
     params.whatsappContact,
   );
   const [visibleCamera, setCamera] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const InclinationData = [
     {
@@ -275,6 +276,15 @@ const AddContact = props => {
     setCamera(visibleCamera => !visibleCamera);
   };
 
+  const onRemove = async () => {
+    const {data} = await deleteContact(props.route.params.id);
+    if (data.success) {
+      disptch(fetchContacts());
+      props.navigation.goBack();
+    } else {
+    }
+  };
+
   return (
     <>
       <View
@@ -316,7 +326,12 @@ const AddContact = props => {
               <TouchableOpacity
                 onPress={() => setCamera(visibleCamera => !visibleCamera)}
                 style={styles.addPhotoBtn}>
-                <Text style={styles.addPhotoText}>Add Photo</Text>
+                <Text style={styles.addPhotoText}>
+                  {props.route.params.hasOwnProperty('newContact')
+                    ? 'Add'
+                    : 'Update'}{' '}
+                  Photo
+                </Text>
               </TouchableOpacity>
             </Card>
             {/* <DotCheckbox
@@ -332,31 +347,39 @@ const AddContact = props => {
             ))}
             {/* {visibleCamera && <Camera onSelectCamera={handleCamera} onSelectGallery={handleGallery}/>}  */}
           </View>
+          {!props.route.params.hasOwnProperty('newContact') ? (
+            <TouchableOpacity
+              onPress={onRemove}
+              style={{alignSelf: 'center', marginTop: Dimension.margin20}}>
+              <Text style={{color: 'red'}}>Remove</Text>
+            </TouchableOpacity>
+          ) : null}
         </ScrollView>
-        <View style={styles.BtnWrapper}>
-          <View style={{flex: 1}}>
-            <Button
-              //onPress={submitButton}
-              onPress={() => props.navigation.goBack()}
-              title="Cancel"
-              disabled={loading}
-              buttonStyle={styles.CancelbtnStyle}
-              titleStyle={styles.Cancelbtntxt}
-              containerStyle={styles.btnContainer}
-            />
+        {props.route.params.hasOwnProperty('newContact') ? (
+          <View style={styles.BtnWrapper}>
+            <View style={{flex: 1}}>
+              <Button
+                onPress={() => props.navigation.goBack()}
+                title="Cancel"
+                disabled={loading}
+                buttonStyle={styles.CancelbtnStyle}
+                titleStyle={styles.Cancelbtntxt}
+                containerStyle={styles.btnContainer}
+              />
+            </View>
+            <View style={{flex: 1}}>
+              <Button
+                onPress={submitButton}
+                title="Save"
+                loading={loading}
+                disabled={loading}
+                buttonStyle={styles.btnStyle}
+                titleStyle={styles.btntxt}
+                containerStyle={styles.btnContainer}
+              />
+            </View>
           </View>
-          <View style={{flex: 1}}>
-            <Button
-              onPress={submitButton}
-              title="Save"
-              loading={loading}
-              disabled={loading}
-              buttonStyle={styles.btnStyle}
-              titleStyle={styles.btntxt}
-              containerStyle={styles.btnContainer}
-            />
-          </View>
-        </View>
+        ) : null}
       </View>
     </>
   );

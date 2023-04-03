@@ -81,11 +81,13 @@ const ActivityScreen = () => {
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         CallLogs.load(99).then(c => {
           console.log(logsData);
-          let recentCallCreatedAt = logsData.get(0).createdAt;
-          let filteredCallLogs = ([...c] || []).filter(
-            __ => Number(__.timestamp) >= recentCallCreatedAt,
-          );
-          createRecentContacts(filteredCallLogs);
+          let recentCallCreatedAt = logsData?.get(0)?.createdAt;
+          if (recentCallCreatedAt) {
+            let filteredCallLogs = ([...c] || []).filter(
+              __ => Number(__.timestamp) >= recentCallCreatedAt,
+            );
+            createRecentContacts(filteredCallLogs);
+          }
         });
       } else {
         console.log('Call Log permission denied');
@@ -216,7 +218,7 @@ const ActivityScreen = () => {
         ListEmptyComponent={
           STATE_STATUS.FETCHED && searchedData.size == 0 ? (
             <View style={styles.NoDataFoundWrap}>
-              <Text style={styles.NoDataFoundTxt}>No records found</Text>
+              <Text style={styles.NoDataFoundTxt}>No Records Found</Text>
             </View>
           ) : null
         }

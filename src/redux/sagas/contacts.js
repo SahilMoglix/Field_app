@@ -7,9 +7,9 @@ import {CONTACTS_ACTIONS} from '../constants/contacts';
 
 function* fetchAllContacts() {
   try {
-    // const {data, error} = yield call(getContacts);
-    const data = contacts;
-    const error = null;
+    const {data, error} = yield call(getContacts);
+    // const data = contacts;
+    // const error = null;
     if (error) {
       yield put(failedFetchContacts(error));
     } else {

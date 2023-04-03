@@ -3,6 +3,11 @@ import Dimension from '../../Theme/Dimension';
 import colors from '../../Theme/Colors';
 import {DIFF_DELETE} from 'jest-diff';
 const styles = StyleSheet.create({
+  NoDataFoundTxt: {
+    alignSelf: 'center',
+    marginTop: Dimension.margin10,
+    color: '#000',
+  },
   TopHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',

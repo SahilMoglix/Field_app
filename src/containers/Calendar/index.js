@@ -158,11 +158,21 @@ const CalendarScreen = () => {
             </TouchableOpacity>
           </View>
         )}
+        {console.log(meetingsData, 'dwedw')}
         {type == 'cal' ? (
           [STATE_STATUS.FETCHING, STATE_STATUS.UNFETCHED].includes(
             meetingsStatus,
           ) ? (
             <ActivityIndicator size={'small'} />
+          ) : meetingsData.size == 0 ? (
+            <Text
+              style={{
+                alignSelf: 'center',
+                marginTop: Dimension.margin10,
+                color: '#000',
+              }}>
+              No Events Found
+            </Text>
           ) : (
             meetingsData.map((data, dataKey) => (
               <EventList data={data} key={dataKey} />
@@ -172,6 +182,15 @@ const CalendarScreen = () => {
             meetingsCustomStatus,
           ) ? (
           <ActivityIndicator size={'small'} />
+        ) : meetingsData.size == 0 ? (
+          <Text
+            style={{
+              alignSelf: 'center',
+              marginTop: Dimension.margin10,
+              color: '#000',
+            }}>
+            No Events Found
+          </Text>
         ) : (
           meetingsCustomData.map((data, dataKey) => (
             <EventList data={data} key={dataKey} />
