@@ -65,7 +65,7 @@ const ContactScreen = props => {
       setContactLoading(true);
       const {data} = await getNumberDetails(contactNum);
       setContactLoading(false);
-      if (data?.result?.data?.length) {
+      if (data?.result?.length) {
         setContactExists(true);
       } else {
         setContactExists(false);
@@ -186,10 +186,10 @@ const ContactScreen = props => {
 
   const onSearchText = item => {
     setSearch(item);
-    flatListRef.current.scrollToOffset({animated: true, offset: 0});
-    let filteredData = contacts.filter(function (val) {
+    // flatListRef.current.scrollToOffset({animated: true, offset: 0});
+    let filteredData = contactsData.filter(function (val) {
       if (
-        val.displayName?.toLowerCase()?.includes(item?.toLowerCase()) ||
+        val.name?.toLowerCase()?.includes(item?.toLowerCase()) ||
         (val.company &&
           val.company?.toLowerCase()?.includes(item?.toLowerCase()))
       ) {
@@ -248,8 +248,8 @@ const ContactScreen = props => {
                 />
               }
               uncheckedIcon={
-                <CustomeIcon
-                  name={'Check-blank'}
+                <Icon
+                  name={'radiobox-blank'}
                   size={Dimension.font22}
                   color={Colors.FontColor}
                 />
@@ -285,10 +285,15 @@ const ContactScreen = props => {
     navigation.navigate('AddContact');
   };
 
+  useEffect(() => {
+    console.log(selectContact);
+  });
+
   return (
     <View
       style={{
         flex: 1,
+        paddingTop: Dimension.padding30,
         // marginTop: Dimension.margin40,
         backgroundColor: '#fff',
       }}>
@@ -393,9 +398,13 @@ const ContactScreen = props => {
           />
         ) : (
           <FlashList
-            // ref={flatListRef}
+            ref={flatListRef}
             estimatedItemSize={106}
-            data={contactsData.toArray()}
+            data={
+              searchValue && searchValue.length
+                ? FilterList.toArray()
+                : contactsData.toArray()
+            }
             renderItem={renderFocusedData}
             refreshing={[
               STATE_STATUS.FETCHING,
@@ -444,7 +453,6 @@ const ContactScreen = props => {
           //style={styles.list}
         />
       ) : null}
-
       <Modal
         onBackButtonPress={() => setModalVisible(false)}
         onBackdropPress={() => setModalVisible(false)}
@@ -489,7 +497,7 @@ const ContactScreen = props => {
               });
               setModalVisible(false);
             }}
-            disabled={!contactExists && contactNum.length == 10}
+            disabled={contactExists || contactNum.length != 10}
             style={
               !contactExists && contactNum.length == 10
                 ? styles.enableBtn

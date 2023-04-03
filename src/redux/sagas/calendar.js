@@ -24,7 +24,7 @@ function* fetchMeetings({payload: {startDate, endDate}}) {
     if (error) {
       yield put(failedFetchCalendar(error));
     } else {
-      yield put(fetchedCalendar(data.data));
+      yield put(fetchedCalendar(data.result));
     }
   } catch (error) {
     yield put(failedFetchCalendar(error));
@@ -39,9 +39,7 @@ function* fetchCustomMeetings({payload: {params}}) {
     if (error) {
       yield put(failedFetchCustomCalendar(error));
     } else {
-      yield put(
-        fetchedCustomCalendar([...data.data, ...data.data, ...data.data]),
-      );
+      yield put(fetchedCustomCalendar(data.result));
     }
   } catch (error) {
     yield put(failedFetchCustomCalendar(error));

@@ -1,5 +1,12 @@
 import React, {useState} from 'react';
-import {Text, ScrollView, View, Platform, TouchableOpacity} from 'react-native';
+import {
+  Text,
+  ScrollView,
+  View,
+  Platform,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 import {Card, Button, Icon, Avatar} from 'react-native-elements';
 import styles from './style';
 //import APPHeader from '../../component/common/APPHeader';
@@ -43,7 +50,7 @@ const AddContact = props => {
   const [name, setName] = useState(params.name);
   const [phone, setPhone] = useState(params.phone);
   const [email, setEmail] = useState(params.email);
-  const [inclination, setInclination] = useState(props.inclination);
+  const [inclination, setInclination] = useState(params.inclination);
   const [company, setCompany] = useState(params.company);
   const [plant, setPlant] = useState(params.plant);
   const [designation, setDesignation] = useState(params.designation);
@@ -124,7 +131,7 @@ const AddContact = props => {
       label: 'Inclination',
       from: 'addContact',
       data: InclinationData,
-      horizontalView: false,
+      horizontalView: true,
       onCheck: val => setInclination(val),
       value: inclination,
     },
@@ -208,7 +215,8 @@ const AddContact = props => {
   ];
 
   const [photo, setPhoto] = useState(
-    'https://www.rattanhospital.in/wp-content/uploads/2020/03/user-dummy-pic.png',
+    params.profilePicUrl ||
+      'https://www.rattanhospital.in/wp-content/uploads/2020/03/user-dummy-pic.png',
   );
 
   const [photoObject, setObject] = useState([
@@ -223,6 +231,7 @@ const AddContact = props => {
       name,
       phone,
       email,
+      id: params.id || null,
       inclination,
       company,
       plant,
@@ -230,7 +239,6 @@ const AddContact = props => {
       department,
       whatsappContact,
     });
-    console.log(data);
     if (data.status) {
       props.navigation.goBack();
       disptch(fetchContacts());
@@ -290,7 +298,7 @@ const AddContact = props => {
       <View
         style={{
           flex: 1,
-          // marginTop: Dimension.margin40,
+          paddingTop: Dimension.margin40,
           backgroundColor: '#fff',
         }}>
         <View style={styles.headerWrap}>
@@ -308,9 +316,25 @@ const AddContact = props => {
               Contact
             </Text>
           </View>
-
-          <View></View>
+          {props.route.params.hasOwnProperty('newContact') ? null : (
+            <View>
+              <TouchableOpacity
+                onPress={submitButton}
+                style={{flexDirection: 'row', marginTop: 5}}>
+                {loading ? (
+                  <ActivityIndicator size={'small'} color={colors.CtaColor} />
+                ) : (
+                  <CustomeIcon
+                    name={'Save-blue'}
+                    color={colors.CtaColor}
+                    size={Dimension.font20}></CustomeIcon>
+                )}
+                <Text style={styles.blueHeadingtxt}>Save</Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
+
         <ScrollView
           style={styles.ScrollViewCss}
           contentContainerStyle={{paddingBottom: 180}}>
@@ -328,9 +352,8 @@ const AddContact = props => {
                 style={styles.addPhotoBtn}>
                 <Text style={styles.addPhotoText}>
                   {props.route.params.hasOwnProperty('newContact')
-                    ? 'Add'
-                    : 'Update'}{' '}
-                  Photo
+                    ? 'Add Photo'
+                    : ''}
                 </Text>
               </TouchableOpacity>
             </Card>
@@ -347,14 +370,21 @@ const AddContact = props => {
             ))}
             {/* {visibleCamera && <Camera onSelectCamera={handleCamera} onSelectGallery={handleGallery}/>}  */}
           </View>
-          {!props.route.params.hasOwnProperty('newContact') ? (
-            <TouchableOpacity
-              onPress={onRemove}
-              style={{alignSelf: 'center', marginTop: Dimension.margin20}}>
-              <Text style={{color: 'red'}}>Remove</Text>
-            </TouchableOpacity>
-          ) : null}
+          {props.route.params.hasOwnProperty('newContact') ? null : (
+            <View style={{flex: 1}}>
+              <Button
+                onPress={onRemove}
+                title="Remove"
+                //loading={loading}
+                //disabled={loading}
+                buttonStyle={styles.RemoveBtnStyle}
+                titleStyle={styles.RemoveBtntxt}
+                containerStyle={styles.btnContainer}
+              />
+            </View>
+          )}
         </ScrollView>
+
         {props.route.params.hasOwnProperty('newContact') ? (
           <View style={styles.BtnWrapper}>
             <View style={{flex: 1}}>

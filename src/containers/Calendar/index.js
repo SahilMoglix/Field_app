@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Button,
   ActivityIndicator,
+  StatusBar,
 } from 'react-native';
 import Calendars from '../../component/Calendars';
 import EventList from '../../component/EventList';
@@ -68,9 +69,9 @@ const CalendarScreen = () => {
   useEffect(() => {
     dispatch(
       fetchCustomCalendar({
-        designation: '',
-        company: '',
-        plant: '',
+        designation: null,
+        company: null,
+        plant: null,
         startDate: new Date(new Date().toDateString() + ' 00:00:00').getTime(),
         endDate: new Date(new Date().toDateString() + ' 23:59:59').getTime(),
       }),
@@ -110,9 +111,10 @@ const CalendarScreen = () => {
     <View
       style={{
         flex: 1,
-        // paddingTop: Dimension.padding30,
+        paddingTop: Dimension.padding30,
         backgroundColor: '#fff',
       }}>
+      <StatusBar translucent backgroundColor="#fff" barStyle={'dark-content'} />
       <View style={styles.headerWrap}>
         <View style={styles.TopHeader}>
           <Text style={styles.headingTxt}>Calendar</Text>

@@ -13,7 +13,7 @@ function* fetchAllContacts() {
     if (error) {
       yield put(failedFetchContacts(error));
     } else {
-      yield put(fetchedContacts(data.data));
+      yield put(fetchedContacts(data.result));
     }
   } catch (error) {
     yield put(failedFetchContacts(error));
