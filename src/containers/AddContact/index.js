@@ -1,5 +1,12 @@
 import React, {useState} from 'react';
-import {Text, ScrollView, View, Platform, TouchableOpacity} from 'react-native';
+import {
+  Text,
+  ScrollView,
+  View,
+  Platform,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 import {Card, Button, Icon, Avatar} from 'react-native-elements';
 import styles from './style';
 //import APPHeader from '../../component/common/APPHeader';
@@ -17,6 +24,7 @@ import DotCheckbox from '../../component/Checkbox';
 import {useDispatch, useSelector} from 'react-redux';
 import {createContact} from '../../services/contacts';
 import {fetchContacts} from '../../redux/actions/contacts';
+import {deleteContact} from 'react-native-contacts';
 // import { launchImageLibrary } from 'react-native-image-picker';
 //import RNFetchBlob from 'rn-fetch-blob';
 //import CONSTANTS from "../../services/constant";
@@ -42,7 +50,7 @@ const AddContact = props => {
   const [name, setName] = useState(params.name);
   const [phone, setPhone] = useState(params.phone);
   const [email, setEmail] = useState(params.email);
-  const [inclination, setInclination] = useState(props.inclination);
+  const [inclination, setInclination] = useState(params.inclination);
   const [company, setCompany] = useState(params.company);
   const [plant, setPlant] = useState(params.plant);
   const [designation, setDesignation] = useState(params.designation);
@@ -51,7 +59,7 @@ const AddContact = props => {
     params.whatsappContact,
   );
   const [visibleCamera, setCamera] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const InclinationData = [
     {
@@ -207,7 +215,8 @@ const AddContact = props => {
   ];
 
   const [photo, setPhoto] = useState(
-    'https://www.rattanhospital.in/wp-content/uploads/2020/03/user-dummy-pic.png',
+    params.profilePicUrl ||
+      'https://www.rattanhospital.in/wp-content/uploads/2020/03/user-dummy-pic.png',
   );
 
   const [photoObject, setObject] = useState([
@@ -222,6 +231,7 @@ const AddContact = props => {
       name,
       phone,
       email,
+      id: params.id || null,
       inclination,
       company,
       plant,
@@ -229,7 +239,6 @@ const AddContact = props => {
       department,
       whatsappContact,
     });
-    console.log(data);
     if (data.status) {
       props.navigation.goBack();
       disptch(fetchContacts());
@@ -275,12 +284,21 @@ const AddContact = props => {
     setCamera(visibleCamera => !visibleCamera);
   };
 
+  const onRemove = async () => {
+    const {data} = await deleteContact(props.route.params.id);
+    if (data.success) {
+      disptch(fetchContacts());
+      props.navigation.goBack();
+    } else {
+    }
+  };
+
   return (
     <>
       <View
         style={{
           flex: 1,
-          // paddingTop: Dimension.margin40,
+          paddingTop: Dimension.margin40,
           backgroundColor: '#fff',
         }}>
         <View style={styles.headerWrap}>
@@ -300,11 +318,17 @@ const AddContact = props => {
           </View>
           {props.route.params.hasOwnProperty('newContact') ? null : (
             <View>
-              <TouchableOpacity style={{flexDirection: 'row', marginTop: 5}}>
-                <CustomeIcon
-                  name={'Save-blue'}
-                  color={colors.CtaColor}
-                  size={Dimension.font20}></CustomeIcon>
+              <TouchableOpacity
+                onPress={submitButton}
+                style={{flexDirection: 'row', marginTop: 5}}>
+                {loading ? (
+                  <ActivityIndicator size={'small'} color={colors.CtaColor} />
+                ) : (
+                  <CustomeIcon
+                    name={'Save-blue'}
+                    color={colors.CtaColor}
+                    size={Dimension.font20}></CustomeIcon>
+                )}
                 <Text style={styles.blueHeadingtxt}>Save</Text>
               </TouchableOpacity>
             </View>
@@ -326,7 +350,11 @@ const AddContact = props => {
               <TouchableOpacity
                 onPress={() => setCamera(visibleCamera => !visibleCamera)}
                 style={styles.addPhotoBtn}>
-                <Text style={styles.addPhotoText}>Add Photo</Text>
+                <Text style={styles.addPhotoText}>
+                  {props.route.params.hasOwnProperty('newContact')
+                    ? 'Add Photo'
+                    : ''}
+                </Text>
               </TouchableOpacity>
             </Card>
             {/* <DotCheckbox
@@ -345,7 +373,7 @@ const AddContact = props => {
           {props.route.params.hasOwnProperty('newContact') ? null : (
             <View style={{flex: 1}}>
               <Button
-                // onPress={submitButton}
+                onPress={onRemove}
                 title="Remove"
                 //loading={loading}
                 //disabled={loading}
@@ -361,7 +389,6 @@ const AddContact = props => {
           <View style={styles.BtnWrapper}>
             <View style={{flex: 1}}>
               <Button
-                //onPress={submitButton}
                 onPress={() => props.navigation.goBack()}
                 title="Cancel"
                 disabled={loading}

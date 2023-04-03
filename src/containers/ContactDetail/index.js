@@ -82,8 +82,8 @@ const ContactDetail = props => {
 
   const onContactFetch = async () => {
     const {data} = await getNumberDetails(props.route.params.phone);
-    if (data?.result?.data.length) {
-      setContactData(data.result.data[0]);
+    if (data?.result?.length) {
+      setContactData(data.result[0]);
     }
   };
 
@@ -92,7 +92,7 @@ const ContactDetail = props => {
       <View
         style={{
           flex: 1,
-          // marginTop: Dimension.margin40,
+          marginTop: Dimension.margin28,
           backgroundColor: '#fff',
         }}>
         <View style={styles.headerWrap}>

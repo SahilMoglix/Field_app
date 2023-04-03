@@ -138,6 +138,9 @@ const Routes = props => {
             key={key}
             lazy={false}
             name={screen.name}
+            initialParams={{
+              setIsLoggedIn,
+            }}
             component={screen.component}
             options={navOptionHandler}
             screenOptions={{
@@ -155,6 +158,9 @@ const Routes = props => {
         <AppStack.Screen
           screenOptions={{
             headerShown: false,
+          }}
+          initialParams={{
+            setIsLoggedIn,
           }}
           name="HomeApp"
           component={TabNavigator}

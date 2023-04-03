@@ -8,10 +8,10 @@ import {failedFetchLogs, fetchedLogs} from '../actions/communication';
 function* fetchCallLogs() {
   try {
     // console.log('aarha hai!!');
-    // const {data, error} = yield call(getContacts);
+    const {data, error} = yield call(getContacts);
     // console.log(data, 'data in saga!!', error);
-    const data = logs;
-    const error = null;
+    // const data = logs;
+    // const error = null;
     if (error) {
       yield put(failedFetchLogs(error));
     } else {

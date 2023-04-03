@@ -224,9 +224,9 @@ const FilterModal = props => {
   const applyFilters = fromReset => {
     if (fromReset) {
       props.onApplyFilter({
-        designation: '',
-        company: '',
-        plant: '',
+        designation: null,
+        company: null,
+        plant: null,
         startDate: new Date(new Date().toDateString() + ' 00:00:00').getTime(),
         endDate: new Date(new Date().toDateString() + ' 23:59:59').getTime(),
       });

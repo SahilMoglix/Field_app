@@ -9,18 +9,22 @@ import {
   failedFetchMonthCalendar,
   fetchedMonthCalendar,
 } from '../actions/calendar';
-import {getMeetings, getCustomMeetings} from '../../services/calendar';
+import {
+  getMeetings,
+  getCustomMeetings,
+  getMonthMeetings,
+} from '../../services/calendar';
 import {meetings, monthData} from '../../responses/calendar';
 
 function* fetchMeetings({payload: {startDate, endDate}}) {
   try {
-    // const {data, error} = yield call(getMeetings, startDate, endDate);
-    const data = meetings;
-    const error = null;
+    const {data, error} = yield call(getMeetings, startDate, endDate);
+    // const data = meetings;
+    // const error = null;
     if (error) {
       yield put(failedFetchCalendar(error));
     } else {
-      yield put(fetchedCalendar(data.data));
+      yield put(fetchedCalendar(data.result));
     }
   } catch (error) {
     yield put(failedFetchCalendar(error));
@@ -29,15 +33,13 @@ function* fetchMeetings({payload: {startDate, endDate}}) {
 
 function* fetchCustomMeetings({payload: {params}}) {
   try {
-    // const {data, error} = yield call(getCustomMeetings, params);
-    const data = meetings;
-    const error = null;
+    const {data, error} = yield call(getCustomMeetings, params);
+    // const data = meetings;
+    // const error = null;
     if (error) {
       yield put(failedFetchCustomCalendar(error));
     } else {
-      yield put(
-        fetchedCustomCalendar([...data.data, ...data.data, ...data.data]),
-      );
+      yield put(fetchedCustomCalendar(data.result));
     }
   } catch (error) {
     yield put(failedFetchCustomCalendar(error));
@@ -46,9 +48,9 @@ function* fetchCustomMeetings({payload: {params}}) {
 
 function* fetchMonthMeetings({payload: {params}}) {
   try {
-    // const {data, error} = yield call(getMonthMeetings, params);
-    const data = monthData;
-    const error = null;
+    const {data, error} = yield call(getMonthMeetings, params);
+    // const data = monthData;
+    // const error = null;
     if (error) {
       yield put(failedFetchMonthCalendar(error));
     } else {

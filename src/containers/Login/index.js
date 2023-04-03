@@ -23,7 +23,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {login} from '../../services/auth';
 // 'ff1fe9da-d218-4ceb-a11f-05ea54a985fb'
-const CLIENT_ID = 'ac5fc872-17f9-4f59-af74-3abbe885956e'; // sai
+const CLIENT_ID = 'ff1fe9da-d218-4ceb-a11f-05ea54a985fb'; // sai
 
 const azureAuth = new AzureAuth({
   clientId: CLIENT_ID,
@@ -71,7 +71,10 @@ const LoginScreen = props => {
             '@microsoftLogin',
             JSON.stringify(storeRes),
           );
-          console.log(setIsLoggedIn);
+          await AsyncStorage.setItem(
+            'token',
+            String(loginResponse?.data?.result?.access_token),
+          );
           props.route.params.setIsLoggedIn(true);
         }
       } else {
