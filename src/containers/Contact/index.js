@@ -106,7 +106,7 @@ const ContactScreen = props => {
         <View style={styles.contactDat}>
           <Text style={styles.name}>{item?.name} </Text>
           <Text style={styles.phoneNumber}>{item?.designation}</Text>
-          <Text style={styles.phoneNumber}>
+          <Text style={item.company ? styles.phoneNumber : styles.redtxt}>
             {!item.company ? 'Company details missing' : item?.company}
           </Text>
           <Text
