@@ -25,6 +25,7 @@ import Colors from '../../Theme/Colors';
 import {CheckBox} from 'react-native-elements';
 import {getNumberDetails, syncContacts} from '../../services/contacts';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Toast from 'react-native-toast-message';
 
 const ContactScreen = props => {
   const navigation = useNavigation();
@@ -37,6 +38,7 @@ const ContactScreen = props => {
   );
 
   const [contacts, setContacts] = useState([]);
+  const [syncLoading, setSyncLoading] = useState(false);
   const [pagetype, setpageType] = useState('Focused');
   const [searchValue, setSearch] = useState('');
   const [FilterList, setFilter] = useState([]);
@@ -278,26 +280,46 @@ const ContactScreen = props => {
   };
 
   const onSyncContacts = async (isSingleContact, contact) => {
-    let body = [];
-    if (isSingleContact) {
-      body = [contact];
-    } else {
-      body = [selectedContacts];
-    }
-    body = body.map(_ => ({
-      name: _.displayName || '',
-      email: (_.emailAddresses.find(__ => __.email) || {}).email || '',
-      phone:
-        ((_.phoneNumbers.find(__ => __.number) || {}).number || '')
-          .split('-' || ' ')
-          .join('') || '',
-    }));
-    const {data} = await syncContacts(body);
-    if (data.status == 200) {
-      console.log(data);
-      dispatch(fetchContacts());
-    } else {
-      console.log(data);
+    try {
+      setSyncLoading(true);
+      let body = [];
+      if (isSingleContact) {
+        body = [contact];
+      } else {
+        body = selectedContacts;
+      }
+      body = body.map(_ => ({
+        name: _.displayName || '',
+        email: (_.emailAddresses.find(__ => __.email) || {}).email || '',
+        phone:
+          ((_.phoneNumbers.find(__ => __.number) || {}).number || '')
+            .split('-' || ' ')
+            .join('') || '',
+      }));
+      const {data} = await syncContacts(body);
+      if (data.status == 200) {
+        console.log(data);
+        dispatch(fetchContacts());
+        setSelectContact(false);
+        Toast.show({
+          type: 'success',
+          text1: data.message,
+        });
+      } else {
+        console.log(data);
+        Toast.show({
+          type: 'error',
+          text1: 'Error while syncing contact',
+        });
+      }
+      setSyncLoading(false);
+    } catch (e) {
+      console.log(e);
+      Toast.show({
+        type: 'error',
+        text1: 'Error while syncing contact',
+      });
+      setSyncLoading(false);
     }
   };
 
@@ -515,9 +537,8 @@ const ContactScreen = props => {
         <View style={styles.BtnWrapper}>
           <View style={{flex: 1}}>
             <Button
-              onPress={() => props.navigation.goBack()}
+              onPress={() => setSelectContact(false)}
               title="Cancel"
-              // disabled={loading}
               buttonStyle={styles.CancelbtnStyle}
               titleStyle={styles.Cancelbtntxt}
               containerStyle={styles.btnContainer}
@@ -525,10 +546,10 @@ const ContactScreen = props => {
           </View>
           <View style={{flex: 1}}>
             <Button
-              // onPress={submitButton}
+              onPress={() => onSyncContacts()}
               title="Save"
-              // loading={loading}
-              //disabled={loading}
+              loading={syncLoading}
+              disabled={!selectedContacts.length}
               buttonStyle={styles.btnStyle}
               titleStyle={styles.btntxt}
               containerStyle={styles.btnContainer}

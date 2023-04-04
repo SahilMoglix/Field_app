@@ -3,11 +3,13 @@ import {SafeAreaView, ScrollView, StyleSheet, Text} from 'react-native';
 import Routes from './src/routes';
 import store from './src/redux/store';
 import {Provider} from 'react-redux';
+import Toast from 'react-native-toast-message';
 
 const App = () => {
   return (
     <Provider store={store}>
       <Routes />
+      <Toast />
     </Provider>
   );
 };

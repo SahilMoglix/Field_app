@@ -1,10 +1,8 @@
 import React, {useState} from 'react';
-import {StyleSheet, Text, TextInput, View, Platform} from 'react-native';
-import {Button, CheckBox} from 'react-native-elements';
-import Modal from 'react-native-modal';
+import {StyleSheet, Text, View, Platform} from 'react-native';
+import {Button} from 'react-native-elements';
 import colors from '../../Theme/Colors';
 import Dimension from '../../Theme/Dimension';
-import CustomeIcon from './CustomeIcon';
 import MyInput from './floatingInput';
 
 const ContactForm = props => {

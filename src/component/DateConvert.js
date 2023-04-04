@@ -2,7 +2,7 @@ import React from 'react';
 import {Text, StyleSheet} from 'react-native';
 import colors from '../Theme/Colors';
 import Dimension from '../Theme/Dimension';
-import moment from 'moment';
+
 const DateConvert = props => {
   // const date = new Date(props.time.noteDate);
   // const formattedDate = moment(date).format("DD MMM YYYY")
@@ -25,7 +25,7 @@ const DateConvert = props => {
     // const dateSplit = time?.split(' ') || '';
     // let actualDate = `${dateSplit?.[2]}-${
     //   months.findIndex(_ => _ == dateSplit?.[1]) + 1
-    // }-${dateSplit?.[0]} ${dateSplit?.[3]}`;
+    // }-${dateSplit?.[0]} ${dateSplit?.[3]}`; //might need in future if date format is not standard
     let date = new Date(time);
     let currentDate = new Date();
     if (currentDate.getFullYear() == date.getFullYear()) {

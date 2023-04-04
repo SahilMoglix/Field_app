@@ -17,9 +17,6 @@ export const getNumberDetails = async phone =>
   axios.get(
     `${CONSTANTS.BASE_URL}contact/searchContactByPhoneForLoggedInUser/${phone}`,
     {
-      params: {
-        // id: 1, //await AsyncStorage.getItem('userId')
-      },
       headers: {
         Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
         'Content-Type': 'application/json',
