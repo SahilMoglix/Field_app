@@ -6,6 +6,7 @@ import {
   Platform,
   View,
   ActivityIndicator,
+  StatusBar,
 } from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -165,6 +166,10 @@ const Routes = props => {
           name="HomeApp"
           component={TabNavigator}
           options={navOptionHandler}
+          containerStyle={{
+            marginTop: Dimension.padding30,
+            backgroundColor: 'pink',
+          }}
         />
         {APP_STACK_SCREENS.map((screen, key) => (
           <AppStack.Screen
@@ -175,6 +180,10 @@ const Routes = props => {
             }}
             component={screen.component}
             options={navOptionHandler}
+            containerStyle={{
+              marginTop: Dimension.padding30,
+              backgroundColor: 'pink',
+            }}
           />
         ))}
       </AppStack.Navigator>
@@ -186,6 +195,10 @@ const Routes = props => {
       <AppStack.Navigator
         screenOptions={{
           headerShown: false,
+        }}
+        containerStyle={{
+          marginTop: Dimension.padding30,
+          backgroundColor: 'pink',
         }}>
         <AppStack.Screen
           initialParams={{
@@ -198,6 +211,10 @@ const Routes = props => {
           }}
           component={LoginScreen}
           options={navOptionHandler}
+          containerStyle={{
+            marginTop: Dimension.padding30,
+            backgroundColor: 'pink',
+          }}
         />
       </AppStack.Navigator>
     );
@@ -206,6 +223,13 @@ const Routes = props => {
   const RootNavigation = () => {
     return (
       <NavigationContainer linking={linking}>
+        <StatusBar
+          translucent
+          backgroundColor="#fff"
+          barStyle={'dark-content'}
+          style={{marginBottom: 60}}
+        />
+
         {!isLoggedIn ? <AuthStack /> : <MainStack />}
       </NavigationContainer>
     );

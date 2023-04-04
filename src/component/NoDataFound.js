@@ -13,11 +13,11 @@ import Dimension from '../Theme/Dimension';
 const NoDataFound = props => {
   return (
     <View style={styles.NoInvoiceWrap}>
-      <Image
+      {/* <Image
         style={{width: 58, height: 58}}
         source={require('../assets/images/Nodatafound.png')}
         resizeMode={'cover'}
-      />
+      /> */}
       <Text style={styles.NoInvoiceTxt}>{props.text}</Text>
     </View>
   );
@@ -37,6 +37,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     height: '100%',
+    marginVertical: 50,
+    alignSelf: 'center',
+    alignContent: 'center',
   },
   NoInvoiceSmallTxt: {
     fontSize: Dimension.font12,

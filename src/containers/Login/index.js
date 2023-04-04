@@ -77,7 +77,6 @@ const LoginScreen = props => {
 
   return (
     <>
-      <StatusBar translucent backgroundColor="#fff" barStyle={'dark-content'} />
       <ScrollView style={{flex: 1, backgroundColor: 'white'}}>
         <LinearGradient
           colors={['#EAF2FF', '#fff']}

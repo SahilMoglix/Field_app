@@ -112,10 +112,9 @@ const CalendarScreen = () => {
     <View
       style={{
         flex: 1,
-        paddingTop: Dimension.padding30,
         backgroundColor: '#fff',
       }}>
-      <StatusBar translucent backgroundColor="#fff" barStyle={'dark-content'} />
+      {/* <StatusBar translucent backgroundColor="#fff" barStyle={'dark-content'} /> */}
       <View style={styles.headerWrap}>
         <View style={styles.TopHeader}>
           <Text style={styles.headingTxt}>Calendar</Text>

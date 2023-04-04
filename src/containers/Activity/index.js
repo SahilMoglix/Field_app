@@ -162,7 +162,6 @@ const ActivityScreen = () => {
     <View
       style={{
         flex: 1,
-        paddingTop: Dimension.padding30,
         backgroundColor: '#fff',
       }}>
       <View style={styles.headerWrap}>
