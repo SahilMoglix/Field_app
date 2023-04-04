@@ -142,7 +142,7 @@ const ContactDetail = props => {
               <Avatar
                 //size={64}
                 rounded
-                source={{uri: photo}}
+                source={{uri: contactData?.profilePicUrl || photo}}
                 avatarStyle={styles.UserImgIcon}
                 containerStyle={styles.UserimgContainer}
               />

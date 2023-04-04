@@ -6,18 +6,14 @@ import {
   Platform,
   TouchableOpacity,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import {Card, Button, Icon, Avatar} from 'react-native-elements';
 import styles from './style';
-//import APPHeader from '../../component/common/APPHeader';
-// import CreateEvent from '../../component/common/CreateEvent';
-//import Camera  from '../../component/common/Camera'
-// import DateTimePicker from '@react-native-community/datetimepicker';
 import CustomeIcon from '../../component/CustomeIcon';
 import Dimension from '../../Theme/Dimension';
 import colors from '../../Theme/Colors';
 import Toast from 'react-native-toast-message';
-//import {ContactService} from '../../services/ContactService';
 import MyInput from '../../component/floatingInput';
 import DropDown from '../../component/DropDown';
 import {useNavigation} from '@react-navigation/native';
@@ -25,10 +21,10 @@ import DotCheckbox from '../../component/Checkbox';
 import {useDispatch, useSelector} from 'react-redux';
 import {createContact, deleteContact} from '../../services/contacts';
 import {fetchContacts} from '../../redux/actions/contacts';
-// import { launchImageLibrary } from 'react-native-image-picker';
-//import RNFetchBlob from 'rn-fetch-blob';
-//import CONSTANTS from "../../services/constant";
-//import SyncStorage from 'sync-storage';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import CONSTANTS from '../../services/constant';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import RNFetchBlob from 'rn-fetch-blob';
 
 const AddContact = props => {
   const disptch = useDispatch();
@@ -217,14 +213,54 @@ const AddContact = props => {
 
   const [photo, setPhoto] = useState(
     params.profilePicUrl ||
-      'https://www.rattanhospital.in/wp-content/uploads/2020/03/user-dummy-pic.png',
+      'https://purchase-order-moglix.s3.ap-south-1.amazonaws.com/thumbnail_image001.png',
   );
 
-  const [photoObject, setObject] = useState([
-    {type: 'image/jpeg', filename: 'dummy.jpg'},
-  ]);
-
   const navigation = useNavigation();
+
+  const openSelection = () => {
+    Alert.alert('Choose one of the options to upload image.', '', [
+      {
+        text: 'Open Camers',
+        onPress: () => onImageSelector('Camera'),
+      },
+      {text: 'Open Gallery', onPress: () => onImageSelector('Gallery')},
+      {
+        text: 'Cancel',
+        onPress: () => {},
+        style: 'cancel',
+      },
+    ]);
+  };
+
+  const onImageSelector = selection => {
+    switch (selection) {
+      case 'Camera':
+        launchCamera({}, res => {
+          console.log(res, 'ferfe');
+          if (!res.didCancel) {
+            handleImageUpload(res?.assets?.[0]);
+          }
+        });
+        return;
+      case 'Gallery':
+        launchImageLibrary({}, res => {
+          console.log(res, 'ferfe');
+          if (!res.didCancel) {
+            handleImageUpload(res?.assets?.[0]);
+          }
+        });
+        return;
+      default:
+        launchCamera({}, res => {
+          console.log(res, 'ferfe');
+          if (!res.didCancel) {
+            handleImageUpload(res?.assets?.[0]);
+          }
+        });
+        return;
+    }
+  };
 
   const submitButton = async () => {
     setLoading(true);
@@ -240,6 +276,7 @@ const AddContact = props => {
         designation,
         department,
         whatsappContact,
+        profilePicUrl: photo,
       });
       console.log(data);
       if (data.status == 200) {
@@ -257,50 +294,45 @@ const AddContact = props => {
       }
       setLoading(false);
     } catch (e) {
+      console.log(e);
       setLoading(false);
       Toast.show({
         type: 'error',
         text1: e?.response?.data?.message || 'Something went wrong!',
       });
     }
-    // ContactService.AddContact(finalData).then(response => {
-    //     console.log("image uplaod response ",response)
-    //     if(response.code==200 && response.success){
-    //          alert(response.message)
-    //          //handleImageUpload(response.data.id);
-    //          props.navigation.goBack()
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //    // throw alert(err);
-    //   });
   };
 
-  const handleImageUpload = id => {
-    // const realPath = Platform.OS === 'ios' ? photoObject.uri.replace('file://', '') : photoObject.uri;
-    // RNFetchBlob.fetch('POST', CONSTANTS.API_BASE_URL+'/api/contact/'+id+'/addImage', {
-    //   'Authorization': SyncStorage.get('token'),
-    //   'Content-Type' : 'multipart/form-data',
-    //     }, [
-    //       { name : 'image',type:photoObject.type, filename : photoObject.fileName,
-    //       data: RNFetchBlob.wrap(decodeURIComponent(realPath)),
-    //       },
-    //     ]).then((resp) => {
-    //       console.log(resp.data)
-    //     });
-  };
-
-  const handleCamera = cam => {
-    setPhoto(cam.assets[0].uri);
-    setObject(cam.assets[0]);
-    setCamera(visibleCamera => !visibleCamera);
-  };
-
-  const handleGallery = camDetail => {
-    setPhoto(camDetail.assets[0].uri);
-    setObject(camDetail.assets[0]);
-    setCamera(visibleCamera => !visibleCamera);
+  const handleImageUpload = async photoObject => {
+    try {
+      const realPath =
+        Platform.OS === 'ios'
+          ? photoObject.uri.replace('file://', '')
+          : photoObject.uri;
+      const response = await RNFetchBlob.fetch(
+        'POST',
+        CONSTANTS.BASE_URL + 'user/uploadProfilePicture/',
+        {
+          Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+          'Content-Type': 'multipart/form-data',
+        },
+        [
+          {
+            name: 'file',
+            type: photoObject.type,
+            filename: photoObject.fileName,
+            data: RNFetchBlob.wrap(decodeURIComponent(realPath)),
+          },
+        ],
+      );
+      const res = await response.json();
+      console.log(res);
+      if (res?.result) {
+        setPhoto(res?.result);
+      }
+    } catch (e) {
+      console.log(e, 'cewcewcwe');
+    }
   };
 
   const onRemove = async () => {
@@ -379,15 +411,19 @@ const AddContact = props => {
               <Avatar
                 //size={64}
                 rounded
-                source={{uri: photo}}
+                source={{
+                  uri:
+                    photo ||
+                    'https://www.rattanhospital.in/wp-content/uploads/2020/03/user-dummy-pic.png',
+                }}
                 avatarStyle={styles.UserImgIcon}
                 containerStyle={styles.UserimgContainer}
               />
               <TouchableOpacity
-                onPress={() => setCamera(visibleCamera => !visibleCamera)}
+                onPress={() => openSelection()}
                 style={styles.addPhotoBtn}>
                 <Text style={styles.addPhotoText}>
-                  {params.hasOwnProperty('newContact') ? 'Add Photo' : ''}
+                  {params.hasOwnProperty('newContact') ? 'Add' : 'Update'} Photo
                 </Text>
               </TouchableOpacity>
             </Card>
