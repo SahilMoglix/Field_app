@@ -297,6 +297,8 @@ const ContactScreen = props => {
         phone:
           ((_.phoneNumbers.find(__ => __.number) || {}).number || '')
             .split('-' || ' ')
+            .join('')
+            .split(' ')
             .join('') || '',
       }));
       const {data} = await syncContacts(body);
