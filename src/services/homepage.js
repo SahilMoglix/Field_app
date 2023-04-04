@@ -3,7 +3,7 @@ import CONSTANTS from './constant';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const getDesignations = async () =>
-  axios.get(`${CONSTANTS.BASE_URL}deignation/get`, {
+  axios.get(`${CONSTANTS.BASE_URL}designation/get`, {
     params: {
       // id: 1, //await AsyncStorage.getItem('userId')
     },

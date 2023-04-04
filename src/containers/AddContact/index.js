@@ -22,9 +22,8 @@ import DropDown from '../../component/DropDown';
 import {useNavigation} from '@react-navigation/native';
 import DotCheckbox from '../../component/Checkbox';
 import {useDispatch, useSelector} from 'react-redux';
-import {createContact} from '../../services/contacts';
+import {createContact, deleteContact} from '../../services/contacts';
 import {fetchContacts} from '../../redux/actions/contacts';
-import {deleteContact} from 'react-native-contacts';
 // import { launchImageLibrary } from 'react-native-image-picker';
 //import RNFetchBlob from 'rn-fetch-blob';
 //import CONSTANTS from "../../services/constant";
@@ -55,6 +54,7 @@ const AddContact = props => {
   const [plant, setPlant] = useState(params.plant);
   const [designation, setDesignation] = useState(params.designation);
   const [department, setDepartment] = useState(params.department);
+  const [removeLoading, setRemoveLoading] = useState(false);
   const [whatsappContact, setWhatsappContact] = useState(
     params.whatsappContact,
   );
@@ -285,11 +285,14 @@ const AddContact = props => {
   };
 
   const onRemove = async () => {
-    const {data} = await deleteContact(props.route.params.id);
-    if (data.success) {
+    setRemoveLoading(true);
+    const {data} = await deleteContact(params.id);
+    if (data.status == 200) {
+      setRemoveLoading(false);
       disptch(fetchContacts());
-      props.navigation.goBack();
+      props.navigation.navigate('Contact');
     } else {
+      setRemoveLoading(false);
     }
   };
 
@@ -312,14 +315,14 @@ const AddContact = props => {
                 size={Dimension.font20}></CustomeIcon>
             </TouchableOpacity>
             <Text style={styles.headingTxt}>
-              {props.route.params.hasOwnProperty('newContact') ? 'Add' : 'Edit'}{' '}
-              Contact
+              {params.hasOwnProperty('newContact') ? 'Add' : 'Edit'} Contact
             </Text>
           </View>
-          {props.route.params.hasOwnProperty('newContact') ? null : (
+          {params.hasOwnProperty('newContact') ? null : (
             <View>
               <TouchableOpacity
                 onPress={submitButton}
+                disabled={loading || removeLoading}
                 style={{flexDirection: 'row', marginTop: 5}}>
                 {loading ? (
                   <ActivityIndicator size={'small'} color={colors.CtaColor} />
@@ -351,9 +354,7 @@ const AddContact = props => {
                 onPress={() => setCamera(visibleCamera => !visibleCamera)}
                 style={styles.addPhotoBtn}>
                 <Text style={styles.addPhotoText}>
-                  {props.route.params.hasOwnProperty('newContact')
-                    ? 'Add Photo'
-                    : ''}
+                  {params.hasOwnProperty('newContact') ? 'Add Photo' : ''}
                 </Text>
               </TouchableOpacity>
             </Card>
@@ -370,13 +371,13 @@ const AddContact = props => {
             ))}
             {/* {visibleCamera && <Camera onSelectCamera={handleCamera} onSelectGallery={handleGallery}/>}  */}
           </View>
-          {props.route.params.hasOwnProperty('newContact') ? null : (
+          {params.hasOwnProperty('newContact') ? null : (
             <View style={{flex: 1}}>
               <Button
                 onPress={onRemove}
                 title="Remove"
-                //loading={loading}
-                //disabled={loading}
+                loading={removeLoading}
+                disabled={removeLoading}
                 buttonStyle={styles.RemoveBtnStyle}
                 titleStyle={styles.RemoveBtntxt}
                 containerStyle={styles.btnContainer}
@@ -385,7 +386,7 @@ const AddContact = props => {
           )}
         </ScrollView>
 
-        {props.route.params.hasOwnProperty('newContact') ? (
+        {params.hasOwnProperty('newContact') ? (
           <View style={styles.BtnWrapper}>
             <View style={{flex: 1}}>
               <Button

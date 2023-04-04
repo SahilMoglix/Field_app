@@ -35,8 +35,16 @@ export const createContact = async data =>
     },
   });
 
-export const deletContact = async id =>
+export const deleteContact = async id =>
   axios.get(`${CONSTANTS.BASE_URL}contact/delete/${id}`, {
+    headers: {
+      Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
+      'Content-Type': 'application/json',
+    },
+  });
+
+export const syncContacts = async contacts =>
+  axios.post(`${CONSTANTS.BASE_URL}contact/createAll`, contacts, {
     headers: {
       Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
       'Content-Type': 'application/json',

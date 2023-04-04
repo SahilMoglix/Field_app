@@ -12,6 +12,7 @@ function* fetchCallLogs() {
     // console.log(data, 'data in saga!!', error);
     // const data = logs;
     // const error = null;
+    console.log(data, 'cewceewcewcwe', error);
     if (error) {
       yield put(failedFetchLogs(error));
     } else {

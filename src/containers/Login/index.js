@@ -1,29 +1,18 @@
-import React, {useState, useEffect} from 'react';
-import {
-  Card,
-  Button,
-  Icon,
-  Avatar,
-  ListItem,
-  Image,
-  Input,
-} from 'react-native-elements';
+import React, {useState} from 'react';
+import {Button, Image} from 'react-native-elements';
 //import CONSTANTS from "../../services/constant";
 import styles from './style';
 import Dimension from '../../Theme/Dimension';
 //import { userService } from "../../services/homepage";
 import LinearGradient from 'react-native-linear-gradient';
 import {Text, ScrollView, View, StatusBar} from 'react-native';
-import Toast from 'react-native-toast-message';
 import AzureAuth from 'react-native-azure-auth';
-import Client from 'react-native-azure-auth/src/networking';
-import {useLinkProps} from '@react-navigation/native';
 import {fetchedAuth} from '../../redux/actions/auth';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {login} from '../../services/auth';
-// 'ff1fe9da-d218-4ceb-a11f-05ea54a985fb'
-const CLIENT_ID = 'ff1fe9da-d218-4ceb-a11f-05ea54a985fb'; // sai
+
+const CLIENT_ID = 'ff1fe9da-d218-4ceb-a11f-05ea54a985fb'; //'ac5fc872-17f9-4f59-af74-3abbe885956e'; //'ff1fe9da-d218-4ceb-a11f-05ea54a985fb';
 
 const azureAuth = new AzureAuth({
   clientId: CLIENT_ID,
