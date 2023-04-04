@@ -171,22 +171,7 @@ const ActivityScreen = () => {
         <View style={styles.TopHeader}>
           <Text style={styles.headingTxt}>Communication</Text>
         </View>
-        {/* <View style={styles.HeaderForBtn}>
-          <View style={styles.BtnWrap}>
-            <TouchableOpacity style={styles.ActiveTopBtn}>
-              <Text style={styles.ActiveBtnTxt}>Call</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.TopBtn}>
-              <Text style={styles.BtnTxt}>Whatsapp</Text>
-            </TouchableOpacity>
-          </View>
-          <View>
-          </View>
-        </View> */}
-        {/* <TouchableOpacity onPress={addContactModal} style={{flexDirection:"row"}}>
-            <CustomeIcon name={'Add-blue'} size={18} color={'#1568E5'}></CustomeIcon>
-              <Text style={styles.addBtnTxt}> Add</Text>
-            </TouchableOpacity> */}
+
         <View></View>
         <View style={styles.searchWraper}>
           <CustomeIcon

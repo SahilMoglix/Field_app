@@ -10,6 +10,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
+import {Button} from 'react-native-elements';
 import Contacts from 'react-native-contacts';
 import Modal from 'react-native-modal';
 import Dimension from '../../Theme/Dimension';
@@ -512,6 +513,31 @@ const ContactScreen = props => {
           </TouchableOpacity>
         </View>
       </Modal>
+      {selectContact ? (
+        <View style={styles.BtnWrapper}>
+          <View style={{flex: 1}}>
+            <Button
+              onPress={() => props.navigation.goBack()}
+              title="Cancel"
+              // disabled={loading}
+              buttonStyle={styles.CancelbtnStyle}
+              titleStyle={styles.Cancelbtntxt}
+              containerStyle={styles.btnContainer}
+            />
+          </View>
+          <View style={{flex: 1}}>
+            <Button
+              // onPress={submitButton}
+              title="Save"
+              // loading={loading}
+              //disabled={loading}
+              buttonStyle={styles.btnStyle}
+              titleStyle={styles.btntxt}
+              containerStyle={styles.btnContainer}
+            />
+          </View>
+        </View>
+      ) : null}
     </View>
   );
 };
