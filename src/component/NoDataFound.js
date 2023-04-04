@@ -6,10 +6,11 @@ import {
   TouchableOpacity,
   View,
   Image,
+  Dimensions,
 } from 'react-native';
 import Colors from '../Theme/Colors';
 import Dimension from '../Theme/Dimension';
-
+const {width: SCREEN_WIDTH, height: SCREEN_HEIGHT} = Dimensions.get('window');
 const NoDataFound = props => {
   return (
     <View style={styles.NoInvoiceWrap}>
@@ -36,10 +37,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     justifyContent: 'center',
-    height: '100%',
+    //height: SCREEN_HEIGHT - 150,
     marginVertical: 50,
     alignSelf: 'center',
     alignContent: 'center',
+    // backgroundColor: '#ccc',
   },
   NoInvoiceSmallTxt: {
     fontSize: Dimension.font12,

@@ -19,6 +19,7 @@ import {STATE_STATUS} from '../../redux/constants';
 import {fetchLogs, updateLogs} from '../../redux/actions/communication';
 import {createAllContacts} from '../../services/communication';
 import NoDataFound from '../../component/NoDataFound';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const ActivityScreen = () => {
   const logsData = useSelector(state => state.communicationReducer.get('data'));
   const logsStatus = useSelector(state =>
@@ -190,7 +191,7 @@ const ActivityScreen = () => {
           </View>
           {/* {searchValue.length > 0 && <>
           <TouchableOpacity onPress={()=>setSearch("")} activeOpacity={0.5} style={styles.crossIcon}>
-            <CustomeIcon name={'Cancel'} size={20} color={'#1568E5'}></CustomeIcon>
+             <Icon name={'close-circle'} size={20} color={'#1568E5'}></Icon>
            </TouchableOpacity>
           </>} */}
         </View>

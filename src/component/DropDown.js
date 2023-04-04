@@ -4,6 +4,7 @@ import colors from '../Theme/Colors';
 import {StyleSheet, TouchableOpacity, Text, View} from 'react-native';
 import CustomeIcon from './CustomeIcon';
 import {Menu, MenuItem, MenuDivider} from 'react-native-material-menu';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const DropDown = props => {
   const {onValueChange, IconName, label, value, options} = props;
@@ -33,19 +34,24 @@ const DropDown = props => {
         </TouchableOpacity>
       }
       onRequestClose={hideMenu}
-      style={styles.dropDownWrap}>
-      {options.map((item, itemIndex) => (
-        <MenuItem
-          onPress={() => {
-            onValueChange(item.value, item.label);
-            hideMenu();
-          }}
-          key={itemIndex}
-          textStyle={styles.dropdownval}
-          style={styles.dropDowninnerWrap}>
-          {item.label}
-        </MenuItem>
-      ))}
+      style={[
+        styles.dropDownWrap,
+        options.length ? {height: 150} : {height: 0},
+      ]}>
+      <ScrollView>
+        {options.map((item, itemIndex) => (
+          <MenuItem
+            onPress={() => {
+              onValueChange(item.value, item.label);
+              hideMenu();
+            }}
+            key={itemIndex}
+            textStyle={styles.dropdownval}
+            style={styles.dropDowninnerWrap}>
+            {item.label}
+          </MenuItem>
+        ))}
+      </ScrollView>
     </Menu>
   );
 };

@@ -128,7 +128,7 @@ const ContactDetail = props => {
         </View>
         <ScrollView
           style={styles.ScrollViewCss}
-          contentContainerStyle={{paddingBottom: 180}}>
+          contentContainerStyle={{paddingBottom: 20}}>
           <View>
             <Card containerStyle={styles.UserDeatilCardWrapper}>
               <Avatar

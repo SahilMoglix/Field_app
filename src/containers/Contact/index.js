@@ -26,6 +26,7 @@ import {CheckBox} from 'react-native-elements';
 import {getNumberDetails, syncContacts} from '../../services/contacts';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Toast from 'react-native-toast-message';
+import NoDataFound from '../../component/NoDataFound';
 
 const ContactScreen = props => {
   const navigation = useNavigation();
@@ -400,10 +401,7 @@ const ContactScreen = props => {
                 onPress={() => setSearch('')}
                 activeOpacity={0.5}
                 style={styles.crossIcon}>
-                <CustomeIcon
-                  name={'Cancel'}
-                  size={20}
-                  color={'#1568E5'}></CustomeIcon>
+                <Icon name={'close-circle'} size={20} color={'#1568E5'}></Icon>
               </TouchableOpacity>
             </>
           )}
@@ -440,14 +438,7 @@ const ContactScreen = props => {
             onRefresh={pullToRefresh}
             ListEmptyComponent={
               contactsStatus == STATE_STATUS.FETCHED ? (
-                <Text
-                  style={{
-                    alignSelf: 'center',
-                    marginTop: Dimension.margin10,
-                    color: '#000',
-                  }}>
-                  No Contacts Found
-                </Text>
+                <NoDataFound text={' No Contacts Found'}></NoDataFound>
               ) : null
             }
             // keyExtractor={index}

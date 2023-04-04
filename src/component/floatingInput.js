@@ -65,7 +65,7 @@ const MyInput = props => {
         onFocus={onFocus}
         onSubmitEditing={props.onSubmitEditing}
         //onBlur={(e)=>onBlur(e.target.value)}
-        placeholder={props.Placeholder}
+        // placeholder={props.Placeholder}
       />
       {props.IconName ? (
         <CustomeIcon
