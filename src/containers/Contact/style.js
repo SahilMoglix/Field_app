@@ -271,6 +271,76 @@ const styles = StyleSheet.create({
     borderColor: colors.WhiteColor,
     width: 'auto',
   },
+  CancelbtnStyle: {
+    backgroundColor: colors.WhiteColor,
+
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignContent: 'center',
+  },
+  Cancelbtntxt:
+    Platform.OS === 'ios'
+      ? {
+          color: colors.CtaColor,
+          fontSize: Dimension.font14,
+          fontFamily: Dimension.CustomBoldFont,
+          fontWeight: '700',
+        }
+      : {
+          color: colors.CtaColor,
+          fontSize: Dimension.font14,
+          fontFamily: Dimension.CustomBoldFont,
+        },
+  btntxt:
+    Platform.OS === 'ios'
+      ? {
+          color: colors.WhiteColor,
+          fontSize: Dimension.font14,
+          fontFamily: Dimension.CustomBoldFont,
+          fontWeight: '700',
+        }
+      : {
+          color: colors.WhiteColor,
+          fontSize: Dimension.font14,
+          fontFamily: Dimension.CustomBoldFont,
+        },
+
+  BtnWrapper: {
+    borderTopWidth: 1,
+    borderTopColor: '#E0E0E0',
+    borderLeftWidth: 1,
+    borderLeftColor: '#E0E0E0',
+    borderRightWidth: 1,
+    borderRightColor: '#E0E0E0',
+    backgroundColor: '#FAFAFA',
+
+    flex: 1,
+    paddingVertical: Dimension.padding10,
+    position: 'absolute',
+    bottom: 0,
+    flexDirection: 'row',
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    shadowColor: '#000',
+    shadowOffset: {width: 2, height: 4},
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    elevation: 10,
+  },
+  btnStyle: {
+    backgroundColor: colors.CtaColor,
+    borderRadius: 50,
+    paddingHorizontal: Dimension.padding30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignSelf: 'center',
+    shadowColor: '#1568E5',
+    shadowOffset: {width: 2, height: 4},
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    elevation: 4,
+  },
 });
 
 export default styles;
