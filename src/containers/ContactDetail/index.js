@@ -92,7 +92,6 @@ const ContactDetail = props => {
       <View
         style={{
           flex: 1,
-          marginTop: Dimension.margin28,
           backgroundColor: '#fff',
         }}>
         <View style={styles.headerWrap}>

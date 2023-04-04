@@ -156,7 +156,7 @@ const Calendars = props => {
         disableArrowRight={false}
         theme={{
           monthTextColor: 'white',
-          dotStyle: {width: 6, height: 6, marginTop: -2, borderRadius: 6},
+          dotStyle: {width: 6, height: 6, marginTop: 8, borderRadius: 6},
           selectedDayBackgroundColor: Colors.BgColor1,
           arrowColor: Colors.FontColor,
           textDayFontFamily: Dimension.CustomMediumFont,
@@ -166,6 +166,7 @@ const Calendars = props => {
           textDayFontSize: Dimension.font14,
           textMonthFontSize: Dimension.font14,
           textDayHeaderFontSize: Dimension.font14,
+
           //monthTextColor: 'blue',
         }}
         disableAllTouchEventsForDisabledDays={true}
@@ -190,7 +191,7 @@ const Calendars = props => {
           marginBottom: Dimension.margin5,
           paddingBottom: Dimension.padding10,
           shadowColor: '#000',
-          height: 320,
+          height: 340,
           shadowOffset: {
             width: 0,
             height: 5,
