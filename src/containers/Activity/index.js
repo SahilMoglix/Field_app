@@ -86,9 +86,13 @@ const ActivityScreen = () => {
             let filteredCallLogs = ([...c] || []).filter(
               __ => Number(__.timestamp) > recentCallCreatedAt,
             );
-            createRecentContacts(filteredCallLogs);
+            if (filteredCallLogs?.length) {
+              createRecentContacts(filteredCallLogs);
+            }
           } else {
-            createRecentContacts(c);
+            if (c?.length) {
+              createRecentContacts(c);
+            }
           }
         });
       } else {

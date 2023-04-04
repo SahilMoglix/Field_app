@@ -22,7 +22,7 @@ import {STATE_STATUS} from '../../redux/constants';
 import {fetchContacts} from '../../redux/actions/contacts';
 import Colors from '../../Theme/Colors';
 import {CheckBox} from 'react-native-elements';
-import {getNumberDetails} from '../../services/contacts';
+import {getNumberDetails, syncContacts} from '../../services/contacts';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const ContactScreen = props => {
@@ -168,11 +168,6 @@ const ContactScreen = props => {
     } else {
       currentData = [...currentData, detail];
     }
-    console.log(
-      currentData.map(_ => _.recordID),
-      detail.recordID,
-      exists,
-    );
     setSelectedContacts([...currentData]);
   };
 
@@ -224,7 +219,7 @@ const ContactScreen = props => {
           </Text>
           {selectContact ? null : (
             <TouchableOpacity
-              onPress={addContactModal}
+              onPress={() => onSyncContacts(true, contact)}
               style={{flexDirection: 'row'}}>
               <CustomeIcon
                 name={'Add-blue'}
@@ -281,13 +276,29 @@ const ContactScreen = props => {
     return mutateContacts;
   };
 
-  const AddContact = () => {
-    navigation.navigate('AddContact');
+  const onSyncContacts = async (isSingleContact, contact) => {
+    let body = [];
+    if (isSingleContact) {
+      body = [contact];
+    } else {
+      body = [selectedContacts];
+    }
+    body = body.map(_ => ({
+      name: _.displayName || '',
+      email: (_.emailAddresses.find(__ => __.email) || {}).email || '',
+      phone:
+        ((_.phoneNumbers.find(__ => __.number) || {}).number || '')
+          .split('-' || ' ')
+          .join('') || '',
+    }));
+    const {data} = await syncContacts(body);
+    if (data.status == 200) {
+      console.log(data);
+      dispatch(fetchContacts());
+    } else {
+      console.log(data);
+    }
   };
-
-  useEffect(() => {
-    console.log(selectContact);
-  });
 
   return (
     <View
@@ -474,12 +485,6 @@ const ContactScreen = props => {
                   checkExistance();
                 }
               }}
-              // RightIconView={() => (
-              //   <Icon
-              //     name={'check-circle'}
-              //     size={Dimension.font28}
-              //     color={'#07AD0D'}></Icon>
-              // )}
             />
           </View>
           {contactExists && contactNum.length == 10 ? (
