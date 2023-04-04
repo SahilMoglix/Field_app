@@ -84,14 +84,14 @@ const ActivityScreen = () => {
           let recentCallCreatedAt = logsData?.get(0)?.timestamp;
           if (recentCallCreatedAt) {
             let filteredCallLogs = ([...c] || []).filter(
-              __ => Number(__.timestamp) > recentCallCreatedAt,
+              __ => Number(__?.timestamp) > recentCallCreatedAt,
             );
             if (filteredCallLogs?.length) {
-              createRecentContacts(filteredCallLogs);
+              createRecentContacts(filteredCallLogs || []);
             }
           } else {
             if (c?.length) {
-              createRecentContacts(c);
+              createRecentContacts(c || []);
             }
           }
         });
@@ -124,7 +124,7 @@ const ActivityScreen = () => {
       <View style={styles.contactCon}>
         <View style={styles.placeholder}>
           <Text style={styles.txt}>
-            {contact?.name ? contact?.name[0] : 'Un'}
+            {contact?.name ? contact?.name[0] : 'U'}
           </Text>
         </View>
         <View style={styles.contactDat}>
@@ -153,10 +153,12 @@ const ActivityScreen = () => {
     return <Contact contact={item} />;
   };
 
+  console.log(logsData, 'dwedwefew');
+
   let searchedData = logsData.filter(
     _ =>
-      _.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-      _.phoneNumber.toLowerCase().includes(searchValue.toLowerCase()),
+      _.name?.toLowerCase().includes(searchValue.toLowerCase()) ||
+      _.phoneNumber?.toLowerCase().includes(searchValue.toLowerCase()),
   );
 
   return (

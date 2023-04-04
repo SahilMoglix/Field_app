@@ -22,12 +22,16 @@ import CustomeIcon from '../../component/CustomeIcon';
 import ContactData from '../../component/contactDetailView';
 import {useNavigation} from '@react-navigation/native';
 import {getNumberDetails} from '../../services/contacts';
+import {useSelector} from 'react-redux';
 // import { launchImageLibrary } from 'react-native-image-picker';
 //import RNFetchBlob from 'rn-fetch-blob';
 //import CONSTANTS from "../../services/constant";
 //import SyncStorage from 'sync-storage';
 
 const ContactDetail = props => {
+  const DepartmentData = useSelector(state =>
+    state.homepageReducer.get('departments'),
+  );
   const [contactData, setContactData] = useState({});
   const photo =
     'https://www.rattanhospital.in/wp-content/uploads/2020/03/user-dummy-pic.png';
@@ -61,7 +65,7 @@ const ContactDetail = props => {
     },
     {
       name: 'Department',
-      value: 'department',
+      value: 'departmentValue',
     },
     {
       name: 'Company',
@@ -83,7 +87,11 @@ const ContactDetail = props => {
   const onContactFetch = async () => {
     const {data} = await getNumberDetails(props.route.params.phone);
     if (data?.result?.length) {
-      setContactData(data.result[0]);
+      let response = data.result[0];
+      response.departmentValue =
+        (DepartmentData.find(_ => _._id == response.department) || {})
+          .departmentName || '';
+      setContactData(response);
     }
   };
 

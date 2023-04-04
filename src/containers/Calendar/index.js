@@ -70,9 +70,9 @@ const CalendarScreen = () => {
   useEffect(() => {
     dispatch(
       fetchCustomCalendar({
-        designation: null,
-        company: null,
-        plant: null,
+        designation: undefined,
+        company: undefined,
+        plant: undefined,
         startDate: new Date(new Date().toDateString() + ' 00:00:00').getTime(),
         endDate: new Date(new Date().toDateString() + ' 23:59:59').getTime(),
       }),
@@ -176,7 +176,7 @@ const CalendarScreen = () => {
             meetingsCustomStatus,
           ) ? (
           <ActivityIndicator size={'small'} />
-        ) : meetingsData.size == 0 ? (
+        ) : meetingsCustomData.size == 0 ? (
           <NoDataFound text={'No event found for the day'}></NoDataFound>
         ) : (
           meetingsCustomData.map((data, dataKey) => (
