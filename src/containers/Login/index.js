@@ -11,6 +11,7 @@ import {fetchedAuth} from '../../redux/actions/auth';
 import {useDispatch} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {login} from '../../services/auth';
+import {setLogoutFunction} from '../../redux/actions/homepage';
 
 const CLIENT_ID = 'ff1fe9da-d218-4ceb-a11f-05ea54a985fb'; //'ac5fc872-17f9-4f59-af74-3abbe885956e'; //'ff1fe9da-d218-4ceb-a11f-05ea54a985fb';
 
@@ -38,7 +39,6 @@ const LoginScreen = props => {
         path: 'me',
         scope: 'openid profile User.Read offline_access Calendars.Read',
       });
-      console.log('CRED>>>', tokens, info);
       if (tokens?.accessToken && tokens?.refreshToken) {
         let loginPayload = {
           tokenType: 'Bearer',
@@ -64,10 +64,11 @@ const LoginScreen = props => {
             'token',
             String(loginResponse?.data?.result?.access_token),
           );
+          dispatch(setLogoutFunction(props.route.params.setIsLoggedIn));
           props.route.params.setIsLoggedIn(true);
         }
       } else {
-        console.log('something went wrong!!');
+        console.log('Something went wrong!!');
       }
     } catch (error) {
       console.log('Error during Azure operation', error);

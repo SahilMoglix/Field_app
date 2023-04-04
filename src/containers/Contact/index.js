@@ -95,7 +95,7 @@ const ContactScreen = props => {
         }
         style={styles.contactCon}>
         <View style={styles.placeholder}>
-          <Text style={styles.txt}>{item?.name[0]}</Text>
+          <Text style={styles.txt}>{item?.name?.[0]}</Text>
           {/* {contact?.hasThumbnail ? (
             <Image
               source={{uri: contact?.thumbnailPath}}
@@ -142,7 +142,6 @@ const ContactScreen = props => {
           });
       } catch (err) {
         setContactsLoader(false);
-        console.log('err', err);
       }
     } else {
       readContacts();
@@ -157,7 +156,6 @@ const ContactScreen = props => {
       })
       .catch(e => {
         setContactsLoader(false);
-        console.log(e);
       });
   };
 
@@ -207,7 +205,7 @@ const ContactScreen = props => {
               style={{width: 48, height: 48, borderRadius: 48}}
             />
           ) : (
-            <Text style={styles.txt}>{contact?.givenName[0]}</Text>
+            <Text style={styles.txt}>{contact?.givenName?.[0]}</Text>
           )}
         </View>
 
@@ -218,7 +216,7 @@ const ContactScreen = props => {
             {contact?.familyName}
           </Text>
           <Text style={styles.phoneNumber}>
-            {contact?.phoneNumbers[0]?.number}
+            {contact?.phoneNumbers?.[0]?.number}
           </Text>
           {selectContact ? null : (
             <TouchableOpacity
@@ -298,7 +296,6 @@ const ContactScreen = props => {
       }));
       const {data} = await syncContacts(body);
       if (data.status == 200) {
-        console.log(data);
         dispatch(fetchContacts());
         setSelectContact(false);
         Toast.show({
@@ -306,18 +303,16 @@ const ContactScreen = props => {
           text1: data.message,
         });
       } else {
-        console.log(data);
         Toast.show({
           type: 'error',
-          text1: 'Error while syncing contact',
+          text1: data.errorMessage || 'Something went wrong!',
         });
       }
       setSyncLoading(false);
     } catch (e) {
-      console.log(e);
       Toast.show({
         type: 'error',
-        text1: 'Error while syncing contact',
+        text1: 'Something went wrong!',
       });
       setSyncLoading(false);
     }

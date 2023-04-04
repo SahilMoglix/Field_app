@@ -7,25 +7,7 @@ import {userService} from '../../services/homepage';
 import SplashScreen from 'react-native-splash-screen';
 
 const Splash = ({navigation}) => {
-  //console.log(SyncStorage.get('token'))
-
   useEffect(() => {
-    // userService
-    //   .getInfo()
-    //   .then((data) => {
-    //     console.log(data)
-    //     const result = SyncStorage.get('token')
-    //     console.log(result)
-    //     SplashScreen.hide();
-    //     if(SyncStorage.get('token')){
-    //         navigation.navigate('HomeApp')
-    //     }else{
-    //         navigation.navigate('Login')
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
     navigation.navigate('HomeApp');
   }, [navigation]);
 

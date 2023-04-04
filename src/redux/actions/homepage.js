@@ -1,5 +1,14 @@
 import {HOMEPAGE_ACTIONS} from '../constants/homepage';
 
+export const setLogoutFunction = data => {
+  return {
+    type: HOMEPAGE_ACTIONS.SET_LOGOUT_FUNCTION,
+    payload: {
+      data,
+    },
+  };
+};
+
 export const fetchDepartments = () => {
   return {
     type: HOMEPAGE_ACTIONS.FETCH_DEPARTMENTS,

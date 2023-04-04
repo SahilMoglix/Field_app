@@ -1,6 +1,7 @@
 import {List, Map} from 'immutable';
 import {STATE_STATUS} from '../constants/index';
 import {HOMEPAGE_ACTIONS} from '../constants/homepage';
+import {AUTH_ACTIONS} from '../constants/auth';
 
 const initialState = new Map({
   designations: new List([]),
@@ -8,6 +9,7 @@ const initialState = new Map({
   company: new List([]),
   plant: new List([]),
   departments: new List([]),
+  logoutFunc: () => {},
 });
 
 export const homepageReducer = (state = initialState, action) => {
@@ -41,6 +43,13 @@ export const homepageReducer = (state = initialState, action) => {
         .set('company', new List(companies))
         .set('plant', new List(plants))
         .set('companyPlant', new Map(companiesPlants));
+
+    case HOMEPAGE_ACTIONS.SET_LOGOUT_FUNCTION:
+      return state.set('logoutFunc', payload.data);
+
+    case AUTH_ACTIONS.LOGOUT:
+      return initialState;
+
     default:
       return state;
   }

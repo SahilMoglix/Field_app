@@ -80,7 +80,6 @@ const ActivityScreen = () => {
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         CallLogs.load(99).then(c => {
-          console.log(logsData, 'cewcwecwecewcew');
           let recentCallCreatedAt = logsData?.get(0)?.timestamp;
           if (recentCallCreatedAt) {
             let filteredCallLogs = ([...c] || []).filter(
@@ -108,7 +107,6 @@ const ActivityScreen = () => {
       let limitCallLogs = [...recentCallLogs].slice(0, 100);
       const {data} = await createAllContacts(limitCallLogs);
       if (data?.result) {
-        console.log(data?.result);
         dispatch(updateLogs([...data?.result, ...logsData.toArray()]));
       }
     } catch (error) {

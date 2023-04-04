@@ -28,9 +28,8 @@ export const contactsReducer = (state = initialState, action) => {
         .set('data', new List([]))
         .set('error', error);
     case AUTH_ACTIONS.LOGOUT:
-      return {
-        ...initialState,
-      };
+      return initialState;
+
     default:
       return state;
   }
