@@ -176,7 +176,7 @@ const CalendarScreen = () => {
             meetingsCustomStatus,
           ) ? (
           <ActivityIndicator size={'small'} />
-        ) : meetingsData.size == 0 ? (
+        ) : meetingsCustomData.size == 0 ? (
           <NoDataFound text={'No event found for the day'}></NoDataFound>
         ) : (
           meetingsCustomData.map((data, dataKey) => (
