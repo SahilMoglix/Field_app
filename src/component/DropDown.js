@@ -1,11 +1,10 @@
 import React, {useState} from 'react';
-import {CheckBox} from 'react-native-elements';
 import Dimension from '../Theme/Dimension';
 import colors from '../Theme/Colors';
 import {StyleSheet, TouchableOpacity, Text, View} from 'react-native';
 import CustomeIcon from './CustomeIcon';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Menu, MenuItem, MenuDivider} from 'react-native-material-menu';
+
 const DropDown = props => {
   const {onValueChange, IconName, label, value, options} = props;
 
@@ -41,6 +40,7 @@ const DropDown = props => {
             onValueChange(item.value, item.label);
             hideMenu();
           }}
+          key={itemIndex}
           textStyle={styles.dropdownval}
           style={styles.dropDowninnerWrap}>
           {item.label}

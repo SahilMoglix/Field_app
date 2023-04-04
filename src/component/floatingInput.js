@@ -4,6 +4,7 @@ import CustomeIcon from './CustomeIcon';
 import Dimension from '../Theme/Dimension';
 import colors from '../Theme/Colors';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
 const MyInput = props => {
   const inEditing = useState(false);
   const labelAnim = useRef(new Animated.Value(0)).current;
@@ -11,11 +12,7 @@ const MyInput = props => {
     Animated.spring(labelAnim, {
       toValue: 1,
       duration: 500,
-    }).start();
-  };
-  const onBlur = test => {
-    Animated.spring(labelAnim, {
-      toValue: 0,
+      useNativeDriver: true,
     }).start();
   };
 
@@ -41,12 +38,6 @@ const MyInput = props => {
               },
             ],
           },
-          //   {
-          //     fontSize: labelAnim.interpolate({
-          //       inputRange: [0, 1],
-          //       outputRange: [10, 20]
-          //     })
-          //   }
           props.IconName
             ? {left: Dimension.padding30}
             : {left: Dimension.padding10},

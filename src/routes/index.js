@@ -15,7 +15,7 @@ import CustomeIcon from '../component/CustomeIcon';
 import colors from '../Theme/Colors';
 import Dimension from '../Theme/Dimension';
 import LoginScreen from '../containers/Login';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {fetchedAuth} from '../redux/actions/auth';
 

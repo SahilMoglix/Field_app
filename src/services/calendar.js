@@ -8,14 +8,8 @@ export const getMeetings = async (startDate, endDate) =>
     {
       startDate,
       endDate,
-      // id: 1, //await AsyncStorage.getItem('userId')
     },
     {
-      // params: {
-      //   startDate,
-      //   endDate,
-      //   // id: 1, //await AsyncStorage.getItem('userId')
-      // },
       headers: {
         Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
         'Content-Type': 'application/json',
@@ -28,10 +22,6 @@ export const getCustomMeetings = async params =>
     `${CONSTANTS.BASE_URL}calender/getCalendar`,
     {...params},
     {
-      // params: {
-      //   ...params,
-      //   // id: 1, //await AsyncStorage.getItem('userId')
-      // },
       headers: {
         Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
         'Content-Type': 'application/json',
@@ -44,10 +34,6 @@ export const getMonthMeetings = async params =>
     `${CONSTANTS.BASE_URL}calender/getCalendarCount`,
     {...params},
     {
-      // params: {
-      //   ...params,
-      //   // id: 1, //await AsyncStorage.getItem('userId')
-      // },
       headers: {
         Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
         'Content-Type': 'application/json',

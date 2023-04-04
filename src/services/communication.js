@@ -4,9 +4,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const getContacts = async () =>
   axios.get(`${CONSTANTS.BASE_URL}communication/getAll`, {
-    params: {
-      // id: 1, //await AsyncStorage.getItem('userId')
-    },
     headers: {
       Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
       'Content-Type': 'application/json',
