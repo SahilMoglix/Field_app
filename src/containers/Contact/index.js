@@ -26,6 +26,7 @@ import {CheckBox} from 'react-native-elements';
 import {getNumberDetails, syncContacts} from '../../services/contacts';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Toast from 'react-native-toast-message';
+import NoDataFound from '../../component/NoDataFound';
 
 const ContactScreen = props => {
   const navigation = useNavigation();
@@ -279,6 +280,10 @@ const ContactScreen = props => {
 
   const onSyncContacts = async (isSingleContact, contact) => {
     try {
+      Toast.show({
+        type: 'info',
+        text1: 'Syncing Contacts...',
+      });
       setSyncLoading(true);
       let body = [];
       if (isSingleContact) {
@@ -312,11 +317,24 @@ const ContactScreen = props => {
     } catch (e) {
       Toast.show({
         type: 'error',
-        text1: 'Something went wrong!',
+        text1: e?.response?.data?.message || 'Something went wrong!',
       });
       setSyncLoading(false);
     }
   };
+
+  let phoneList = [];
+  if (pagetype == 'Phone') {
+    phoneList = getContactsData().filter(function (val) {
+      if (
+        val.displayName?.toLowerCase()?.includes(searchValue?.toLowerCase()) ||
+        (val.company &&
+          val.company?.toLowerCase()?.includes(searchValue?.toLowerCase()))
+      ) {
+        return val;
+      }
+    });
+  }
 
   return (
     <View
@@ -334,7 +352,10 @@ const ContactScreen = props => {
               style={
                 pagetype == 'Focused' ? styles.ActiveTopBtn : styles.TopBtn
               }
-              onPress={() => setpageType('Focused')}>
+              onPress={() => {
+                setSearch('');
+                setpageType('Focused');
+              }}>
               <Text
                 style={
                   pagetype == 'Focused' ? styles.ActiveBtnTxt : styles.BtnTxt
@@ -344,7 +365,10 @@ const ContactScreen = props => {
             </TouchableOpacity>
             <TouchableOpacity
               style={pagetype == 'Phone' ? styles.ActiveTopBtn : styles.TopBtn}
-              onPress={() => setpageType('Phone')}>
+              onPress={() => {
+                setSearch('');
+                setpageType('Phone');
+              }}>
               <Text
                 style={
                   pagetype == 'Phone' ? styles.ActiveBtnTxt : styles.BtnTxt
@@ -440,14 +464,7 @@ const ContactScreen = props => {
             onRefresh={pullToRefresh}
             ListEmptyComponent={
               contactsStatus == STATE_STATUS.FETCHED ? (
-                <Text
-                  style={{
-                    alignSelf: 'center',
-                    marginTop: Dimension.margin10,
-                    color: '#000',
-                  }}>
-                  No Contacts Found
-                </Text>
+                <NoDataFound text={'No Contact Found'}></NoDataFound>
               ) : null
             }
             // keyExtractor={index}
@@ -470,13 +487,12 @@ const ContactScreen = props => {
         <FlashList
           ref={flatListRef}
           estimatedItemSize={106}
-          data={
-            searchValue && searchValue.length > 0
-              ? FilterList
-              : getContactsData()
-          }
+          data={phoneList}
           renderItem={renderItem}
           keyExtractor={keyExtractor}
+          ListEmptyComponent={
+            <NoDataFound text={'No Contact Found'}></NoDataFound>
+          }
           //style={styles.list}
         />
       ) : null}

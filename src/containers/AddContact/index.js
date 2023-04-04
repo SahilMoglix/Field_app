@@ -260,7 +260,7 @@ const AddContact = props => {
       setLoading(false);
       Toast.show({
         type: 'error',
-        text1: 'Something went wrong!',
+        text1: e?.response?.data?.message || 'Something went wrong!',
       });
     }
     // ContactService.AddContact(finalData).then(response => {
@@ -325,7 +325,7 @@ const AddContact = props => {
       setRemoveLoading(false);
       Toast.show({
         type: 'error',
-        text1: 'Something went wrong!',
+        text1: e?.response?.data?.message || 'Something went wrong!',
       });
     }
   };
