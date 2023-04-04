@@ -16,6 +16,7 @@ import styles from './style';
 import CustomeIcon from '../../component/CustomeIcon';
 import Dimension from '../../Theme/Dimension';
 import colors from '../../Theme/Colors';
+import Toast from 'react-native-toast-message';
 //import {ContactService} from '../../services/ContactService';
 import MyInput from '../../component/floatingInput';
 import DropDown from '../../component/DropDown';
@@ -227,23 +228,41 @@ const AddContact = props => {
 
   const submitButton = async () => {
     setLoading(true);
-    const {data} = await createContact({
-      name,
-      phone,
-      email,
-      id: params.id || null,
-      inclination,
-      company,
-      plant,
-      designation,
-      department,
-      whatsappContact,
-    });
-    if (data.status) {
-      props.navigation.goBack();
-      disptch(fetchContacts());
+    try {
+      const {data} = await createContact({
+        name,
+        phone,
+        email,
+        id: params.id || undefined,
+        inclination,
+        company,
+        plant,
+        designation,
+        department,
+        whatsappContact,
+      });
+      console.log(data);
+      if (data.status == 200) {
+        props.navigation.goBack();
+        Toast.show({
+          type: 'success',
+          text1: data.message,
+        });
+        disptch(fetchContacts());
+      } else {
+        Toast.show({
+          type: 'error',
+          text1: data.errorMessage || 'Something went wrong!',
+        });
+      }
+      setLoading(false);
+    } catch (e) {
+      setLoading(false);
+      Toast.show({
+        type: 'error',
+        text1: 'Something went wrong!',
+      });
     }
-    setLoading(false);
     // ContactService.AddContact(finalData).then(response => {
     //     console.log("image uplaod response ",response)
     //     if(response.code==200 && response.success){
@@ -285,14 +304,29 @@ const AddContact = props => {
   };
 
   const onRemove = async () => {
-    setRemoveLoading(true);
-    const {data} = await deleteContact(params.id);
-    if (data.status == 200) {
+    try {
+      setRemoveLoading(true);
+      const {data} = await deleteContact(params.id);
+      if (data.status == 200) {
+        disptch(fetchContacts());
+        Toast.show({
+          type: 'success',
+          text1: data.message,
+        });
+        props.navigation.navigate('Contact');
+      } else {
+        Toast.show({
+          type: 'error',
+          text1: data.errorMessage || 'Something went wrong!',
+        });
+      }
       setRemoveLoading(false);
-      disptch(fetchContacts());
-      props.navigation.navigate('Contact');
-    } else {
+    } catch (e) {
       setRemoveLoading(false);
+      Toast.show({
+        type: 'error',
+        text1: 'Something went wrong!',
+      });
     }
   };
 

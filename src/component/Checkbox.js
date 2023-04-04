@@ -7,7 +7,6 @@ import CustomeIcon from './CustomeIcon';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const DotCheckbox = props => {
   const {data, onCheck, value} = props;
-  console.log(props);
   return (
     <>
       <View style={props.from == 'addContact' ? styles.WrapperStyle : null}>

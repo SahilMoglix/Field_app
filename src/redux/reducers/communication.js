@@ -39,10 +39,8 @@ export const communicationReducer = (state = initialState, action) => {
         )
         .set('error', null);
     case AUTH_ACTIONS.LOGOUT:
-      d;
-      return {
-        ...initialState,
-      };
+      return initialState;
+
     default:
       return state;
   }

@@ -7,19 +7,15 @@ import {failedFetchLogs, fetchedLogs} from '../actions/communication';
 
 function* fetchCallLogs() {
   try {
-    // console.log('aarha hai!!');
     const {data, error} = yield call(getContacts);
-    // console.log(data, 'data in saga!!', error);
     // const data = logs;
     // const error = null;
-    console.log(data, 'cewceewcewcwe', error);
     if (error) {
       yield put(failedFetchLogs(error));
     } else {
       yield put(fetchedLogs(data?.result));
     }
   } catch (error) {
-    console.log(error);
     yield put(failedFetchLogs(error));
   }
 }

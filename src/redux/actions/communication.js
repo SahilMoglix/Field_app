@@ -23,7 +23,6 @@ export const failedFetchLogs = error => {
 };
 
 export const updateLogs = data => {
-  console.log(data);
   return {
     type: COMMUNICATION_ACTIONS.UPDATE_LOGS,
     payload: {

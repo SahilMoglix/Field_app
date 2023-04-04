@@ -34,7 +34,6 @@ function* fetchDepartment() {
       yield put(fetchedDepartments(data.result));
     }
   } catch (error) {
-    console.log(error, 'department');
     yield put(failedFetchDepartments(error));
   }
 }
@@ -50,7 +49,6 @@ function* fetchDesignation() {
       yield put(fetchedDesignations(data.result));
     }
   } catch (error) {
-    console.log(error, 'designation');
     yield put(failedFetchDesignations(error));
   }
 }
@@ -66,7 +64,6 @@ function* fetchPlantCompany() {
       yield put(fetchedPlantCompanies(data.data));
     }
   } catch (error) {
-    console.log(error, 'plantcompany');
     yield put(failedFetchPlantCompanies(error));
   }
 }

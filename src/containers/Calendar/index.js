@@ -160,7 +160,6 @@ const CalendarScreen = () => {
             </TouchableOpacity>
           </View>
         )}
-        {console.log(meetingsData, 'dwedw')}
         {type == 'cal' ? (
           [STATE_STATUS.FETCHING, STATE_STATUS.UNFETCHED].includes(
             meetingsStatus,
