@@ -6,7 +6,6 @@ import {
   Platform,
   View,
   ActivityIndicator,
-  StatusBar,
 } from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -223,13 +222,6 @@ const Routes = props => {
   const RootNavigation = () => {
     return (
       <NavigationContainer linking={linking}>
-        <StatusBar
-          translucent
-          backgroundColor="#fff"
-          barStyle={'dark-content'}
-          style={{marginBottom: 60}}
-        />
-
         {!isLoggedIn ? <AuthStack /> : <MainStack />}
       </NavigationContainer>
     );

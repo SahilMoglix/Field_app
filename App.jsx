@@ -1,5 +1,5 @@
 import React from 'react';
-import {SafeAreaView, ScrollView, StyleSheet, Text} from 'react-native';
+import {SafeAreaView, StatusBar, View, StyleSheet} from 'react-native';
 import Routes from './src/routes';
 import store from './src/redux/store';
 import {Provider} from 'react-redux';
@@ -8,6 +8,8 @@ import Toast from 'react-native-toast-message';
 const App = () => {
   return (
     <Provider store={store}>
+      <StatusBar translucent backgroundColor="#fff" barStyle={'dark-content'} />
+      <View style={{marginTop: 20}} />
       <Routes />
       <Toast />
     </Provider>
