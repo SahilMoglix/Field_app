@@ -426,10 +426,7 @@ const ContactScreen = props => {
                 onPress={() => setSearch('')}
                 activeOpacity={0.5}
                 style={styles.crossIcon}>
-                <CustomeIcon
-                  name={'Cancel'}
-                  size={20}
-                  color={'#1568E5'}></CustomeIcon>
+                <Icon name={'close-circle'} size={20} color={'#1568E5'}></Icon>
               </TouchableOpacity>
             </>
           )}

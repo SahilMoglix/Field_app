@@ -165,10 +165,6 @@ const Routes = props => {
           name="HomeApp"
           component={TabNavigator}
           options={navOptionHandler}
-          containerStyle={{
-            marginTop: Dimension.padding30,
-            backgroundColor: 'pink',
-          }}
         />
         {APP_STACK_SCREENS.map((screen, key) => (
           <AppStack.Screen
@@ -179,10 +175,6 @@ const Routes = props => {
             }}
             component={screen.component}
             options={navOptionHandler}
-            containerStyle={{
-              marginTop: Dimension.padding30,
-              backgroundColor: 'pink',
-            }}
           />
         ))}
       </AppStack.Navigator>
@@ -194,10 +186,6 @@ const Routes = props => {
       <AppStack.Navigator
         screenOptions={{
           headerShown: false,
-        }}
-        containerStyle={{
-          marginTop: Dimension.padding30,
-          backgroundColor: 'pink',
         }}>
         <AppStack.Screen
           initialParams={{
@@ -210,10 +198,6 @@ const Routes = props => {
           }}
           component={LoginScreen}
           options={navOptionHandler}
-          containerStyle={{
-            marginTop: Dimension.padding30,
-            backgroundColor: 'pink',
-          }}
         />
       </AppStack.Navigator>
     );

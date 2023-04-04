@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Text,
   ScrollView,
@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Alert,
+  Keyboard,
 } from 'react-native';
 import {Card, Button, Icon, Avatar} from 'react-native-elements';
 import styles from './style';
@@ -42,7 +43,7 @@ const AddContact = props => {
   const CompanyData = useSelector(state =>
     state.homepageReducer.get('company'),
   );
-
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const [name, setName] = useState(params.name);
   const [phone, setPhone] = useState(params.phone);
   const [email, setEmail] = useState(params.email);
@@ -302,6 +303,25 @@ const AddContact = props => {
       });
     }
   };
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setKeyboardVisible(true); // or some other action
+      },
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setKeyboardVisible(false); // or some other action
+      },
+    );
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
 
   const handleImageUpload = async photoObject => {
     try {
@@ -405,7 +425,7 @@ const AddContact = props => {
 
         <ScrollView
           style={styles.ScrollViewCss}
-          contentContainerStyle={{paddingBottom: 180}}>
+          contentContainerStyle={{paddingBottom: 80}}>
           <View>
             <Card containerStyle={styles.UserDeatilCardWrapper}>
               <Avatar
@@ -455,7 +475,7 @@ const AddContact = props => {
           )}
         </ScrollView>
 
-        {params.hasOwnProperty('newContact') ? (
+        {params.hasOwnProperty('newContact') && !isKeyboardVisible ? (
           <View style={styles.BtnWrapper}>
             <View style={{flex: 1}}>
               <Button

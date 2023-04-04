@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "411364200545",
+    "project_id": "field-app-kam",
+    "storage_bucket": "field-app-kam.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:411364200545:android:c99bf132a4f1ac8d8ada20",
+        "android_client_info": {
+          "package_name": "com.moglix.field"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "411364200545-9a7tser6l1dfdcnmchvlkp2457rlugbq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxahZdUZYjFTvgz8lQBlZUIO3Rvv-tZlM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "411364200545-9a7tser6l1dfdcnmchvlkp2457rlugbq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

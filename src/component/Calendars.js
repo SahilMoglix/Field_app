@@ -163,8 +163,8 @@ const Calendars = props => {
           textMonthFontFamily: Dimension.CustomMediumFont,
           textDayHeaderFontFamily: Dimension.CustomMediumFont,
           textDayFontWeight: '500',
-          textDayFontSize: Dimension.font14,
-          textMonthFontSize: Dimension.font14,
+          textDayFontSize: Dimension.font16,
+          textMonthFontSize: Dimension.font16,
           textDayHeaderFontSize: Dimension.font14,
 
           //monthTextColor: 'blue',
