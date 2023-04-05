@@ -169,7 +169,7 @@ const FilterModal = props => {
         startDate: new Date(
           dateConverter(startDate, 'datetime', 'from'),
         ).getTime(),
-        endDate: new Date(dateConverter(startDate, 'datetime', 'to')).getTime(),
+        endDate: new Date(dateConverter(endDate, 'datetime', 'to')).getTime(),
       });
     }
   };
