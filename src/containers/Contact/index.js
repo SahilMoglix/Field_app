@@ -539,9 +539,11 @@ const ContactScreen = props => {
               });
               setModalVisible(false);
             }}
-            disabled={contactExists || contactNum.length != 10}
+            disabled={
+              contactExists || contactNum.length != 10 || contactLoading
+            }
             style={
-              !contactExists && contactNum.length == 10
+              !contactExists && contactNum.length == 10 && !contactLoading
                 ? styles.enableBtn
                 : styles.disableBtn
             }>

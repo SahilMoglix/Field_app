@@ -238,7 +238,6 @@ const AddContact = props => {
     switch (selection) {
       case 'Camera':
         launchCamera({}, res => {
-          console.log(res, 'ferfe');
           if (!res.didCancel) {
             handleImageUpload(res?.assets?.[0]);
           }
@@ -246,7 +245,6 @@ const AddContact = props => {
         return;
       case 'Gallery':
         launchImageLibrary({}, res => {
-          console.log(res, 'ferfe');
           if (!res.didCancel) {
             handleImageUpload(res?.assets?.[0]);
           }
@@ -254,7 +252,6 @@ const AddContact = props => {
         return;
       default:
         launchCamera({}, res => {
-          console.log(res, 'ferfe');
           if (!res.didCancel) {
             handleImageUpload(res?.assets?.[0]);
           }
@@ -279,7 +276,6 @@ const AddContact = props => {
         whatsappContact,
         profilePicUrl: photo,
       });
-      console.log(data);
       if (data.status == 200) {
         props.navigation.goBack();
         Toast.show({
@@ -295,7 +291,6 @@ const AddContact = props => {
       }
       setLoading(false);
     } catch (e) {
-      console.log(e);
       setLoading(false);
       Toast.show({
         type: 'error',
@@ -346,13 +341,10 @@ const AddContact = props => {
         ],
       );
       const res = await response.json();
-      console.log(res);
       if (res?.result) {
         setPhoto(res?.result);
       }
-    } catch (e) {
-      console.log(e, 'cewcewcwe');
-    }
+    } catch (e) {}
   };
 
   const onRemove = async () => {

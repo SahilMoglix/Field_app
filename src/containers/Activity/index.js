@@ -172,8 +172,6 @@ const ActivityScreen = () => {
     return <Contact contact={item} />;
   };
 
-  console.log(logsData, 'dwedwefew');
-
   let searchedData = logsData.filter(
     _ =>
       _.name?.toLowerCase().includes(searchValue.toLowerCase()) ||

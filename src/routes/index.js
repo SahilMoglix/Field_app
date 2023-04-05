@@ -20,6 +20,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {fetchedAuth} from '../redux/actions/auth';
 import firebase from '@react-native-firebase/app';
 import messaging from '@react-native-firebase/messaging';
+import NetInfo from '@react-native-community/netinfo';
+import Toast from 'react-native-toast-message';
 
 const AppStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -69,6 +71,18 @@ const Routes = props => {
 
   useEffect(() => {
     init();
+    const unsubscribe = NetInfo.addEventListener(state => {
+      if (!state.isConnected) {
+        Toast.show({
+          type: 'info',
+          text1: 'No Network',
+          position: 'bottom',
+          autoHide: false,
+        });
+      } else {
+        Toast.hide();
+      }
+    });
   }, []);
   useEffect(() => {
     getFcmToken();

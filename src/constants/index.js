@@ -11,7 +11,7 @@ import Splash from '../containers/Login/splash';
 
 export const BOTTOM_TAB_SCREENS = [
   {
-    name: 'Calender',
+    name: 'Calendar',
     component: CalendarScreen,
     inactiveIcon: 'Calendar-Grey-Tab',
     activeIcon: 'Calendar-Blue-Tab',

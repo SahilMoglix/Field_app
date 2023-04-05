@@ -27,7 +27,6 @@ export const logoutMiddleware = store => next => async action => {
         type: 'LOGOUT',
       });
     } catch (e) {
-      console.log(e);
       return next({
         type: 'LOGOUT',
       });
