@@ -41,8 +41,8 @@ const CalendarScreen = () => {
   const meetingsCustomData = useSelector(state =>
     state.calendarReducer.getIn(['custom', 'data']),
   );
-  const meetingsCustomParams = useSelector(state =>
-    state.calendarReducer.getIn(['custom', 'params']),
+  const meetingsCustomParams = useSelector(
+    state => state.calendarReducer.getIn(['custom', 'params']) || {},
   );
   const meetingsCustomStatus = useSelector(state =>
     state.calendarReducer.getIn(['custom', 'status']),
@@ -68,13 +68,20 @@ const CalendarScreen = () => {
   };
 
   useEffect(() => {
+    let curr = new Date();
+    let first = curr.getDate() - curr.getDay();
+    let last = first + 6;
     dispatch(
       fetchCustomCalendar({
         designation: undefined,
         company: undefined,
         plant: undefined,
-        startDate: new Date(new Date().toDateString() + ' 00:00:00').getTime(),
-        endDate: new Date(new Date().toDateString() + ' 23:59:59').getTime(),
+        startDate: new Date(
+          new Date(curr.setDate(first)).toDateString() + ' 00:00:00',
+        ).getTime(),
+        endDate: new Date(
+          new Date(curr.setDate(last)).toDateString() + ' 23:59:59',
+        ).getTime(),
       }),
     );
     dispatch(fetchDesignations());
@@ -150,7 +157,11 @@ const CalendarScreen = () => {
             updateMonthData={updateMonthData}
           />
         ) : (
-          <View>
+          <View style={styles.row}>
+            <Text style={styles.dateText}>
+              {new Date(meetingsCustomParams?.startDate || '').toDateString()} -{' '}
+              {new Date(meetingsCustomParams?.endDate || '').toDateString()}
+            </Text>
             <TouchableOpacity style={styles.filterbtn} onPress={gotoFilter}>
               <CustomeIcon
                 name={'Filter-blue'}

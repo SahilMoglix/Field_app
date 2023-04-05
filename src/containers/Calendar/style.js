@@ -2,6 +2,20 @@ import {StyleSheet, Platform} from 'react-native';
 import Dimension from '../../Theme/Dimension';
 import colors from '../../Theme/Colors';
 const styles = StyleSheet.create({
+  dateText: {
+    color: colors.CtaColor,
+    fontSize: Dimension.font12,
+    padding: Dimension.padding6,
+    borderWidth: 0.4,
+    borderColor: colors.CtaColor,
+    borderRadius: 24,
+  },
+  row: {
+    flexDirection: 'row',
+    paddingHorizontal: Dimension.padding12,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
   TopHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',

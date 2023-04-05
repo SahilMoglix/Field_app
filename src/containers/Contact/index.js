@@ -131,6 +131,10 @@ const ContactScreen = props => {
     );
   };
 
+  const pullToRefreshContacts = () => {
+    getPhoneContacts();
+  };
+
   const getPhoneContacts = () => {
     if (Platform.OS == 'android') {
       try {
@@ -489,6 +493,8 @@ const ContactScreen = props => {
           data={phoneList}
           renderItem={renderItem}
           keyExtractor={keyExtractor}
+          refreshing={contactsLoader}
+          onRefresh={pullToRefreshContacts}
           ListEmptyComponent={
             <NoDataFound text={'No Contact Found'}></NoDataFound>
           }
