@@ -64,6 +64,7 @@ const LoginScreen = props => {
             'token',
             String(loginResponse?.data?.result?.access_token),
           );
+          await AsyncStorage.setItem('email', String(info.mail));
           dispatch(setLogoutFunction(props.route.params.setIsLoggedIn));
           props.route.params.setIsLoggedIn(true);
         }

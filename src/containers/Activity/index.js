@@ -45,6 +45,7 @@ const ActivityScreen = () => {
 
   const onRefreshLogs = () => {
     dispatch(fetchLogs());
+    checkPermission();
   };
 
   const setCallType = type => {
@@ -83,15 +84,33 @@ const ActivityScreen = () => {
         CallLogs.load(99).then(c => {
           let recentCallCreatedAt = logsData?.get(0)?.timestamp;
           if (recentCallCreatedAt) {
-            let filteredCallLogs = ([...c] || []).filter(
-              __ => Number(__?.timestamp) > recentCallCreatedAt,
-            );
+            let filteredCallLogs = ([...c] || [])
+              .filter(__ => Number(__?.timestamp) > recentCallCreatedAt)
+              .map(_ => ({
+                ..._,
+                phoneNumber: (_.phoneNumber || '')
+                  .split('-')
+                  .join('')
+                  .split('-')
+                  .join('')
+                  .replace('+91', ''),
+              }));
             if (filteredCallLogs?.length) {
               createRecentContacts(filteredCallLogs || []);
             }
           } else {
             if (c?.length) {
-              createRecentContacts(c || []);
+              createRecentContacts(
+                c.map(_ => ({
+                  ..._,
+                  phoneNumber: (_.phoneNumber || '')
+                    .split('-')
+                    .join('')
+                    .split('-')
+                    .join('')
+                    .replace('+91', ''),
+                })) || [],
+              );
             }
           }
         });
@@ -191,11 +210,16 @@ const ActivityScreen = () => {
               clearButtonMode="always"
               style={styles.SearchInputCss}></TextInput>
           </View>
-          {/* {searchValue.length > 0 && <>
-          <TouchableOpacity onPress={()=>setSearch("")} activeOpacity={0.5} style={styles.crossIcon}>
-             <Icon name={'close-circle'} size={20} color={'#1568E5'}></Icon>
-           </TouchableOpacity>
-          </>} */}
+          {searchValue.length > 0 && (
+            <>
+              <TouchableOpacity
+                onPress={() => setSearchValue('')}
+                activeOpacity={0.5}
+                style={styles.crossIcon}>
+                <Icon name={'close-circle'} size={20} color={'#1568E5'}></Icon>
+              </TouchableOpacity>
+            </>
+          )}
         </View>
       </View>
       <FlatList

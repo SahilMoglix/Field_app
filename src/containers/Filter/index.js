@@ -154,12 +154,19 @@ const FilterModal = props => {
 
   const applyFilters = fromReset => {
     if (fromReset) {
+      let curr = new Date();
+      let first = curr.getDate() - curr.getDay();
+      let last = first + 6;
       props.onApplyFilter({
         designation: undefined,
         company: undefined,
         plant: undefined,
-        startDate: new Date(new Date().toDateString() + ' 00:00:00').getTime(),
-        endDate: new Date(new Date().toDateString() + ' 23:59:59').getTime(),
+        startDate: new Date(
+          new Date(curr.setDate(first)).toDateString() + ' 00:00:00',
+        ).getTime(),
+        endDate: new Date(
+          new Date(curr.setDate(last)).toDateString() + ' 23:59:59',
+        ).getTime(),
       });
     } else {
       props.onApplyFilter({
