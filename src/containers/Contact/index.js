@@ -64,6 +64,10 @@ const ContactScreen = props => {
     }
   }, [contactNum]);
 
+  useEffect(() => {
+    setContactNum('');
+  }, [isModalVisible]);
+
   const checkExistance = async () => {
     try {
       setContactLoading(true);
@@ -537,6 +541,7 @@ const ContactScreen = props => {
                 phone: contactNum,
                 newContact: true,
               });
+              setContactNum('');
               setModalVisible(false);
             }}
             disabled={
