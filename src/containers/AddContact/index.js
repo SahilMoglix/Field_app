@@ -202,7 +202,7 @@ const AddContact = props => {
       defaultValue: whatsappContact,
       value: whatsappContact,
       onChangeText: text => setWhatsappContact(text),
-      keyboardType: 'qwerty',
+      keyboardType: 'number-pad',
       editable: true,
       maxLength: null,
       onSubmitEditing: () => {},
@@ -219,7 +219,7 @@ const AddContact = props => {
   const openSelection = () => {
     Alert.alert('Choose one of the options to upload image.', '', [
       {
-        text: 'Open Camers',
+        text: 'Open Camera',
         onPress: () => onImageSelector('Camera'),
       },
       {text: 'Open Gallery', onPress: () => onImageSelector('Gallery')},
@@ -234,21 +234,21 @@ const AddContact = props => {
   const onImageSelector = selection => {
     switch (selection) {
       case 'Camera':
-        launchCamera({}, res => {
+        launchCamera({mediaType: 'photo'}, res => {
           if (!res.didCancel) {
             handleImageUpload(res?.assets?.[0]);
           }
         });
         return;
       case 'Gallery':
-        launchImageLibrary({}, res => {
+        launchImageLibrary({mediaType: 'photo'}, res => {
           if (!res.didCancel) {
             handleImageUpload(res?.assets?.[0]);
           }
         });
         return;
       default:
-        launchCamera({}, res => {
+        launchCamera({mediaType: 'photo'}, res => {
           if (!res.didCancel) {
             handleImageUpload(res?.assets?.[0]);
           }
@@ -257,36 +257,70 @@ const AddContact = props => {
     }
   };
 
+  const isValid = type => {
+    const emailRegex =
+      /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+    let alertText = '';
+    if (!phone || phone.length != 10) {
+      alertText = 'Phone number must be 10 digits';
+    } else if (!name) {
+      alertText = 'Name is mandatory';
+    } else if (!email || !email.match(emailRegex)) {
+      alertText = 'Email is invalid';
+    } else if (!inclination) {
+      alertText = 'Inclination is mandatory';
+    } else if (!company) {
+      alertText = 'Company is mandatory';
+    } else if (!plant) {
+      alertText = 'Plant is mandatory';
+    } else if (!designation) {
+      alertText = 'Designation is mandatory';
+    } else if (!department) {
+      alertText = 'Department is mandatory';
+    } else {
+      alertText = '';
+    }
+    return type == 'alert' ? alertText : !!alertText;
+  };
+
   const submitButton = async () => {
-    setLoading(true);
     try {
-      const {data} = await createContact({
-        name,
-        phone,
-        email,
-        id: params.id || undefined,
-        inclination,
-        company,
-        plant,
-        designation,
-        department,
-        whatsappContact,
-        profilePicUrl: photo,
-      });
-      if (data.status == 200) {
-        props.navigation.goBack();
-        Toast.show({
-          type: 'success',
-          text1: data.message,
-        });
-        disptch(fetchContacts());
-      } else {
+      if (isValid('bool')) {
         Toast.show({
           type: 'error',
-          text1: data.errorMessage || 'Something went wrong!',
+          text1: isValid('alert'),
         });
+        return;
+      } else {
+        setLoading(true);
+        const {data} = await createContact({
+          name,
+          phone,
+          email,
+          id: params.id || undefined,
+          inclination,
+          company,
+          plant,
+          designation,
+          department,
+          whatsappContact,
+          profilePicUrl: photo,
+        });
+        if (data.status == 200) {
+          props.navigation.goBack();
+          Toast.show({
+            type: 'success',
+            text1: data.message,
+          });
+          disptch(fetchContacts());
+        } else {
+          Toast.show({
+            type: 'error',
+            text1: data.errorMessage || 'Something went wrong!',
+          });
+        }
+        setLoading(false);
       }
-      setLoading(false);
     } catch (e) {
       setLoading(false);
       Toast.show({

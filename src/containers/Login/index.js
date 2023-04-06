@@ -22,10 +22,12 @@ const azureAuth = new AzureAuth({
 
 const LoginScreen = props => {
   const [accessToken, setAccessToken] = useState(null);
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
   const onLogin = async () => {
     try {
+      setLoading(true);
       let tokens = await azureAuth.webAuth.authorize({
         prompt: 'login',
         scope: 'openid profile User.Read offline_access Calendars.Read',
@@ -64,15 +66,19 @@ const LoginScreen = props => {
           await AsyncStorage.setItem('email', String(info.mail));
           dispatch(setLogoutFunction(props.route.params.setIsLoggedIn));
           props.route.params.setIsLoggedIn(true);
+          setLoading(false);
         }
+        setLoading(false);
       } else {
         console.log('Something went wrong!!');
+        setLoading(false);
       }
     } catch (error) {
       Toast.show({
         type: 'error',
         text1: 'User not registered!',
       });
+      setLoading(false);
       console.log('Error during Azure operation', error);
     }
   };
@@ -113,6 +119,8 @@ const LoginScreen = props => {
               onPress={onLogin}
               title="Login with Microsoft"
               color="#272727"
+              disabled={loading}
+              loading={loading}
               buttonStyle={styles.btnStyle}
               titleStyle={styles.btntxt}
               containerStyle={styles.btnContainer}

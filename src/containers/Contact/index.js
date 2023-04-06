@@ -65,6 +65,12 @@ const ContactScreen = props => {
   }, [contactNum]);
 
   useEffect(() => {
+    if (selectedContacts && selectedContacts.length) {
+      setSelectedContacts([]);
+    }
+  }, [selectContact]);
+
+  useEffect(() => {
     setContactNum('');
   }, [isModalVisible]);
 

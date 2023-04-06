@@ -61,7 +61,7 @@ function* fetchPlantCompany() {
     if (error) {
       yield put(failedFetchPlantCompanies(error));
     } else {
-      yield put(fetchedPlantCompanies(data.data));
+      yield put(fetchedPlantCompanies(data.result));
     }
   } catch (error) {
     yield put(failedFetchPlantCompanies(error));

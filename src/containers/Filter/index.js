@@ -5,9 +5,8 @@ import Modal from 'react-native-modal';
 import Dimension from '../../Theme/Dimension';
 import styles from './style';
 import CustomeIcon from '../../component/CustomeIcon';
-
+import Toast from 'react-native-toast-message';
 import {useNavigation} from '@react-navigation/native';
-import MyInput from '../../component/floatingInput';
 import DotCheckbox from '../../component/Checkbox';
 import CustomeDatePicker from '../../component/Datepicker';
 import {useSelector} from 'react-redux';
@@ -128,11 +127,11 @@ const FilterModal = props => {
       let date =
         String(updatedparams.split('-')[0]).length > 2
           ? updatedparams
-          : updatedparams.split('-')[1] +
+          : updatedparams.split('-')[2] +
             '-' +
-            updatedparams.split('-')[0] +
+            updatedparams.split('-')[1] +
             '-' +
-            updatedparams.split('-')[2];
+            updatedparams.split('-')[0];
       let month =
         String(new Date(date).getMonth() + 1).length > 1
           ? String(new Date(date).getMonth() + 1)
@@ -169,15 +168,29 @@ const FilterModal = props => {
         ).getTime(),
       });
     } else {
-      props.onApplyFilter({
-        designation,
-        company,
-        plant,
-        startDate: new Date(
-          dateConverter(startDate, 'datetime', 'from'),
-        ).getTime(),
-        endDate: new Date(dateConverter(endDate, 'datetime', 'to')).getTime(),
-      });
+      if (startDate && endDate) {
+        if (
+          new Date(dateConverter(startDate, 'datetime', 'from')).getTime() >
+          new Date(dateConverter(endDate, 'datetime', 'to')).getTime()
+        ) {
+          Toast.show({
+            type: 'error',
+            text1: 'Selected start date must be less than end date',
+          });
+        } else {
+          props.onApplyFilter({
+            designation,
+            company,
+            plant,
+            startDate: new Date(
+              dateConverter(startDate, 'datetime', 'from'),
+            ).getTime(),
+            endDate: new Date(
+              dateConverter(endDate, 'datetime', 'to'),
+            ).getTime(),
+          });
+        }
+      }
     }
   };
 
@@ -259,6 +272,7 @@ const FilterModal = props => {
           </TouchableOpacity>
         </View>
       </View>
+      <Toast />
     </Modal>
   );
 };
