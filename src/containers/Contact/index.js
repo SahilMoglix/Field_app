@@ -59,6 +59,11 @@ const ContactScreen = props => {
   }, []);
 
   useEffect(() => {
+    setSelectContact(false);
+    setSelectedContacts([]);
+  }, [pagetype]);
+
+  useEffect(() => {
     if (contactNum.length == 10) {
       checkExistance();
     }

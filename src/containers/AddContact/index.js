@@ -26,6 +26,7 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import CONSTANTS from '../../services/constant';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNFetchBlob from 'rn-fetch-blob';
+import Colors from '../../Theme/Colors';
 
 const AddContact = props => {
   const disptch = useDispatch();
@@ -56,6 +57,7 @@ const AddContact = props => {
   const [whatsappContact, setWhatsappContact] = useState(
     params.whatsappContact,
   );
+  const [imageLoading, setImageLoading] = useState(false);
   const [visibleCamera, setCamera] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -351,6 +353,7 @@ const AddContact = props => {
 
   const handleImageUpload = async photoObject => {
     try {
+      setImageLoading(true);
       const realPath =
         Platform.OS === 'ios'
           ? photoObject.uri.replace('file://', '')
@@ -375,7 +378,10 @@ const AddContact = props => {
       if (res?.result) {
         setPhoto(res?.result);
       }
-    } catch (e) {}
+      setImageLoading(false);
+    } catch (e) {
+      setImageLoading(false);
+    }
   };
 
   const onRemove = async () => {
@@ -451,17 +457,36 @@ const AddContact = props => {
           contentContainerStyle={{paddingBottom: 80}}>
           <View>
             <Card containerStyle={styles.UserDeatilCardWrapper}>
-              <Avatar
-                //size={64}
-                rounded
-                source={{
-                  uri:
-                    photo ||
-                    'https://www.rattanhospital.in/wp-content/uploads/2020/03/user-dummy-pic.png',
-                }}
-                avatarStyle={styles.UserImgIcon}
-                containerStyle={styles.UserimgContainer}
-              />
+              {imageLoading ? (
+                <View
+                  style={[
+                    styles.UserImgIcon,
+                    {
+                      backgroundColor: '#ccc',
+                      alignSelf: 'center',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    },
+                  ]}>
+                  <ActivityIndicator
+                    size={'large'}
+                    color={Colors.CtaColor}
+                    style={{alignSelf: 'center'}}
+                  />
+                </View>
+              ) : (
+                <Avatar
+                  //size={64}
+                  rounded
+                  source={{
+                    uri:
+                      photo ||
+                      'https://www.rattanhospital.in/wp-content/uploads/2020/03/user-dummy-pic.png',
+                  }}
+                  avatarStyle={styles.UserImgIcon}
+                  containerStyle={styles.UserimgContainer}
+                />
+              )}
               <TouchableOpacity
                 onPress={() => openSelection()}
                 style={styles.addPhotoBtn}>
