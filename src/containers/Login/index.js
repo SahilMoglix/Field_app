@@ -20,17 +20,13 @@ const azureAuth = new AzureAuth({
 });
 
 const LoginScreen = props => {
-  const [myContact, setContact] = useState();
-  const [myPass, setPass] = useState();
   const [accessToken, setAccessToken] = useState(null);
-  const [user, setUser] = useState('');
-  const [mails, setMails] = useState([]);
-  const [userId, setUserId] = useState('');
   const dispatch = useDispatch();
 
   const onLogin = async () => {
     try {
       let tokens = await azureAuth.webAuth.authorize({
+        prompt: 'login',
         scope: 'openid profile User.Read offline_access Calendars.Read',
       });
       setAccessToken(tokens?.accessToken);
