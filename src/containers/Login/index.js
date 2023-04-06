@@ -12,6 +12,7 @@ import {useDispatch} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {login} from '../../services/auth';
 import {setLogoutFunction} from '../../redux/actions/homepage';
+import Toast from 'react-native-toast-message';
 
 const CLIENT_ID = 'ff1fe9da-d218-4ceb-a11f-05ea54a985fb'; //'ac5fc872-17f9-4f59-af74-3abbe885956e'; //'ff1fe9da-d218-4ceb-a11f-05ea54a985fb';
 
@@ -68,6 +69,10 @@ const LoginScreen = props => {
         console.log('Something went wrong!!');
       }
     } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'User not registered!',
+      });
       console.log('Error during Azure operation', error);
     }
   };
