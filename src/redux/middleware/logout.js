@@ -12,7 +12,7 @@ export const logoutMiddleware = store => next => async action => {
     action &&
     action.error &&
     action.error.response &&
-    action.error.response.status == 401
+    (action.error.response.status == 401 || action.error.response.status == 410)
   ) {
     try {
       await AsyncStorage.clear();

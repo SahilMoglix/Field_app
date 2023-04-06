@@ -22,6 +22,7 @@ import firebase from '@react-native-firebase/app';
 import messaging from '@react-native-firebase/messaging';
 import NetInfo from '@react-native-community/netinfo';
 import Toast from 'react-native-toast-message';
+import {setLogoutFunction} from '../redux/actions/homepage';
 
 const AppStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -120,6 +121,7 @@ const Routes = props => {
   };
 
   if (loading) {
+    dispatch(setLogoutFunction(setIsLoggedIn));
     return (
       <View
         style={{flex: 1, justifyContent: 'center', backgroundColor: '#fefefe'}}>

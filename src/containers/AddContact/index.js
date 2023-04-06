@@ -212,10 +212,7 @@ const AddContact = props => {
     },
   ];
 
-  const [photo, setPhoto] = useState(
-    params.profilePicUrl ||
-      'https://purchase-order-moglix.s3.ap-south-1.amazonaws.com/thumbnail_image001.png',
-  );
+  const [photo, setPhoto] = useState(params.profilePicUrl || '');
 
   const navigation = useNavigation();
 

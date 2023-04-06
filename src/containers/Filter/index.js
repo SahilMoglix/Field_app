@@ -78,8 +78,8 @@ const FilterModal = props => {
         ],
       },
       {
-        name: 'plant',
-        key: 'plant',
+        name: 'Plant',
+        key: 'Plant',
         fields: [
           {
             title: 'Plant',
