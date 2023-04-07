@@ -59,10 +59,25 @@ const ContactScreen = props => {
   }, []);
 
   useEffect(() => {
+    setSelectContact(false);
+    setSelectedContacts([]);
+  }, [pagetype]);
+
+  useEffect(() => {
     if (contactNum.length == 10) {
       checkExistance();
     }
   }, [contactNum]);
+
+  useEffect(() => {
+    if (selectedContacts && selectedContacts.length) {
+      setSelectedContacts([]);
+    }
+  }, [selectContact]);
+
+  useEffect(() => {
+    setContactNum('');
+  }, [isModalVisible]);
 
   const checkExistance = async () => {
     try {
@@ -537,11 +552,14 @@ const ContactScreen = props => {
                 phone: contactNum,
                 newContact: true,
               });
+              setContactNum('');
               setModalVisible(false);
             }}
-            disabled={contactExists || contactNum.length != 10}
+            disabled={
+              contactExists || contactNum.length != 10 || contactLoading
+            }
             style={
-              !contactExists && contactNum.length == 10
+              !contactExists && contactNum.length == 10 && !contactLoading
                 ? styles.enableBtn
                 : styles.disableBtn
             }>

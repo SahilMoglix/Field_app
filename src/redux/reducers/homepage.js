@@ -9,7 +9,7 @@ const initialState = new Map({
   company: new List([]),
   plant: new List([]),
   departments: new List([]),
-  logoutFunc: () => {},
+  logoutFunc: null,
 });
 
 export const homepageReducer = (state = initialState, action) => {

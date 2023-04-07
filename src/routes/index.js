@@ -6,7 +6,6 @@ import {
   Platform,
   View,
   ActivityIndicator,
-  Alert,
 } from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -21,7 +20,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {fetchedAuth} from '../redux/actions/auth';
 import firebase from '@react-native-firebase/app';
 import messaging from '@react-native-firebase/messaging';
-import {Adjust, AdjustEvent, AdjustConfig} from 'react-native-adjust';
+import NetInfo from '@react-native-community/netinfo';
+import Toast from 'react-native-toast-message';
+import {setLogoutFunction} from '../redux/actions/homepage';
+
 const AppStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -45,19 +47,13 @@ const horizontalAnimation = {
 const getFcmToken = async () => {
   try {
     const token = await firebase.messaging().getToken();
-    Adjust.setPushToken(token);
-    console.log('fcmToken', token);
     AsyncStorage.setItem('fcm_token', token);
-    // dispatch(setFcmToken(token));
   } catch (error) {
     console.log(error);
   }
 };
 const onTokenRefreshListener = async () => {
   try {
-    const token = await firebase.messaging().onTokenRefresh();
-    Adjust.setPushToken(token);
-    console.log('fcmToken', token);
   } catch (error) {
     console.log(error);
   }
@@ -76,21 +72,33 @@ const Routes = props => {
 
   useEffect(() => {
     init();
+    const unsubscribe = NetInfo.addEventListener(state => {
+      if (!state.isConnected) {
+        Toast.show({
+          type: 'info',
+          text1: 'No Network',
+          position: 'bottom',
+          autoHide: false,
+        });
+      } else {
+        Toast.hide();
+      }
+    });
   }, []);
   useEffect(() => {
     getFcmToken();
-
     const unsubscribe = messaging().onMessage(async remoteMessage => {
-      Alert('A new FCM message arrived!' + JSON.stringify(remoteMessage));
+      // Alert('A new FCM message arrived!' + JSON.stringify(remoteMessage));
     });
     // Register background handler
     messaging().setBackgroundMessageHandler(async remoteMessage => {
-      console.log('Message handled in the background!', remoteMessage);
+      // console.log('Message handled in the background!', remoteMessage);
     });
     return () => {
       onTokenRefreshListener();
     };
   }, []);
+
   const init = async () => {
     let userData = await AsyncStorage.getItem('@microsoftLogin');
     let parsedToken = JSON.parse(userData);
@@ -113,6 +121,7 @@ const Routes = props => {
   };
 
   if (loading) {
+    dispatch(setLogoutFunction(setIsLoggedIn));
     return (
       <View
         style={{flex: 1, justifyContent: 'center', backgroundColor: '#fefefe'}}>
