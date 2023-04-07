@@ -38,7 +38,9 @@ const DropDown = props => {
       onRequestClose={hideMenu}
       style={[
         styles.dropDownWrap,
-        options.length ? {height: 150} : {height: 0},
+        options.length
+          ? {maxHeight: 150, minHeight: 30}
+          : {maxHeight: 150, minHeight: 0},
       ]}>
       <ScrollView>
         {options.map((item, itemIndex) => (
