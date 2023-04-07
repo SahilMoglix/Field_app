@@ -315,10 +315,11 @@ const ContactScreen = props => {
         email: (_.emailAddresses.find(__ => __.email) || {}).email || '',
         phone:
           ((_.phoneNumbers.find(__ => __.number) || {}).number || '')
-            .split('-' || ' ')
+            .split('-')
             .join('')
             .split(' ')
-            .join('') || '',
+            .join('')
+            .replace('+91', '') || '',
       }));
       const {data} = await syncContacts(body);
       if (data.status == 200) {

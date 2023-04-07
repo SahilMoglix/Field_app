@@ -44,6 +44,7 @@ const AddContact = props => {
   const CompanyData = useSelector(state =>
     state.homepageReducer.get('company'),
   );
+  const PlantData = useSelector(state => state.homepageReducer.get('plant'));
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const [name, setName] = useState(params.name);
   const [phone, setPhone] = useState(params.phone);
@@ -301,8 +302,10 @@ const AddContact = props => {
           email,
           id: params.id || undefined,
           inclination,
-          company,
-          plant,
+          companyId: company,
+          plantId: String(plant),
+          company: (CompanyData.find(_ => _.key == company) || {}).value,
+          plant: (PlantData.find(_ => _.key == plant) || {}).value,
           designation,
           department,
           whatsappContact,

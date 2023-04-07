@@ -10,6 +10,7 @@ import {useNavigation} from '@react-navigation/native';
 import DotCheckbox from '../../component/Checkbox';
 import CustomeDatePicker from '../../component/Datepicker';
 import {useSelector} from 'react-redux';
+import Colors from '../../Theme/Colors';
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
@@ -181,7 +182,7 @@ const FilterModal = props => {
           props.onApplyFilter({
             designation,
             company,
-            plant,
+            plant: String(plant),
             startDate: new Date(
               dateConverter(startDate, 'datetime', 'from'),
             ).getTime(),
@@ -252,11 +253,22 @@ const FilterModal = props => {
             ))}
           </View>
           <View style={styles.rightPart}>
-            {FILTERS_DATA.tabs[selectedTabIndex].fields.map((_, k) => (
-              <View key={k} style={{paddingHorizontal: Dimension.padding15}}>
-                <_.component {..._} />
-              </View>
-            ))}
+            {FILTERS_DATA.tabs[selectedTabIndex].fields.map((_, k) =>
+              _.title == 'Plant' && !company ? (
+                <Text
+                  style={{
+                    fontSize: Dimension.font14,
+                    color: Colors.FontColor,
+                    margin: Dimension.margin8,
+                  }}>
+                  Please select company to view plants
+                </Text>
+              ) : (
+                <View key={k} style={{paddingHorizontal: Dimension.padding15}}>
+                  <_.component {..._} />
+                </View>
+              ),
+            )}
           </View>
         </View>
         <View style={styles.bottomAction}>
