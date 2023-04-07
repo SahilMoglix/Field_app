@@ -36,24 +36,23 @@ const DropDown = props => {
         </TouchableOpacity>
       }
       onRequestClose={hideMenu}
-      style={[
-        styles.dropDownWrap,
-        options.length ? {height: 150} : {height: 0},
-      ]}>
-      <ScrollView>
-        {options.map((item, itemIndex) => (
-          <MenuItem
-            onPress={() => {
-              onValueChange(item.value, item.label);
-              hideMenu();
-            }}
-            key={itemIndex}
-            textStyle={styles.dropdownval}
-            style={styles.dropDowninnerWrap}>
-            {item.label}
-          </MenuItem>
-        ))}
-      </ScrollView>
+      style={[styles.dropDownWrap, {maxHeight: options.length ? 150 : 0}]}>
+      {options.length ? (
+        <ScrollView>
+          {options.map((item, itemIndex) => (
+            <MenuItem
+              onPress={() => {
+                onValueChange(item.value, item.label);
+                hideMenu();
+              }}
+              key={itemIndex}
+              textStyle={styles.dropdownval}
+              style={styles.dropDowninnerWrap}>
+              {item.label}
+            </MenuItem>
+          ))}
+        </ScrollView>
+      ) : null}
     </Menu>
   );
 };

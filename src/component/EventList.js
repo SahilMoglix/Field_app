@@ -1,13 +1,30 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, Text, Modal, Platform} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  Modal,
+  Platform,
+  TouchableOpacity,
+  Linking,
+} from 'react-native';
 import CustomeIcon from './CustomeIcon';
 import Dimension from '../Theme/Dimension';
 import colors from '../Theme/Colors';
+import {Button} from 'react-native-elements';
 
 const EventList = props => {
   const {data} = props;
   const [isOpen, setIsOpen] = useState(false);
   const [showMore, setShowMore] = useState(false);
+
+  let meetingLink = '';
+
+  if (data?.body?.content) {
+    meetingLink = (data?.body?.content || '')
+      .split('"')
+      .find(_ => _.includes('https://teams.microsoft.com/l/meetup-join/'));
+  }
 
   return (
     <>
@@ -73,12 +90,42 @@ const EventList = props => {
               )}
             </View>
           </View>
+          {meetingLink ? (
+            <Button
+              onPress={() => Linking.openURL(meetingLink)}
+              title="Join Teams Meeting"
+              buttonStyle={styles.CancelbtnStyle}
+              titleStyle={styles.Cancelbtntxt}
+              containerStyle={styles.btnContainer}
+            />
+          ) : null}
         </View>
       </View>
     </>
   );
 };
 const styles = StyleSheet.create({
+  btntxt:
+    Platform.OS === 'ios'
+      ? {
+          color: colors.WhiteColor,
+          fontSize: Dimension.font14,
+          fontFamily: Dimension.CustomBoldFont,
+          fontWeight: '700',
+        }
+      : {
+          color: colors.WhiteColor,
+          fontSize: Dimension.font14,
+          fontFamily: Dimension.CustomBoldFont,
+        },
+  btnStyle: {
+    backgroundColor: colors.CtaColor,
+    borderRadius: 50,
+    paddingHorizontal: Dimension.padding30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignContent: 'center',
+  },
   EventWrap: {
     borderWidth: 1,
     borderColor: colors.borderColor,
