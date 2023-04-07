@@ -91,7 +91,7 @@ const ActivityScreen = () => {
                 phoneNumber: (_.phoneNumber || '')
                   .split('-')
                   .join('')
-                  .split('-')
+                  .split(' ')
                   .join('')
                   .replace('+91', ''),
               }));
@@ -106,7 +106,7 @@ const ActivityScreen = () => {
                   phoneNumber: (_.phoneNumber || '')
                     .split('-')
                     .join('')
-                    .split('-')
+                    .split(' ')
                     .join('')
                     .replace('+91', ''),
                 })) || [],
