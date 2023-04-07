@@ -24,7 +24,9 @@ const DropDown = props => {
               name={IconName}
               size={Dimension.font18}
               color={colors.DateBgColor}></CustomeIcon>
-            <Text style={styles.labelStyle}>{value || label}</Text>
+            <Text style={value ? styles.valuestyle : styles.labelStyle}>
+              {value || label}
+            </Text>
           </View>
           <CustomeIcon
             name="icon_Below"
@@ -99,6 +101,13 @@ const styles = StyleSheet.create({
 
     paddingVertical: Dimension.padding5,
     marginHorizontal: 5,
+  },
+  valuestyle: {
+    fontSize: Dimension.font16,
+    color: colors.FontColor,
+    fontFamily: Dimension.CustomMediumFont,
+    // fontWeight:(Platform.OS === 'ios') ? "500" : "",
+    marginLeft: Dimension.margin8,
   },
   labelStyle: {
     fontSize: Dimension.font16,
