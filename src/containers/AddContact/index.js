@@ -110,6 +110,7 @@ const AddContact = props => {
       Placeholder: 'Contact',
       IconName: 'call-grey',
       RightIconView: () => null,
+      prefix: '+91',
     },
     {
       component: MyInput,
@@ -160,31 +161,25 @@ const AddContact = props => {
         label: _.value,
       })),
       value: (
-        CompanyData.toArray()
-          .map(_ => ({
-            value: _.key,
-            label: _.value,
-          }))
-          .find(_ => _.value == company) || {}
-      ).label,
+        CompanyData.toArray().find(
+          _ => _.value == props.companyId || company,
+        ) || {}
+      ).value,
     },
     {
       component: DropDown,
       onValueChange: val => setPlant(val),
       IconName: 'Plant-grey',
       label: 'Plant',
-      options: (PlantsData.get(company) || []).map(_ => ({
+      options: (PlantsData.get(params.companyId || company) || []).map(_ => ({
         value: _.key,
         label: _.value,
       })),
       value: (
-        (PlantsData.get(company) || [])
-          .map(_ => ({
-            value: _.key,
-            label: _.value,
-          }))
-          .find(_ => _.value == plant) || {}
-      ).label,
+        (PlantsData.get(params.companyId || company) || []).find(
+          _ => _.key == props.plantId || plant,
+        ) || {}
+      ).value,
     },
     {
       component: DropDown,
@@ -268,6 +263,8 @@ const AddContact = props => {
       alertText = 'Phone number must be 10 digits';
     } else if (!name) {
       alertText = 'Name is mandatory';
+    } else if (!email) {
+      alertText = 'Email is mandatory';
     } else if (!email || !email.match(emailRegex)) {
       alertText = 'Email is invalid';
     } else if (!inclination) {

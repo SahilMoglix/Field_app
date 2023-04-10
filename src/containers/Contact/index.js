@@ -535,6 +535,7 @@ const ContactScreen = props => {
               label="Contact Number"
               keyboardType="number-pad"
               maxLength={10}
+              prefix={'+91'}
               IconName={'call-grey'}
               defaultValue={contactNum}
               value={contactNum}
