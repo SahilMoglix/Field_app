@@ -90,13 +90,19 @@ const Calendars = props => {
     updateMonthData(currentMonthYear);
   }, [currentMonthYear]);
 
-  const getDots = dotCount => {
+  const getDots = (dotCount, dotDate) => {
     let dots = [];
     new Array(dotCount).fill({}).map((_, k) => {
       dots.push({
         key: k,
-        color: 'dodgerblue',
-        selectedDotColor: 'dodgerblue',
+        color:
+          new Date().getTime() <= new Date(dotDate).getTime()
+            ? 'dodgerblue'
+            : '#8E8E93',
+        selectedDotColor:
+          new Date().getTime() <= new Date(dotDate).getTime()
+            ? 'dodgerblue'
+            : '#8E8E93',
       });
     });
     return dots;
@@ -109,7 +115,7 @@ const Calendars = props => {
         selected: Object.keys(_)[0] == currentDate,
         marked: Object.keys(_)[0] == currentDate,
         selectedColor: Object.keys(_)[0] == currentDate ? '#ED6A60' : null,
-        dots: getDots(_[Object.keys(_)[0]]),
+        dots: getDots(_[Object.keys(_)[0]], Object.keys(_)[0]),
       };
     });
     if (obj[currentDate]) {
