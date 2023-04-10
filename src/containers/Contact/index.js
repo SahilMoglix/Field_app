@@ -103,6 +103,12 @@ const ContactScreen = props => {
     setModalVisible(!isModalVisible);
   };
 
+  const INCLINATION_COLORS = {
+    Promoter: '#E2FCD0',
+    Detractor: '#FFD8D5',
+    Neutral: '#C1C1C1',
+  };
+
   const renderFocusedData = ({item, index}) => {
     return (
       <TouchableOpacity
@@ -131,7 +137,7 @@ const ContactScreen = props => {
           <Text
             style={[
               styles.PositionWrap,
-              {backgroundColor: item?.backgroundColor},
+              {backgroundColor: INCLINATION_COLORS[item?.inclination || '']},
             ]}>
             {item?.inclination}
           </Text>
