@@ -44,29 +44,42 @@ const MyInput = props => {
         ]}>
         {props.label}
       </Animated.Text>
-
-      <TextInput
-        style={[
-          styles.inputStyle,
-          props.IconName
-            ? {paddingLeft: Dimension.padding20}
-            : {paddingLeft: 0},
-          props.RightIconName
-            ? {paddingRight: Dimension.padding20}
-            : {paddingRight: 0},
-        ]}
-        autoCapitalize="none"
-        defaultValue={props.defaultValue}
-        value={props.value}
-        onChangeText={props.onChangeText}
-        keyboardType={props.keyboardType}
-        editable={props.editable}
-        maxLength={props.maxLength}
-        onFocus={onFocus}
-        onSubmitEditing={props.onSubmitEditing}
-        //onBlur={(e)=>onBlur(e.target.value)}
-        // placeholder={props.Placeholder}
-      />
+      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        {props.prefix ? (
+          <Text
+            style={{
+              fontSize: Dimension.font16,
+              color: colors.FontColor,
+              fontFamily: Dimension.CustomMediumFont,
+              marginLeft: Dimension.margin20,
+              marginTop: Dimension.margin4,
+            }}>
+            {props.prefix}
+          </Text>
+        ) : null}
+        <TextInput
+          style={[
+            styles.inputStyle,
+            props.IconName
+              ? {paddingLeft: Dimension.padding20}
+              : {paddingLeft: 0},
+            props.RightIconName
+              ? {paddingRight: Dimension.padding20}
+              : {paddingRight: 0},
+          ]}
+          autoCapitalize="none"
+          defaultValue={props.defaultValue}
+          value={props.value}
+          onChangeText={props.onChangeText}
+          keyboardType={props.keyboardType}
+          editable={props.editable}
+          maxLength={props.maxLength}
+          onFocus={onFocus}
+          onSubmitEditing={props.onSubmitEditing}
+          //onBlur={(e)=>onBlur(e.target.value)}
+          // placeholder={props.Placeholder}
+        />
+      </View>
       {props.IconName ? (
         <CustomeIcon
           name={props.IconName}
@@ -117,6 +130,7 @@ const styles = StyleSheet.create({
     // fontWeight:(Platform.OS === 'ios') ? "500" : "",
     paddingLeft: 0,
     marginBottom: 0,
+    flex: 1,
     marginTop: Dimension.margin10,
   },
   iconStyle: {

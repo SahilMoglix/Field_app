@@ -30,7 +30,10 @@ const ContactData = props => {
       </View>
       <View>
         <Text style={styles.labelStyle}>{props.label}</Text>
-        <Text style={styles.inputStyle}>{props.value}</Text>
+        <Text style={styles.inputStyle}>
+          {props.label == 'Contact' ? '+91 ' : ''}
+          {props.value}
+        </Text>
       </View>
     </View>
   );
