@@ -52,17 +52,18 @@ const MyInput = props => {
               color: colors.FontColor,
               fontFamily: Dimension.CustomMediumFont,
               marginLeft: Dimension.margin20,
-              marginTop: Dimension.margin4,
+              marginTop: Dimension.margin6,
             }}>
             {props.prefix}
+            {' -'}
           </Text>
         ) : null}
         <TextInput
           style={[
             styles.inputStyle,
-            props.IconName
-              ? {paddingLeft: Dimension.padding20}
-              : {paddingLeft: 0},
+            props.prefix
+              ? {paddingLeft: 0}
+              : {paddingLeft: Dimension.padding20},
             props.RightIconName
               ? {paddingRight: Dimension.padding20}
               : {paddingRight: 0},

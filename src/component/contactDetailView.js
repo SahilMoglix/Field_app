@@ -13,7 +13,7 @@ const ContactData = props => {
     designation: 'Designation-grey',
     plant: 'Plant-grey',
     company: 'company-grey',
-    department: 'Department-grey',
+    departmentValue: 'Department-grey',
     whatsappContact: 'Whatsaap-green',
   };
   const getIconName = () => {
@@ -31,7 +31,7 @@ const ContactData = props => {
       <View>
         <Text style={styles.labelStyle}>{props.label}</Text>
         <Text style={styles.inputStyle}>
-          {props.label == 'Contact' ? '+91 ' : ''}
+          {props.label == 'Contact' ? '+91 -' : ''}
           {props.value}
         </Text>
       </View>
