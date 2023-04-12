@@ -102,6 +102,7 @@ const CustomeDatePicker = props => {
               )}
               editable={false}
               selectionColor={'#3c3c3c'}
+              placeholder={'Select ' + props.label}
               disabled={props.disabled}
               onFocus={handleFocus}
               onBlur={() => handleBlur(true)}
