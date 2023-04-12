@@ -2,7 +2,17 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
 
 export const logoutMiddleware = store => next => async action => {
-  if (action?.error?.response?.data) {
+  if (
+    action &&
+    action.error &&
+    action.error.response &&
+    action.error.response.status == 429
+  ) {
+    Toast.show({
+      type: 'info',
+      text1: 'Please try after sometime!',
+    });
+  } else if (action?.error?.response?.data) {
     Toast.show({
       type: 'info',
       text1: action?.error?.response?.data?.message || 'Something went wrong!',
@@ -32,6 +42,5 @@ export const logoutMiddleware = store => next => async action => {
       });
     }
   }
-
   return next(action);
 };
