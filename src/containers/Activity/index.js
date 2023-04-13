@@ -8,6 +8,7 @@ import {
   FlatList,
   TouchableOpacity,
   TextInput,
+  Linking,
 } from 'react-native';
 import CallLogs from 'react-native-call-log';
 import CustomeIcon from '../../component/CustomeIcon';
@@ -20,6 +21,7 @@ import {fetchLogs, updateLogs} from '../../redux/actions/communication';
 import {createAllContacts} from '../../services/communication';
 import NoDataFound from '../../component/NoDataFound';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Colors from '../../Theme/Colors';
 const ActivityScreen = () => {
   const logsData = useSelector(state => state.communicationReducer.get('data'));
   const logsStatus = useSelector(state =>
@@ -164,6 +166,16 @@ const ActivityScreen = () => {
             {contact?.dateTime}
           </Text> */}
         </View>
+        <TouchableOpacity
+          style={styles.arrowBtn}
+          onPress={() => {
+            Linking.openURL(`tel:${contact?.phoneNumber}`);
+          }}>
+          <CustomeIcon
+            name={'Call-blue'}
+            color={Colors.CtaColor}
+            size={22}></CustomeIcon>
+        </TouchableOpacity>
       </View>
     );
   };

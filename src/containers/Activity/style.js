@@ -114,6 +114,13 @@ const styles = StyleSheet.create({
     color: colors.FontColor,
     justifyContent: 'flex-start',
   },
+  arrowBtn: {
+    position: 'absolute',
+    right: 20,
+    width: 20,
+    height: 20,
+    top: 20,
+  },
   datetxt: {
     marginLeft: Dimension.margin10,
   },
