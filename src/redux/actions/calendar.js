@@ -1,11 +1,12 @@
 import {CALENDAR_ACTIONS} from '../constants/calendar';
 
-export const fetchCalendar = (startDate, endDate) => {
+export const fetchCalendar = (startDate, endDate, pullFromAzure) => {
   return {
     type: CALENDAR_ACTIONS.FETCH_CALENDAR,
     payload: {
       startDate,
       endDate,
+      pullFromAzure,
     },
   };
 };

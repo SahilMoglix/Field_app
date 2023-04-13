@@ -33,7 +33,7 @@ const FilterModal = props => {
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [designation, setDesignation] = useState(props.designation);
   const [company, setCompany] = useState(props.company);
-  const [plant, setPlant] = useState(props.plant);
+  const [plant, setPlant] = useState(props.plant || '');
   const [startDate, setStartDate] = useState(new Date(props.startDate));
   const [endDate, setEndDate] = useState(new Date(props.endDate));
 
@@ -182,7 +182,7 @@ const FilterModal = props => {
           props.onApplyFilter({
             designation,
             company,
-            plant: String(plant),
+            plant: plant ? String(plant) : undefined,
             startDate: new Date(
               dateConverter(startDate, 'datetime', 'from'),
             ).getTime(),

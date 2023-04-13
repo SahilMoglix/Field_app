@@ -2,12 +2,13 @@ import axios from 'axios';
 import CONSTANTS from './constant';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const getMeetings = async (startDate, endDate) =>
+export const getMeetings = async (startDate, endDate, pullFromAzure) =>
   axios.post(
     `${CONSTANTS.BASE_URL}calender/getCalendar`,
     {
       startDate,
       endDate,
+      pullFromAzure,
     },
     {
       headers: {

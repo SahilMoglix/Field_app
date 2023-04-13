@@ -72,24 +72,28 @@ const EventList = props => {
               ) : null}
             </View>
           ) : null}
-          <View style={styles.meetingWrap}>
-            <Text style={styles.meetingheading}>Meeting Agenda</Text>
-            <View
-              style={{
-                flexDirection: 'column',
-              }}>
-              <Text
-                style={styles.meetingval}
-                numberOfLines={showMore ? null : 1}>
-                {data.bodyPreview}
-              </Text>
-              {showMore ? null : (
-                <Text onPress={() => setShowMore(true)} style={styles.bluetxt}>
-                  ...More
+          {!data.bodyPreview ? null : (
+            <View style={styles.meetingWrap}>
+              <Text style={styles.meetingheading}>Meeting Agenda</Text>
+              <View
+                style={{
+                  flexDirection: 'column',
+                }}>
+                <Text
+                  style={styles.meetingval}
+                  numberOfLines={showMore ? null : 1}>
+                  {data.bodyPreview}
                 </Text>
-              )}
+                {showMore ? null : (
+                  <Text
+                    onPress={() => setShowMore(true)}
+                    style={styles.bluetxt}>
+                    ...More
+                  </Text>
+                )}
+              </View>
             </View>
-          </View>
+          )}
           {meetingLink ? (
             <Button
               onPress={() => Linking.openURL(meetingLink)}

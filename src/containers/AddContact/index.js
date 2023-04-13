@@ -50,8 +50,8 @@ const AddContact = props => {
   const [phone, setPhone] = useState(params.phone);
   const [email, setEmail] = useState(params.email);
   const [inclination, setInclination] = useState(params.inclination);
-  const [company, setCompany] = useState(params.company);
-  const [plant, setPlant] = useState(params.plant);
+  const [company, setCompany] = useState(params.companyId);
+  const [plant, setPlant] = useState(params.plantId);
   const [designation, setDesignation] = useState(params.designation);
   const [department, setDepartment] = useState(params.department);
   const [removeLoading, setRemoveLoading] = useState(false);

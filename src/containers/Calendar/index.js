@@ -1,18 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Button,
-  ActivityIndicator,
-  StatusBar,
-} from 'react-native';
+import {View, Text, TouchableOpacity, FlatList} from 'react-native';
 import Calendars from '../../component/Calendars';
 import EventList from '../../component/EventList';
 import styles from './style';
-import Dimension from '../../Theme/Dimension';
 import CustomeIcon from '../../component/CustomeIcon';
-import {ScrollView} from 'react-native-gesture-handler';
 import Colors from '../../Theme/Colors';
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -56,7 +47,8 @@ const CalendarScreen = () => {
 
   const [type, setType] = useState('cal');
   const [filtersModal, setFiltersModal] = useState(false);
-  const navigation = useNavigation();
+  const [monthYearData, setMonthYearData] = useState({});
+  const [currentDate, setCurrentDate] = useState('');
 
   const gotoFilter = () => {
     setFiltersModal(true);
@@ -89,16 +81,19 @@ const CalendarScreen = () => {
     dispatch(fetchDepartments());
   }, []);
 
-  const updateDate = date => {
+  const updateDate = (date, onDemand) => {
+    setCurrentDate(date);
     dispatch(
       fetchCalendar(
         new Date(date + ' 00:00:00').getTime(),
         new Date(date + ' 23:59:59').getTime(),
+        onDemand,
       ),
     );
   };
 
-  const updateMonthData = monthYear => {
+  const updateMonthData = (monthYear, onDemand) => {
+    setMonthYearData(monthYear);
     dispatch(
       fetchMonthCalendar({
         startDate: new Date(
@@ -111,6 +106,7 @@ const CalendarScreen = () => {
             0,
           ).getDate()}` + ' 23:59:59',
         ).getTime(),
+        pullFromAzure: onDemand,
       }),
     );
   };
@@ -149,14 +145,40 @@ const CalendarScreen = () => {
           </TouchableOpacity>
         </View>
       </View>
-      <ScrollView>
-        {type == 'cal' ? (
-          <Calendars
-            meetingsMonthData={meetingsMonthData}
-            updateDate={updateDate}
-            updateMonthData={updateMonthData}
+      {type == 'cal' ? (
+        <>
+          <FlatList
+            data={meetingsData.toArray()}
+            ListHeaderComponent={
+              <Calendars
+                meetingsMonthData={meetingsMonthData}
+                updateDate={updateDate}
+                updateMonthData={updateMonthData}
+              />
+            }
+            keyExtractor={(item, index) => `item-${index}`}
+            refreshing={[
+              STATE_STATUS.FETCHING,
+              STATE_STATUS.UNFETCHED,
+            ].includes(meetingsStatus)}
+            onRefresh={() => {
+              updateDate(currentDate, true);
+              updateMonthData(monthYearData, true);
+            }}
+            renderItem={({item, index}) => (
+              <EventList data={item} key={index} />
+            )}
+            ListEmptyComponent={
+              [STATE_STATUS.FETCHING, STATE_STATUS.UNFETCHED].includes(
+                meetingsStatus,
+              ) ? null : (
+                <NoDataFound text={'No event found for the day'}></NoDataFound>
+              )
+            }
           />
-        ) : (
+        </>
+      ) : (
+        <>
           <View style={styles.row}>
             <Text style={styles.dateText}>
               {new Date(meetingsCustomParams?.startDate || '').toDateString()} -{' '}
@@ -170,31 +192,34 @@ const CalendarScreen = () => {
               <Text style={styles.filtertxt}>Filter</Text>
             </TouchableOpacity>
           </View>
-        )}
-        {type == 'cal' ? (
-          [STATE_STATUS.FETCHING, STATE_STATUS.UNFETCHED].includes(
-            meetingsStatus,
-          ) ? (
-            <ActivityIndicator size={'small'} />
-          ) : meetingsData.size == 0 ? (
-            <NoDataFound text={'No event found for the day'}></NoDataFound>
-          ) : (
-            meetingsData.map((data, dataKey) => (
-              <EventList data={data} key={dataKey} />
-            ))
-          )
-        ) : [STATE_STATUS.FETCHING, STATE_STATUS.UNFETCHED].includes(
-            meetingsCustomStatus,
-          ) ? (
-          <ActivityIndicator size={'small'} />
-        ) : meetingsCustomData.size == 0 ? (
-          <NoDataFound text={'No event found for the day'}></NoDataFound>
-        ) : (
-          meetingsCustomData.map((data, dataKey) => (
-            <EventList data={data} key={dataKey} />
-          ))
-        )}
-      </ScrollView>
+          <FlatList
+            data={meetingsCustomData.toArray()}
+            keyExtractor={(item, index) => `item-${index}`}
+            refreshing={[
+              STATE_STATUS.FETCHING,
+              STATE_STATUS.UNFETCHED,
+            ].includes(meetingsCustomStatus)}
+            onRefresh={() => {
+              dispatch(
+                fetchCustomCalendar({
+                  ...meetingsCustomParams,
+                  pullFromAzure: true,
+                }),
+              );
+            }}
+            renderItem={({item, index}) => (
+              <EventList data={item} key={index} />
+            )}
+            ListEmptyComponent={
+              [STATE_STATUS.FETCHING, STATE_STATUS.UNFETCHED].includes(
+                meetingsCustomStatus,
+              ) ? null : (
+                <NoDataFound text={'No event found for the day'}></NoDataFound>
+              )
+            }
+          />
+        </>
+      )}
       {filtersModal && (
         <FilterModal
           setFiltersModal={setFiltersModal}

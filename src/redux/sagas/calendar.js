@@ -16,9 +16,14 @@ import {
 } from '../../services/calendar';
 import {meetings, monthData} from '../../responses/calendar';
 
-function* fetchMeetings({payload: {startDate, endDate}}) {
+function* fetchMeetings({payload: {startDate, endDate, pullFromAzure}}) {
   try {
-    const {data, error} = yield call(getMeetings, startDate, endDate);
+    const {data, error} = yield call(
+      getMeetings,
+      startDate,
+      endDate,
+      pullFromAzure,
+    );
     // const data = meetings;
     // const error = null;
     if (error) {
