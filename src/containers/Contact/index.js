@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   TextInput,
   TouchableOpacity,
+  Linking,
 } from 'react-native';
 import {Button} from 'react-native-elements';
 import Contacts from 'react-native-contacts';
@@ -107,7 +108,7 @@ const ContactScreen = props => {
   const INCLINATION_COLORS = {
     Promoter: '#E2FCD0',
     Detractor: '#FFD8D5',
-    Neutral: '#C1C1C1',
+    Neutral: '#F0DDA8',
   };
 
   const renderFocusedData = ({item, index}) => {
@@ -116,7 +117,7 @@ const ContactScreen = props => {
         onPress={() =>
           navigation.navigate('ContactDetail', {phone: item.phone})
         }
-        style={styles.contactCon}>
+        style={index == 0 ? styles.contactConWrap : styles.contactCon}>
         <View style={styles.placeholder}>
           <Text style={styles.txt}>{item?.name?.[0]}</Text>
           {/* {contact?.hasThumbnail ? (
@@ -130,23 +131,59 @@ const ContactScreen = props => {
         </View>
 
         <View style={styles.contactDat}>
-          <Text style={styles.name}>{item?.name} </Text>
-          <Text style={styles.phoneNumber}>{item?.designation}</Text>
+          {item?.name ? <Text style={styles.name}>{item?.name} </Text> : null}
+          {item?.designation ? (
+            <Text style={styles.phoneNumber}>{item?.designation}</Text>
+          ) : null}
+
           <Text style={item.company ? styles.phoneNumber : styles.redtxt}>
-            {!item.company ? 'Company details missing' : item?.company}
+            {!item.company
+              ? 'Company and other details missing'
+              : item?.company}
           </Text>
-          <Text
-            style={[
-              styles.PositionWrap,
-              {backgroundColor: INCLINATION_COLORS[item?.inclination || '']},
-            ]}>
-            {item?.inclination}
-          </Text>
+          {item?.inclination ? (
+            <View style={{flexDirection: 'row'}}>
+              <Text
+                style={[
+                  styles.PositionWrap,
+                  {
+                    backgroundColor:
+                      INCLINATION_COLORS[item?.inclination || ''],
+                  },
+                ]}>
+                {item?.inclination}
+              </Text>
+
+              <CustomeIcon
+                name={'Arrow-black'}
+                color={Colors.FontColor}
+                size={20}></CustomeIcon>
+            </View>
+          ) : (
+            <View style={{flexDirection: 'row'}}>
+              <Text style={[styles.PositionWrap, {backgroundColor: '#E0E0E0'}]}>
+                Info missing
+              </Text>
+              <CustomeIcon
+                name={'Arrow-black'}
+                color={Colors.FontColor}
+                size={18}
+                style={{marginTop: Dimension.margin5}}></CustomeIcon>
+            </View>
+          )}
         </View>
-        <TouchableOpacity style={styles.arrowBtn}>
+        <TouchableOpacity
+          style={styles.arrowBtn}
+          onPress={async () => {
+            await logAnalytics('Open_Dialer', {
+              Contact: item.phone,
+              Screen_Name: 'Contacts',
+            });
+            Linking.openURL(`tel:${item.phone}`);
+          }}>
           <CustomeIcon
-            name={'Arrow-black'}
-            color={Colors.FontColor}
+            name={'Call-blue'}
+            color={Colors.CtaColor}
             size={20}></CustomeIcon>
         </TouchableOpacity>
       </TouchableOpacity>
@@ -200,7 +237,7 @@ const ContactScreen = props => {
   };
 
   const renderItem = ({item, index}) => {
-    return <Contact contact={item} />;
+    return <Contact contact={item} index={index} />;
   };
 
   const keyExtractor = (item, idx) => {
@@ -222,9 +259,10 @@ const ContactScreen = props => {
     setFilter(filteredData);
   };
 
-  const Contact = ({contact}) => {
+  const Contact = ({contact, index}) => {
+    console.log(index, 'render Phone Data');
     return (
-      <View style={styles.contactCon}>
+      <View style={index == 0 ? styles.contactConWrap : styles.contactCon}>
         <View style={styles.placeholder}>
           {contact?.hasThumbnail ? (
             <Image
@@ -242,13 +280,18 @@ const ContactScreen = props => {
             {contact?.middleName && contact.middleName + ' '}
             {contact?.familyName}
           </Text>
-          <Text style={styles.phoneNumber}>
-            {contact?.phoneNumbers?.[0]?.number}
-          </Text>
+          {contact?.phoneNumbers?.[0]?.number ? (
+            <Text style={styles.phoneNumber}>
+              {contact?.phoneNumbers?.[0]?.number}
+            </Text>
+          ) : null}
           {selectContact ? null : (
             <TouchableOpacity
               onPress={() => onSyncContacts(true, contact)}
-              style={{flexDirection: 'row'}}>
+              style={{
+                flexDirection: 'row',
+                marginLeft: -2,
+              }}>
               <CustomeIcon
                 name={'Add-blue'}
                 size={18}
@@ -256,7 +299,9 @@ const ContactScreen = props => {
               <Text style={styles.addBtnTxt}> Add</Text>
             </TouchableOpacity>
           )}
-          <Text style={styles.name}>{contact?.company}</Text>
+          {contact?.company ? (
+            <Text style={styles.name}>{contact?.company}</Text>
+          ) : null}
         </View>
         {selectContact ? (
           <TouchableOpacity style={styles.selectWrap}>
@@ -520,6 +565,7 @@ const ContactScreen = props => {
                 <NoDataFound text={'No Contact Found'}></NoDataFound>
               ) : null
             }
+
             // keyExtractor={index}
             //style={styles.list}
           />

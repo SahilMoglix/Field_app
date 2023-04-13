@@ -69,6 +69,19 @@ const styles = StyleSheet.create({
   },
   list: {
     flex: 1,
+    borderTopColor: '#DCE2EA',
+    borderToptWidth: 1,
+  },
+  contactConWrap: {
+    flex: 1,
+    flexDirection: 'row',
+    padding: Dimension.padding10,
+
+    borderColor: '#DCE2EA',
+    borderWidth: 1,
+    marginHorizontal: Dimension.margin8,
+    backgroundColor: '#fff',
+    paddingTop: Dimension.padding20,
   },
   contactCon: {
     flex: 1,
@@ -77,9 +90,11 @@ const styles = StyleSheet.create({
     borderColor: '#DCE2EA',
     borderLeftWidth: 1,
     borderRightWidth: 1,
-    borderBottomWidth: 0.5,
-    borderTopWidth: 0.5,
+    borderBottomWidth: 1,
+    // borderTopWidth: 0.5,
     marginHorizontal: Dimension.margin8,
+    paddingTop: Dimension.padding20,
+
     backgroundColor: '#fff',
   },
   imgCon: {},
@@ -96,7 +111,8 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   contactDat: {
-    paddingLeft: 5,
+    paddingLeft: Dimension.padding10,
+    width: '75%',
   },
   txt: {
     fontSize: Dimension.font20,
@@ -235,13 +251,14 @@ const styles = StyleSheet.create({
     fontSize: Dimension.font12,
     fontFamily: Dimension.CustomRegularFont,
     color: colors.FontColor,
+    marginTop: Dimension.margin5,
   },
   arrowBtn: {
     position: 'absolute',
-    right: 0,
-    width: 24,
-    height: 24,
-    top: 10,
+    right: 10,
+    width: 20,
+    height: 20,
+    top: 20,
   },
   selectWrap: {
     position: 'absolute',
