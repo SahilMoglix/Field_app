@@ -23,6 +23,7 @@ import ContactData from '../../component/contactDetailView';
 import {useNavigation} from '@react-navigation/native';
 import {getNumberDetails} from '../../services/contacts';
 import {useSelector} from 'react-redux';
+import logAnalytics from '../../services/analytics';
 // import { launchImageLibrary } from 'react-native-image-picker';
 //import RNFetchBlob from 'rn-fetch-blob';
 //import CONSTANTS from "../../services/constant";
@@ -88,6 +89,10 @@ const ContactDetail = props => {
     const {data} = await getNumberDetails(props.route.params.phone);
     if (data?.result?.length) {
       let response = data.result[0];
+      await logAnalytics('Contact_Detail', {
+        Name: response.name,
+        Contact: response.phone,
+      });
       response.departmentValue =
         (DepartmentData.find(_ => _._id == response.department) || {})
           .departmentName || '';

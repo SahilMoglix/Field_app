@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
+import logAnalytics from '../../services/analytics';
 
 export const logoutMiddleware = store => next => async action => {
   if (
@@ -8,6 +9,9 @@ export const logoutMiddleware = store => next => async action => {
     action.error.response &&
     action.error.response.status == 429
   ) {
+    await logAnalytics('Calendar_ToomanyRequest', {
+      Error_Message: action?.error?.response?.data?.message || '',
+    });
     Toast.show({
       type: 'info',
       text1: 'Please try after sometime!',
