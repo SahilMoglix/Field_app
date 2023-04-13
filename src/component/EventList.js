@@ -72,7 +72,7 @@ const EventList = props => {
               ) : null}
             </View>
           ) : null}
-          {!data.bodyPreview?.split('----------')?.[0] ? null : (
+          {!data.bodyPreview?.split('__________')?.[0] ? null : (
             <View style={styles.meetingWrap}>
               <Text style={styles.meetingheading}>Meeting Agenda</Text>
               <View
@@ -82,7 +82,7 @@ const EventList = props => {
                 <Text
                   style={styles.meetingval}
                   numberOfLines={showMore ? null : 1}>
-                  {data.bodyPreview?.split('----------')?.[0]}
+                  {data.bodyPreview?.split('__________')?.[0]}
                 </Text>
                 {showMore ? null : (
                   <Text

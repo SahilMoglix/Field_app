@@ -9,9 +9,10 @@ import {
   Dimensions,
 } from 'react-native';
 import CustomeIcon from './CustomeIcon';
-import {Menu, MenuItem, MenuDivider} from 'react-native-material-menu';
-import {ScrollView} from 'react-native-gesture-handler';
+import Modal from 'react-native-modal';
+
 const {width: SCREEN_WIDTH, height: SCREEN_HEIGHT} = Dimensions.get('window');
+
 const DropDown = props => {
   const {onValueChange, IconName, label, value, options} = props;
 
@@ -23,45 +24,43 @@ const DropDown = props => {
   return (
     <View style={{position: 'relative'}}>
       {value ? <Text style={styles.labelStyle1}>{label}</Text> : null}
-      <Menu
-        visible={visible}
-        anchor={
-          <TouchableOpacity onPress={showMenu} style={styles.dropDownBtn}>
-            <View style={{flexDirection: 'row', marginTop: 20}}>
-              <CustomeIcon
-                name={IconName}
-                size={Dimension.font18}
-                color={colors.DateBgColor}></CustomeIcon>
-              <Text style={value ? styles.valuestyle : styles.labelStyle}>
-                {value || label}
-              </Text>
-            </View>
-            <CustomeIcon
-              name="icon_Below"
-              size={Dimension.font18}
-              color={colors.FontColor}
-              style={styles.DropDownIcon}></CustomeIcon>
-          </TouchableOpacity>
-        }
-        onRequestClose={hideMenu}
-        style={[styles.dropDownWrap, {maxHeight: options.length ? 150 : 0}]}>
-        {options.length ? (
-          <ScrollView>
-            {options.map((item, itemIndex) => (
-              <MenuItem
-                onPress={() => {
-                  onValueChange(item.value, item.label);
-                  hideMenu();
-                }}
-                key={itemIndex}
-                textStyle={styles.dropdownval}
-                style={styles.dropDowninnerWrap}>
-                {item.label}
-              </MenuItem>
-            ))}
-          </ScrollView>
-        ) : null}
-      </Menu>
+      <TouchableOpacity onPress={showMenu} style={styles.dropDownBtn}>
+        <View style={{flexDirection: 'row', marginTop: 20}}>
+          <CustomeIcon
+            name={IconName}
+            size={Dimension.font18}
+            color={colors.DateBgColor}></CustomeIcon>
+          <Text style={value ? styles.valuestyle : styles.labelStyle}>
+            {value || label}
+          </Text>
+        </View>
+        <CustomeIcon
+          name="icon_Below"
+          size={Dimension.font18}
+          color={colors.FontColor}
+          style={styles.DropDownIcon}></CustomeIcon>
+      </TouchableOpacity>
+      <Modal
+        isVisible={visible}
+        onBackButtonPress={() => hideMenu()}
+        onBackdropPress={() => hideMenu()}
+        style={{backgroundColor: '#fff'}}
+        backdropColor={'rgba(0,0,0,0.3)'}
+        backdropOpacity={0.3}>
+        <View style={{backgroundColor: '#fff', flex: 1}}>
+          {options.map((item, itemIndex) => (
+            <TouchableOpacity
+              key={itemIndex}
+              onPress={() => {
+                onValueChange(item.value, item.label);
+                hideMenu();
+              }}
+              style={styles.dropDowninnerWrap}>
+              <Text style={styles.dropdownval}> {item.label}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </Modal>
     </View>
   );
 };
