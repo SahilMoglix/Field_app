@@ -49,7 +49,7 @@ const ActivityScreen = () => {
 
   const onRefreshLogs = () => {
     dispatch(fetchLogs());
-    checkPermission();
+    // checkPermission();
   };
 
   const setCallType = type => {
