@@ -25,7 +25,9 @@ import logAnalytics from '../../services/analytics';
 import Colors from '../../Theme/Colors';
 
 const ActivityScreen = () => {
+  const total = useSelector(state => state.communicationReducer.get('total'));
   const logsData = useSelector(state => state.communicationReducer.get('data'));
+  const pageNo = useSelector(state => state.communicationReducer.get('pageNo'));
   const logsStatus = useSelector(state =>
     state.communicationReducer.get('status'),
   );
@@ -35,21 +37,21 @@ const ActivityScreen = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    onRefreshLogs();
+    onRefreshLogs(0);
   }, []);
 
-  useEffect(() => {
-    if (logsStatus == STATE_STATUS.FETCHED) {
-      if (Platform.OS === 'android') {
-        checkPermission();
-      } else {
-      }
-    }
-  }, [logsStatus]);
+  // useEffect(() => {
+  //   if (logsStatus == STATE_STATUS.FETCHED) {
+  //     if (Platform.OS === 'android') {
+  //       checkPermission();
+  //     } else {
+  //     }
+  //   }
+  // }, [logsStatus]);
 
-  const onRefreshLogs = () => {
-    dispatch(fetchLogs());
-    // checkPermission();
+  const onRefreshLogs = pageNo => {
+    dispatch(fetchLogs(pageNo));
+    checkPermission();
   };
 
   const setCallType = type => {
@@ -89,7 +91,7 @@ const ActivityScreen = () => {
           let recentCallCreatedAt = logsData?.get(0)?.timestamp;
           if (recentCallCreatedAt) {
             let filteredCallLogs = ([...c] || [])
-              .filter(__ => Number(__?.timestamp) > recentCallCreatedAt)
+              // .filter(__ => Number(__?.timestamp) > recentCallCreatedAt)
               .map(_ => ({
                 ..._,
                 phoneNumber: (_.phoneNumber || '')
@@ -209,6 +211,12 @@ const ActivityScreen = () => {
     });
   };
 
+  const onEndReached = () => {
+    if (logsStatus == STATE_STATUS.FETCHED && total / 20 > pageNo + 1) {
+      onRefreshLogs(pageNo + 1);
+    }
+  };
+
   return (
     <View
       style={{
@@ -258,6 +266,8 @@ const ActivityScreen = () => {
         )}
         onRefresh={onRefreshLogs}
         renderItem={renderItem}
+        onEndReachedThreshold={0.8}
+        onEndReached={onEndReached}
         style={styles.list}
         ListEmptyComponent={
           STATE_STATUS.FETCHED && searchedData.size == 0 ? (
