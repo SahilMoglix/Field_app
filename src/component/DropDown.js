@@ -44,10 +44,13 @@ const DropDown = props => {
         isVisible={visible}
         onBackButtonPress={() => hideMenu()}
         onBackdropPress={() => hideMenu()}
-        style={{backgroundColor: '#fff'}}
-        backdropColor={'rgba(0,0,0,0.3)'}
-        backdropOpacity={0.3}>
-        <View style={{backgroundColor: '#fff', flex: 1}}>
+        coverScreen={true}
+        hasBackdrop={true}
+        style={styles.modalbg}>
+        <View style={styles.ModalContainer}>
+          <View>
+            <Text style={styles.Modalheader}>Select {label}</Text>
+          </View>
           {options.map((item, itemIndex) => (
             <TouchableOpacity
               key={itemIndex}
@@ -55,16 +58,40 @@ const DropDown = props => {
                 onValueChange(item.value, item.label);
                 hideMenu();
               }}
-              style={styles.dropDowninnerWrap}>
+              style={itemIndex == 0 ? styles.OptiosTopWrap : styles.OptiosWrap}>
               <Text style={styles.dropdownval}> {item.label}</Text>
             </TouchableOpacity>
           ))}
+          <TouchableOpacity style={styles.CancelBtn} onPress={() => hideMenu()}>
+            <Text style={styles.CancelBtnTxt}>Cancel</Text>
+          </TouchableOpacity>
         </View>
       </Modal>
     </View>
   );
 };
 const styles = StyleSheet.create({
+  modalbg: {
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    margin: 0,
+    justifyContent: 'flex-end',
+  },
+  ModalContainer: {
+    borderWidth: 0.5,
+    borderColor: '#D0D0D0',
+    borderRadius: 35,
+    justifyContent: 'flex-end',
+    backgroundColor: '#fff',
+    paddingVertical: Dimension.padding20,
+  },
+  Modalheader: {
+    fontSize: Dimension.font16,
+    color: colors.FontColor,
+    fontFamily: Dimension.CustomMediumFont,
+    // fontWeight:(Platform.OS === 'ios') ? "500" : "",
+    alignSelf: 'center',
+    marginBottom: Dimension.margin15,
+  },
   dropDownBtn: {
     flexDirection: 'row',
     borderWidth: 1,
@@ -96,22 +123,47 @@ const styles = StyleSheet.create({
     paddingBottom: 0,
     marginVertical: 0,
   },
+  OptiosTopWrap: {
+    borderBottomColor: '#DCE2EA',
+    borderBottomWidth: 1,
+    borderTopColor: '#DCE2EA',
+    borderTopWidth: 1,
+    paddingVertical: Dimension.padding15,
+    paddingHorizontal: Dimension.padding20,
+  },
+  OptiosWrap: {
+    borderBottomColor: '#DCE2EA',
+    borderBottomWidth: 1,
+    paddingVertical: Dimension.padding15,
+    paddingHorizontal: Dimension.padding20,
+  },
+
   dropdownval: {
     fontSize: Dimension.font14,
     color: colors.FontColor,
-    fontFamily: Dimension.CustomRegularFont,
-    paddingLeft: 0,
-    paddingRight: 0,
-    borderBottomColor: colors.FontColor,
-    borderBottomWidth: 0.5,
-    //backgroundColor: 'rgba(0,0,0,0.5)',
-    width: '100%',
-    // minWidth: '100%',
-    width: SCREEN_WIDTH - Dimension.margin40,
+    fontFamily: Dimension.CustomMediumFont,
+    // paddingLeft: 0,
+    // paddingRight: 0,
+    // borderBottomColor: colors.FontColor,
+    // borderBottomWidth: 0.5,
+    // //backgroundColor: 'rgba(0,0,0,0.5)',
+    // width: '100%',
+    // // minWidth: '100%',
+    // width: SCREEN_WIDTH - Dimension.margin40,
 
-    paddingVertical: Dimension.padding5,
-    marginHorizontal: 5,
-    marginVertical: 0,
+    // paddingVertical: Dimension.padding5,
+    // marginHorizontal: 5,
+    // marginVertical: 0,
+  },
+  CancelBtn: {
+    padding: Dimension.padding15,
+    marginTop: Dimension.margin15,
+  },
+  CancelBtnTxt: {
+    fontSize: Dimension.font14,
+    color: colors.CtaColor,
+    fontFamily: Dimension.CustomBoldFont,
+    alignSelf: 'center',
   },
   valuestyle: {
     fontSize: Dimension.font16,

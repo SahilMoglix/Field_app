@@ -5,6 +5,7 @@ import store from './src/redux/store';
 import {Provider} from 'react-redux';
 import Toast from 'react-native-toast-message';
 import SplashScreen from 'react-native-splash-screen';
+import {toastConfig} from './src/generic/index';
 
 const App = () => {
   useEffect(() => {
@@ -19,7 +20,9 @@ const App = () => {
         }}
       />
       <Routes />
-      <Toast />
+      {/* <Toast /> */}
+      <Toast config={toastConfig} ref={ref => Toast.setRef(ref)} />
+ 
     </Provider>
   );
 };

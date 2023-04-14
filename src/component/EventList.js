@@ -60,13 +60,13 @@ const EventList = props => {
                       onPress={() => setIsOpen(true)}
                       style={styles.bluetxt}>
                       {' '}
-                      + {data.attendees.length - 1} More{' '}
+                      + {data.attendees.length - 1} Show more{' '}
                     </Text>
                     <CustomeIcon
                       name={'icon_Below'}
                       color={colors.CtaColor}
                       size={Dimension.font14}
-                      style={{marginTop: 1}}></CustomeIcon>
+                      style={{marginTop: 2}}></CustomeIcon>
                   </View>
                 )
               ) : null}
@@ -98,8 +98,8 @@ const EventList = props => {
             <Button
               onPress={() => Linking.openURL(meetingLink)}
               title="Join Teams Meeting"
-              buttonStyle={styles.CancelbtnStyle}
-              titleStyle={styles.Cancelbtntxt}
+              buttonStyle={styles.btnStyle}
+              titleStyle={styles.btntxt}
               containerStyle={styles.btnContainer}
             />
           ) : null}
@@ -129,6 +129,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     alignContent: 'center',
+  },
+  btnContainer: {
+    marginTop: Dimension.margin10,
   },
   EventWrap: {
     borderWidth: 1,
