@@ -5,15 +5,15 @@ import {logs} from '../../responses/calendar';
 import {COMMUNICATION_ACTIONS} from '../constants/communication';
 import {failedFetchLogs, fetchedLogs} from '../actions/communication';
 
-function* fetchCallLogs() {
+function* fetchCallLogs({payload: {pageNo}}) {
   try {
-    const {data, error} = yield call(getContacts);
+    const {data, error} = yield call(getContacts, pageNo);
     // const data = logs;
     // const error = null;
     if (error) {
       yield put(failedFetchLogs(error));
     } else {
-      yield put(fetchedLogs(data?.result));
+      yield put(fetchedLogs(pageNo, data?.result, data?.total));
     }
   } catch (error) {
     yield put(failedFetchLogs(error));
