@@ -193,7 +193,8 @@ const CalendarScreen = () => {
               <CustomeIcon
                 name={'Filter-blue'}
                 color={Colors.CtaColor}
-                size={20}></CustomeIcon>
+                size={20}
+                style={{marginTop: 2}}></CustomeIcon>
               <Text style={styles.filtertxt}>Filter</Text>
             </TouchableOpacity>
           </View>

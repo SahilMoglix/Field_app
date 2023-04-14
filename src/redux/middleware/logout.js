@@ -13,7 +13,7 @@ export const logoutMiddleware = store => next => async action => {
       Error_Message: action?.error?.response?.data?.message || '',
     });
     Toast.show({
-      type: 'info',
+      type: 'error',
       text1: 'Please try after sometime!',
     });
   } else if (action?.error?.response?.data) {
@@ -33,7 +33,7 @@ export const logoutMiddleware = store => next => async action => {
       let logoutFunction = store.getState().homepageReducer.get('logoutFunc');
       logoutFunction(false);
       Toast.show({
-        type: 'info',
+        type: 'error',
         text1: 'Session expired!',
         text2: 'Please login again.',
       });

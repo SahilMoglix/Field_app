@@ -27,7 +27,7 @@ import NetInfo from '@react-native-community/netinfo';
 import Toast from 'react-native-toast-message';
 import {setLogoutFunction} from '../redux/actions/homepage';
 import analytics from '@react-native-firebase/analytics';
-
+import {toastConfig} from '../generic/index';
 const AppStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 

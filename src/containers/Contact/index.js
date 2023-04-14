@@ -168,7 +168,7 @@ const ContactScreen = props => {
                 name={'Arrow-black'}
                 color={Colors.FontColor}
                 size={18}
-                style={{marginTop: Dimension.margin5}}></CustomeIcon>
+                style={{marginTop: Dimension.margin8}}></CustomeIcon>
             </View>
           )}
         </View>

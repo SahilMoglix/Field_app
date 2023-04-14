@@ -3,18 +3,17 @@ import Dimension from '../../Theme/Dimension';
 import colors from '../../Theme/Colors';
 const styles = StyleSheet.create({
   dateText: {
-    color: colors.CtaColor,
-    fontSize: Dimension.font12,
-    padding: Dimension.padding6,
-    borderWidth: 0.4,
-    borderColor: colors.CtaColor,
-    borderRadius: 24,
+    color: colors.FontColor,
+    fontSize: Dimension.font14,
+    fontFamily: Dimension.CustomMediumFont,
+    marginTop: Dimension.margin12,
   },
   row: {
     flexDirection: 'row',
     paddingHorizontal: Dimension.padding12,
     alignItems: 'center',
     justifyContent: 'space-between',
+    alignContent: 'center',
   },
   TopHeader: {
     flexDirection: 'row',
@@ -47,7 +46,8 @@ const styles = StyleSheet.create({
   activRightBtn: {
     backgroundColor: '#EAF2FF',
     paddingHorizontal: Dimension.padding8,
-    paddingVertical: Dimension.padding4,
+    paddingTop: Dimension.padding4,
+    paddingBottom: Dimension.padding5,
   },
   InactivRightBtn: {
     paddingHorizontal: Dimension.padding8,
@@ -69,6 +69,7 @@ const styles = StyleSheet.create({
     fontSize: Dimension.font16,
     color: colors.CtaColor,
     marginLeft: Dimension.margin6,
+    marginTop: 1,
   },
 });
 

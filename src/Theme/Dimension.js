@@ -20,11 +20,11 @@ const Dimension = {
   font9: normalize(9),
   font10: normalize(9),
   font11: normalize(10),
-  font12: normalize(11),
-  font13: normalize(12),
-  font14: normalize(13),
-  font15: normalize(14),
-  font16: normalize(15),
+  font12: normalize(12),
+
+  font14: normalize(14),
+
+  font16: normalize(16),
   font18: normalize(17),
   font20: normalize(19),
   font22: normalize(20),
@@ -76,7 +76,7 @@ const Dimension = {
   margin60: normalize(60),
   margin25: normalize(25),
   margin28: normalize(28),
-  
+
   margin50: normalize(50),
   margin60: normalize(60),
   margin70: normalize(70),
@@ -229,7 +229,6 @@ const Dimension = {
   width74: normalize(74),
   width150: normalize(150),
 
- 
   borderwidth1: 1,
   borderRadius3: normalize(3),
   SCREEN_WIDTH,

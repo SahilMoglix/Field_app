@@ -260,6 +260,7 @@ const FilterModal = props => {
                     fontSize: Dimension.font14,
                     color: Colors.FontColor,
                     margin: Dimension.margin8,
+                    fontFamily: Dimension.CustomMediumFont,
                   }}>
                   Please select company to view plants
                 </Text>
