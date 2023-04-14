@@ -20,6 +20,7 @@ import {
   fetchPlantCompanies,
 } from '../../redux/actions/homepage';
 import NoDataFound from '../../component/NoDataFound';
+import logAnalytics from '../../services/analytics';
 
 const CalendarScreen = () => {
   const meetingsData = useSelector(state =>
@@ -54,7 +55,10 @@ const CalendarScreen = () => {
     setFiltersModal(true);
   };
 
-  const applyFilters = params => {
+  const applyFilters = async params => {
+    await logAnalytics('Calendar_ApplyFilter', {
+      Selected_Fields: JSON.stringify(params),
+    });
     setFiltersModal(false);
     dispatch(fetchCustomCalendar(params));
   };
@@ -161,7 +165,8 @@ const CalendarScreen = () => {
               STATE_STATUS.FETCHING,
               STATE_STATUS.UNFETCHED,
             ].includes(meetingsStatus)}
-            onRefresh={() => {
+            onRefresh={async () => {
+              await logAnalytics('Calendar_Ondemand', {});
               updateDate(currentDate, true);
               updateMonthData(monthYearData, true);
             }}
@@ -199,7 +204,8 @@ const CalendarScreen = () => {
               STATE_STATUS.FETCHING,
               STATE_STATUS.UNFETCHED,
             ].includes(meetingsCustomStatus)}
-            onRefresh={() => {
+            onRefresh={async () => {
+              await logAnalytics('Calendar_Ondemand', {});
               dispatch(
                 fetchCustomCalendar({
                   ...meetingsCustomParams,

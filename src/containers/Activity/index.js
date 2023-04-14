@@ -21,7 +21,9 @@ import {fetchLogs, updateLogs} from '../../redux/actions/communication';
 import {createAllContacts} from '../../services/communication';
 import NoDataFound from '../../component/NoDataFound';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import logAnalytics from '../../services/analytics';
 import Colors from '../../Theme/Colors';
+
 const ActivityScreen = () => {
   const logsData = useSelector(state => state.communicationReducer.get('data'));
   const logsStatus = useSelector(state =>
@@ -47,7 +49,7 @@ const ActivityScreen = () => {
 
   const onRefreshLogs = () => {
     dispatch(fetchLogs());
-    checkPermission();
+    // checkPermission();
   };
 
   const setCallType = type => {
@@ -168,7 +170,11 @@ const ActivityScreen = () => {
         </View>
         <TouchableOpacity
           style={styles.arrowBtn}
-          onPress={() => {
+          onPress={async () => {
+            await logAnalytics('Open_Dialer', {
+              Contact: contact?.phoneNumber,
+              Screen_Name: 'Communication',
+            });
             Linking.openURL(`tel:${contact?.phoneNumber}`);
           }}>
           <CustomeIcon
@@ -189,6 +195,19 @@ const ActivityScreen = () => {
       _.name?.toLowerCase().includes(searchValue.toLowerCase()) ||
       _.phoneNumber?.toLowerCase().includes(searchValue.toLowerCase()),
   );
+
+  useEffect(() => {
+    if (searchValue && searchValue.length && searchValue.length > 4) {
+      logEvents();
+    }
+  }, [searchValue]);
+
+  const logEvents = async () => {
+    await logAnalytics('Search', {
+      Search_Field: searchValue,
+      Screen_Name: 'Communication',
+    });
+  };
 
   return (
     <View

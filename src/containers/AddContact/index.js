@@ -27,6 +27,7 @@ import CONSTANTS from '../../services/constant';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNFetchBlob from 'rn-fetch-blob';
 import Colors from '../../Theme/Colors';
+import logAnalytics from '../../services/analytics';
 
 const AddContact = props => {
   const disptch = useDispatch();
@@ -293,6 +294,18 @@ const AddContact = props => {
         return;
       } else {
         setLoading(true);
+        // params.id
+
+        await logAnalytics(!params.id ? 'Add_Contact' : 'Edit_Contact', {
+          Name: name,
+          Contact: phone,
+          Email: email,
+          Inclination: inclination,
+          Designation: designation,
+          Company: (CompanyData.find(_ => _.key == company) || {}).value,
+          Plant: (PlantData.find(_ => _.key == plant) || {}).value,
+          Department: department,
+        });
         const {data} = await createContact({
           name,
           phone,

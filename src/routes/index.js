@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,7 +7,10 @@ import {
   View,
   ActivityIndicator,
 } from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
+import {
+  NavigationContainer,
+  useNavigationContainerRef,
+} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {APP_STACK_SCREENS, BOTTOM_TAB_SCREENS} from '../constants/index';
@@ -23,6 +26,7 @@ import messaging from '@react-native-firebase/messaging';
 import NetInfo from '@react-native-community/netinfo';
 import Toast from 'react-native-toast-message';
 import {setLogoutFunction} from '../redux/actions/homepage';
+import analytics from '@react-native-firebase/analytics';
 
 const AppStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -66,9 +70,12 @@ const navOptionHandler = () => ({
 });
 
 const Routes = props => {
+  const navigationRef = useNavigationContainerRef();
+  const routeNameRef = useRef();
+  const dispatch = useDispatch();
+
   const [loading, setLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const dispatch = useDispatch();
 
   useEffect(() => {
     init();
@@ -249,7 +256,23 @@ const Routes = props => {
 
   const RootNavigation = () => {
     return (
-      <NavigationContainer linking={linking}>
+      <NavigationContainer
+        ref={navigationRef}
+        onReady={() => {
+          routeNameRef.current = navigationRef.getCurrentRoute().name;
+        }}
+        onStateChange={async () => {
+          const previousRouteName = routeNameRef.current;
+          const currentRouteName = navigationRef.current.getCurrentRoute().name;
+          if (previousRouteName !== currentRouteName) {
+            await analytics().logScreenView({
+              screen_name: currentRouteName,
+              screen_class: currentRouteName,
+            });
+          }
+          routeNameRef.current = currentRouteName;
+        }}
+        linking={linking}>
         {!isLoggedIn ? <AuthStack /> : <MainStack />}
       </NavigationContainer>
     );

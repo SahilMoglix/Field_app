@@ -13,6 +13,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {login} from '../../services/auth';
 import {setLogoutFunction} from '../../redux/actions/homepage';
 import Toast from 'react-native-toast-message';
+import logAnalytics from '../../services/analytics';
 
 const CLIENT_ID = 'ff1fe9da-d218-4ceb-a11f-05ea54a985fb'; //'ac5fc872-17f9-4f59-af74-3abbe885956e'; //'ff1fe9da-d218-4ceb-a11f-05ea54a985fb';
 
@@ -48,6 +49,9 @@ const LoginScreen = props => {
           refresh_token: tokens?.refreshToken,
           email: info?.mail,
         };
+        await logAnalytics('Login_Attempt', {
+          Email_Id: info?.mail,
+        });
         let loginResponse = await login(loginPayload);
         if (loginResponse?.data?.result?.access_token) {
           let storeRes = {
@@ -64,6 +68,9 @@ const LoginScreen = props => {
             String(loginResponse?.data?.result?.access_token),
           );
           await AsyncStorage.setItem('email', String(info.mail));
+          await logAnalytics('Login_Success', {
+            Email_Id: info?.mail,
+          });
           dispatch(setLogoutFunction(props.route.params.setIsLoggedIn));
           props.route.params.setIsLoggedIn(true);
           setLoading(false);

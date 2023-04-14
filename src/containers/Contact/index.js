@@ -28,6 +28,7 @@ import {getNumberDetails, syncContacts} from '../../services/contacts';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Toast from 'react-native-toast-message';
 import NoDataFound from '../../component/NoDataFound';
+import logAnalytics from '../../services/analytics';
 
 const ContactScreen = props => {
   const navigation = useNavigation();
@@ -173,7 +174,11 @@ const ContactScreen = props => {
         </View>
         <TouchableOpacity
           style={styles.arrowBtn}
-          onPress={() => {
+          onPress={async () => {
+            await logAnalytics('Open_Dialer', {
+              Contact: item.phone,
+              Screen_Name: 'Contacts',
+            });
             Linking.openURL(`tel:${item.phone}`);
           }}>
           <CustomeIcon
@@ -368,6 +373,20 @@ const ContactScreen = props => {
             .join('')
             .replace('+91', '') || '',
       }));
+
+      isSingleContact;
+      await logAnalytics(
+        isSingleContact ? 'Add_SingleContact' : 'Add_BulkContact',
+        isSingleContact
+          ? {
+              Name: body[0].name,
+              Contact: body[0].phone,
+            }
+          : {
+              Contacts: JSON.stringify(body),
+            },
+      );
+
       const {data} = await syncContacts(body);
       if (data.status == 200) {
         dispatch(fetchContacts());
@@ -404,6 +423,19 @@ const ContactScreen = props => {
       }
     });
   }
+
+  useEffect(() => {
+    if (searchValue && searchValue.length && searchValue.length > 4) {
+      logEvents();
+    }
+  }, [searchValue]);
+
+  const logEvents = async () => {
+    await logAnalytics('Search', {
+      Search_Field: searchValue,
+      Screen_Name: `Contacts-${pagetype}`,
+    });
+  };
 
   return (
     <View
