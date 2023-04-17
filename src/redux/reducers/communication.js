@@ -52,12 +52,9 @@ export const communicationReducer = (state = initialState, action) => {
     case COMMUNICATION_ACTIONS.UPDATE_LOGS:
       return state
         .set('status', STATE_STATUS.UPDATED)
-        .set(
-          'data',
-          new List(
-            payload.data.sort((a, b) => (a.timestamp > b.timestamp ? -1 : 1)),
-          ),
-        )
+        .set('pageNo', payload.pageNo)
+        .set('data', new List(payload.data))
+        .set('total', payload.total)
         .set('error', null);
     case AUTH_ACTIONS.LOGOUT:
       return initialState;

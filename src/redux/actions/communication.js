@@ -30,12 +30,13 @@ export const failedFetchLogs = (pageNo, error) => {
   };
 };
 
-export const updateLogs = (pageNo, data) => {
+export const updateLogs = (pageNo, data, total) => {
   return {
     type: COMMUNICATION_ACTIONS.UPDATE_LOGS,
     payload: {
       data,
       pageNo,
+      total,
     },
   };
 };

@@ -40,18 +40,18 @@ const ActivityScreen = () => {
     onRefreshLogs(0);
   }, []);
 
-  // useEffect(() => {
-  //   if (logsStatus == STATE_STATUS.FETCHED) {
-  //     if (Platform.OS === 'android') {
-  //       checkPermission();
-  //     } else {
-  //     }
-  //   }
-  // }, [logsStatus]);
+  useEffect(() => {
+    if (
+      logsStatus == STATE_STATUS.FETCHED &&
+      pageNo == 0 &&
+      Platform.OS === 'android'
+    ) {
+      checkPermission();
+    }
+  }, [logsStatus]);
 
   const onRefreshLogs = pageNo => {
     dispatch(fetchLogs(pageNo));
-    checkPermission();
   };
 
   const setCallType = type => {
@@ -91,7 +91,7 @@ const ActivityScreen = () => {
           let recentCallCreatedAt = logsData?.get(0)?.timestamp;
           if (recentCallCreatedAt) {
             let filteredCallLogs = ([...c] || [])
-              // .filter(__ => Number(__?.timestamp) > recentCallCreatedAt)
+              .filter(__ => Number(__?.timestamp) > recentCallCreatedAt)
               .map(_ => ({
                 ..._,
                 phoneNumber: (_.phoneNumber || '')
@@ -132,8 +132,8 @@ const ActivityScreen = () => {
     try {
       let limitCallLogs = [...recentCallLogs].slice(0, 100);
       const {data} = await createAllContacts(limitCallLogs);
-      if (data?.result) {
-        dispatch(updateLogs([...data?.result, ...logsData.toArray()]));
+      if (data?.result && data?.result?.length) {
+        dispatch(updateLogs(0, data?.result, data.total));
       }
     } catch (error) {
       console.log(error);
@@ -212,7 +212,10 @@ const ActivityScreen = () => {
   };
 
   const onEndReached = () => {
-    if (logsStatus == STATE_STATUS.FETCHED && total / 20 > pageNo + 1) {
+    if (
+      [STATE_STATUS.FETCHED, STATE_STATUS.UPDATED].includes(logsStatus) &&
+      total / 20 > pageNo + 1
+    ) {
       onRefreshLogs(pageNo + 1);
     }
   };
