@@ -195,7 +195,7 @@ const CalendarScreen = () => {
                 color={Colors.CtaColor}
                 size={20}
                 style={{marginTop: 2}}></CustomeIcon>
-              <Text style={styles.filtertxt}>Filter</Text>
+              {/* <Text style={styles.filtertxt}>Filter</Text> */}
             </TouchableOpacity>
           </View>
           <FlatList

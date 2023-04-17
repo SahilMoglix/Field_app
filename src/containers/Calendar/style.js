@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.CtaColor,
     borderRadius: 50,
-    paddingHorizontal: Dimension.padding20,
+    paddingHorizontal: Dimension.padding10,
     paddingVertical: Dimension.padding5,
     alignSelf: 'center',
     marginTop: Dimension.margin10,

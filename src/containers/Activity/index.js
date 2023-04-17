@@ -50,7 +50,7 @@ const ActivityScreen = () => {
     }
   }, [logsStatus]);
 
-  const onRefreshLogs = pageNo => {
+  const onRefreshLogs = (pageNo = 0) => {
     dispatch(fetchLogs(pageNo));
   };
 
@@ -95,11 +95,8 @@ const ActivityScreen = () => {
               .map(_ => ({
                 ..._,
                 phoneNumber: (_.phoneNumber || '')
-                  .split('-')
-                  .join('')
-                  .split(' ')
-                  .join('')
-                  .replace('+91', ''),
+                  .replace(/\D/g, '')
+                  .slice(-10),
               }));
             if (filteredCallLogs?.length) {
               createRecentContacts(filteredCallLogs || []);
@@ -110,11 +107,8 @@ const ActivityScreen = () => {
                 c.map(_ => ({
                   ..._,
                   phoneNumber: (_.phoneNumber || '')
-                    .split('-')
-                    .join('')
-                    .split(' ')
-                    .join('')
-                    .replace('+91', ''),
+                    .replace(/\D/g, '')
+                    .slice(-10),
                 })) || [],
               );
             }
