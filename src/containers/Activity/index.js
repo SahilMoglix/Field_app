@@ -50,7 +50,7 @@ const ActivityScreen = () => {
     }
   }, [logsStatus]);
 
-  const onRefreshLogs = pageNo => {
+  const onRefreshLogs = (pageNo = 0) => {
     dispatch(fetchLogs(pageNo));
   };
 
