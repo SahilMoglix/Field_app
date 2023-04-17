@@ -12,7 +12,6 @@ import {
   fetchMonthCalendar,
 } from '../../redux/actions/calendar';
 import {STATE_STATUS} from '../../redux/constants';
-import {useNavigation} from '@react-navigation/native';
 import FilterModal from '../Filter';
 import {
   fetchDepartments,
@@ -186,8 +185,17 @@ const CalendarScreen = () => {
         <>
           <View style={styles.row}>
             <Text style={styles.dateText}>
-              {new Date(meetingsCustomParams?.startDate || '').toDateString()} -{' '}
-              {new Date(meetingsCustomParams?.endDate || '').toDateString()}
+              {new Date(meetingsCustomParams?.startDate || '')
+                .toDateString()
+                .split(' ')
+                .slice(1, 5)
+                .join(' ')}{' '}
+              -{' '}
+              {new Date(meetingsCustomParams?.endDate || '')
+                .toDateString()
+                .split(' ')
+                .slice(1, 5)
+                .join(' ')}
             </Text>
             <TouchableOpacity style={styles.filterbtn} onPress={gotoFilter}>
               <CustomeIcon
@@ -195,7 +203,7 @@ const CalendarScreen = () => {
                 color={Colors.CtaColor}
                 size={20}
                 style={{marginTop: 2}}></CustomeIcon>
-              {/* <Text style={styles.filtertxt}>Filter</Text> */}
+              <Text style={styles.filtertxt}>Filter</Text>
             </TouchableOpacity>
           </View>
           <FlatList
