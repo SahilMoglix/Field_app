@@ -256,9 +256,11 @@ const styles = StyleSheet.create({
   arrowBtn: {
     position: 'absolute',
     right: 10,
-    width: 20,
-    height: 20,
+    width: Dimension.width40,
+    height: Dimension.height40,
     top: 20,
+    alignItems: 'flex-end',
+    //backgroundColor: '#ccc',
   },
   selectWrap: {
     position: 'absolute',

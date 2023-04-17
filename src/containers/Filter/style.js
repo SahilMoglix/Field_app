@@ -5,12 +5,15 @@ const deviceHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
   TopHeader: {
     flexDirection: 'row',
+
+    alignItems: 'center',
   },
   headingTxt: {
     fontFamily: Dimension.CustomMediumFont,
     fontSize: Dimension.font18,
     color: Colors.FontColor,
     marginLeft: Dimension.margin10,
+    marginTop: 3,
   },
   headerWrap: {
     shadowColor: '#000',
@@ -62,7 +65,7 @@ const styles = StyleSheet.create({
     height: deviceHeight,
   },
   leftPart: {
-    flex: 3.5,
+    flex: 4,
     borderRightColor: Colors.borderColor,
     borderRightWidth: 1,
     backgroundColor: '#fff',
