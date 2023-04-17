@@ -308,7 +308,7 @@ const AddContact = props => {
         });
         const {data} = await createContact({
           name,
-          phone,
+          phone: phone.replace(/\D/g, '').slice(-10),
           email,
           id: params.id || undefined,
           inclination,

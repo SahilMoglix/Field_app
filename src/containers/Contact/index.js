@@ -260,7 +260,6 @@ const ContactScreen = props => {
   };
 
   const Contact = ({contact, index}) => {
-    console.log(index, 'render Phone Data');
     return (
       <View style={index == 0 ? styles.contactConWrap : styles.contactCon}>
         <View style={styles.placeholder}>
@@ -365,13 +364,9 @@ const ContactScreen = props => {
       body = body.map(_ => ({
         name: _.displayName || '',
         email: (_.emailAddresses.find(__ => __.email) || {}).email || '',
-        phone:
-          ((_.phoneNumbers.find(__ => __.number) || {}).number || '')
-            .split('-')
-            .join('')
-            .split(' ')
-            .join('')
-            .replace('+91', '') || '',
+        phone: ((_.phoneNumbers.find(__ => __.number) || {}).number || '')
+          .replace(/\D/g, '')
+          .slice(-10),
       }));
 
       isSingleContact;

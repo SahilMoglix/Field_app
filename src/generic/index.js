@@ -7,13 +7,13 @@ export const toastConfig = {
   success: ({text1, text2, onPress, ...rest}) => (
     <View style={styles.successView}>
       <Text style={styles.successText}>{text1}</Text>
-      <Text style={styles.successText2}>{text2}</Text>
+      {text2 ? <Text style={styles.successText2}>{text2}</Text> : null}
     </View>
   ),
   error: ({text1, text2, onPress, ...rest}) => (
     <View style={styles.errorView}>
       <Text style={styles.errorText}>{text1}</Text>
-      <Text style={styles.errorText2}>{text2}</Text>
+      {text2 ? <Text style={styles.errorText2}>{text2}</Text> : null}
     </View>
   ),
 };
