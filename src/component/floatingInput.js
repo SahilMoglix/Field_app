@@ -17,7 +17,7 @@ const MyInput = props => {
   };
 
   useEffect(() => {
-    if (props.value) {
+    if (props.value && props.prefix) {
       onFocus();
     }
   }, [props.value]);
