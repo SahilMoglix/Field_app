@@ -17,11 +17,16 @@ const MyInput = props => {
   };
 
   useEffect(() => {
-    if (props.value && props.prefix) {
+    if (props.value) {
       onFocus();
     }
   }, [props.value]);
 
+  useEffect(() => {
+    if (props.prefix) {
+      onFocus();
+    }
+  }, [props.prefix]);
   return (
     <View style={styles.WrapperStyle}>
       <Animated.Text
