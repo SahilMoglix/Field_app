@@ -81,9 +81,10 @@ const LoginScreen = props => {
         setLoading(false);
       }
     } catch (error) {
+      console.log(error, 'dwindiewndiewn');
       Toast.show({
         type: 'error',
-        text1: 'User not registered!',
+        text1: error?.error_description || 'Something went wrong!',
       });
       setLoading(false);
       console.log('Error during Azure operation', error);
