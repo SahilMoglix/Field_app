@@ -57,7 +57,7 @@ const MyInput = props => {
               color: colors.FontColor,
               fontFamily: Dimension.CustomMediumFont,
               marginLeft: Dimension.margin20,
-              marginTop: Dimension.margin6,
+              marginTop: Dimension.margin10,
             }}>
             {props.prefix}
             {' -'}
@@ -138,6 +138,8 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     flex: 1,
     marginTop: Dimension.margin10,
+
+    lineHeight: Dimension.height20,
   },
   iconStyle: {
     width: Dimension.width24,
