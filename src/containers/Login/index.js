@@ -30,7 +30,7 @@ const LoginScreen = props => {
     try {
       setLoading(true);
       let tokens = await azureAuth.webAuth.authorize({
-        prompt: 'login',
+        // prompt: 'login',
         scope: 'openid profile User.Read offline_access Calendars.Read',
       });
       setAccessToken(tokens?.accessToken);

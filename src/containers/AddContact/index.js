@@ -278,6 +278,10 @@ const AddContact = props => {
       alertText = 'Designation is mandatory';
     } else if (!department) {
       alertText = 'Department is mandatory';
+    } else if (whatsappContact) {
+      if (whatsappContact.length != 10) {
+        alertText = 'WhatsApp number must be 10 digits';
+      }
     } else {
       alertText = '';
     }
@@ -322,7 +326,18 @@ const AddContact = props => {
           profilePicUrl: photo,
         });
         if (data.status == 200) {
-          props.navigation.goBack();
+          props.navigation.reset({
+            index: props.navigation.getState().index - 1,
+            routes: [
+              ...props.navigation
+                .getState()
+                .routes.slice(0, props.navigation.getState().index - 1),
+              {
+                name: 'ContactDetail',
+                params: {phone: phone.replace(/\D/g, '').slice(-10)},
+              },
+            ],
+          });
           Toast.show({
             type: 'success',
             text1: data.message,
