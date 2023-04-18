@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: Dimension.font10,
-    color: colors.BrandColor,
+    color: colors.brandColor,
     fontFamily: Dimension.CustomMediumFont,
   },
 

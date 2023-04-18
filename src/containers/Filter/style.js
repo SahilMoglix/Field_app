@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
   },
   rejectCtabtn: {
     flex: 5,
-    backgroundColor: Colors.BrandColor,
+    backgroundColor: Colors.brandColor,
     borderRadius: 4,
     paddingVertical: Dimension.padding12,
     justifyContent: 'center',

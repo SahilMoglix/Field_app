@@ -109,8 +109,8 @@ const FilterModal = props => {
             component: CustomeDatePicker,
           },
           {
-            title: 'to Date',
-            label: 'to Date',
+            title: 'To Date',
+            label: 'To Date',
             placeholder: '',
             value: endDate,
             onChange: date => setEndDate(date),

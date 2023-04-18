@@ -145,8 +145,8 @@ const styles = StyleSheet.create({
     paddingRight: 0,
   },
   errorText: {
-    fontSize: Dimension.font10,
-    color: colors.BrandColor,
+    fontSize: Dimension.font12,
+    color: colors.brandColor,
     fontFamily: Dimension.CustomMediumFont,
     //fontWeight:(Platform.OS === 'ios') ? "500" : "",
   },

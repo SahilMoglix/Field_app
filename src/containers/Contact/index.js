@@ -655,6 +655,7 @@ const ContactScreen = props => {
               containerStyle={styles.btnContainer}
             />
           </View>
+
           <View style={{flex: 1}}>
             <Button
               onPress={() => onSyncContacts()}
@@ -664,6 +665,8 @@ const ContactScreen = props => {
               buttonStyle={styles.btnStyle}
               titleStyle={styles.btntxt}
               containerStyle={styles.btnContainer}
+              disabledStyle={styles.disabledBtn}
+              disabledTitleStyle={styles.btntxt}
             />
           </View>
         </View>

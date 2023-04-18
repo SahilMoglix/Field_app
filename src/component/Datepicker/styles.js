@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     fontFamily: Dimension.CustomMediumFont,
   },
   labelStyle: {
-    fontSize: Dimension.font10,
+    fontSize: Dimension.font12,
     color: colors.FontColor,
     fontFamily: Dimension.CustomMediumFont,
     marginLeft: Dimension.margin12,
@@ -28,8 +28,8 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
   },
   starIcon: {
-    fontSize: Dimension.font10,
-    color: colors.BrandColor,
+    fontSize: Dimension.font12,
+    color: colors.brandColor,
     fontFamily: Dimension.CustomMediumFont,
   },
   inputStyle: {
@@ -45,15 +45,11 @@ const styles = StyleSheet.create({
     marginRight: Dimension.padding10,
   },
   errorText: {
-    fontSize: Dimension.font10,
-    color: colors.BrandColor,
+    fontSize: Dimension.font12,
+    color: colors.brandColor,
     fontFamily: Dimension.CustomMediumFont,
   },
-  errorText: {
-    fontSize: Dimension.font10,
-    color: colors.BrandColor,
-    fontFamily: Dimension.CustomMediumFont,
-  },
+
   disabledInputStyle: {
     fontSize: Dimension.font12,
     color: colors.FontColor,

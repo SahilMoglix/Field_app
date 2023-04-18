@@ -290,8 +290,9 @@ const styles = StyleSheet.create({
     borderColor: colors.WhiteColor,
     width: 'auto',
   },
+
   CancelbtnStyle: {
-    backgroundColor: colors.WhiteColor,
+    backgroundColor: 'transparent',
 
     alignItems: 'center',
     justifyContent: 'center',
@@ -355,6 +356,20 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     alignSelf: 'center',
     shadowColor: '#1568E5',
+    shadowOffset: {width: 2, height: 4},
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    elevation: 4,
+  },
+  disabledBtn: {
+    backgroundColor: colors.graySahde1,
+    borderRadius: 50,
+    paddingHorizontal: Dimension.padding30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignSelf: 'center',
+    shadowColor: '#D3D3D3',
     shadowOffset: {width: 2, height: 4},
     shadowOpacity: 0.23,
     shadowRadius: 2.62,
