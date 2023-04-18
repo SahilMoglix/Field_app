@@ -31,7 +31,8 @@ const EventList = props => {
       <View>
         <View style={styles.dateWrap}>
           <Text style={styles.dateTxt}>
-            {new Date(data.start.dateTime).toDateString()}
+            {new Date(data.start.dateTime).toDateString()}{' '}
+            {new Date(data.start.dateTime).toLocaleTimeString()}
           </Text>
         </View>
         <View style={styles.EventWrap}>
@@ -96,10 +97,21 @@ const EventList = props => {
           )}
           {meetingLink ? (
             <Button
+              disabled={
+                new Date().toISOString().split('T')[0] != data.start.date
+              }
               onPress={() => Linking.openURL(meetingLink)}
               title="Join Teams Meeting"
-              buttonStyle={styles.btnStyle}
-              titleStyle={styles.btntxt}
+              buttonStyle={
+                new Date().toISOString().split('T')[0] == data.start.date
+                  ? styles.btnStyle
+                  : styles.disableBtn
+              }
+              titleStyle={
+                new Date().toISOString().split('T')[0] == data.start.date
+                  ? styles.btntxt
+                  : styles.disableBtnTxt
+              }
               containerStyle={styles.btnContainer}
             />
           ) : null}
@@ -129,6 +141,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     alignContent: 'center',
+  },
+  disableBtn: {
+    borderRadius: 50,
+    paddingHorizontal: Dimension.padding30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignContent: 'center',
+    backgroundColor: '#C1C1C1',
+  },
+  disableBtnTxt: {
+    fontSize: Dimension.font14,
+    fontFamily: Dimension.CustomBoldFont,
+    color: colors.WhiteColor,
   },
   btnContainer: {
     marginTop: Dimension.margin10,

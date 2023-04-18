@@ -278,6 +278,10 @@ const AddContact = props => {
       alertText = 'Designation is mandatory';
     } else if (!department) {
       alertText = 'Department is mandatory';
+    } else if (whatsappContact) {
+      if (whatsappContact.length != 10) {
+        alertText = 'WhatsApp number must be 10 digits';
+      }
     } else {
       alertText = '';
     }

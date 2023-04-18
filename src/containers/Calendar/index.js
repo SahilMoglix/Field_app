@@ -45,7 +45,7 @@ const CalendarScreen = () => {
 
   const dispatch = useDispatch();
 
-  const [type, setType] = useState('cal');
+  const [type, setType] = useState('list');
   const [filtersModal, setFiltersModal] = useState(false);
   const [monthYearData, setMonthYearData] = useState({});
   const [currentDate, setCurrentDate] = useState('');
@@ -127,16 +127,6 @@ const CalendarScreen = () => {
         </View>
         <View style={styles.rightWrap}>
           <TouchableOpacity
-            onPress={() => setType('cal')}
-            style={
-              type == 'cal' ? styles.activRightBtn : styles.InactivRightBtn
-            }>
-            <CustomeIcon
-              name={'Calendar-black'}
-              size={18}
-              color={type == 'cal' ? '#1568E5' : '#3c3c3c'}></CustomeIcon>
-          </TouchableOpacity>
-          <TouchableOpacity
             onPress={() => setType('list')}
             style={
               type == 'cal' ? styles.InactivRightBtn : styles.activRightBtn
@@ -145,6 +135,16 @@ const CalendarScreen = () => {
               name={'List-black'}
               size={18}
               color={type != 'cal' ? '#1568E5' : '#3c3c3c'}></CustomeIcon>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setType('cal')}
+            style={
+              type == 'cal' ? styles.activRightBtn : styles.InactivRightBtn
+            }>
+            <CustomeIcon
+              name={'Calendar-black'}
+              size={18}
+              color={type == 'cal' ? '#1568E5' : '#3c3c3c'}></CustomeIcon>
           </TouchableOpacity>
         </View>
       </View>
