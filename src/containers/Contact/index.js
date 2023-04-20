@@ -208,7 +208,7 @@ const ContactScreen = props => {
         setContactsLoader(false);
       }
     } else {
-      readContacts();
+      // readContacts();
     }
   };
 

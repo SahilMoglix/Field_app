@@ -79,7 +79,7 @@ const ActivityScreen = () => {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.READ_CALL_LOG,
         {
-          title: 'Call Log Example',
+          title: 'KAM App',
           message: 'Access your call logs',
           buttonNeutral: 'Ask Me Later',
           buttonNegative: 'Cancel',
