@@ -81,7 +81,6 @@ const LoginScreen = props => {
         setLoading(false);
       }
     } catch (error) {
-      console.log(error, 'dwindiewndiewn');
       Toast.show({
         type: 'error',
         text1: error?.error_description || 'Something went wrong!',

@@ -23,6 +23,8 @@ import NoDataFound from '../../component/NoDataFound';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import logAnalytics from '../../services/analytics';
 import Colors from '../../Theme/Colors';
+import {PERMISSIONS, request} from 'react-native-permissions';
+import CallDetectorManager from 'react-native-call-detection';
 
 const ActivityScreen = () => {
   const total = useSelector(state => state.communicationReducer.get('total'));
@@ -36,17 +38,18 @@ const ActivityScreen = () => {
 
   const dispatch = useDispatch();
 
+  let callDetector = null;
+
   useEffect(() => {
     onRefreshLogs(0);
   }, []);
 
   useEffect(() => {
-    if (
-      logsStatus == STATE_STATUS.FETCHED &&
-      pageNo == 0 &&
-      Platform.OS === 'android'
-    ) {
+    if (logsStatus == STATE_STATUS.FETCHED && pageNo == 0) {
       checkPermission();
+    }
+    if (logsStatus == STATE_STATUS.FETCHING && callDetector) {
+      callDetector && callDetector.dispose();
     }
   }, [logsStatus]);
 
@@ -74,48 +77,56 @@ const ActivityScreen = () => {
     );
   };
 
-  const checkPermission = async () => {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.READ_CALL_LOG,
-        {
-          title: 'KAM App',
-          message: 'Access your call logs',
-          buttonNeutral: 'Ask Me Later',
-          buttonNegative: 'Cancel',
-          buttonPositive: 'OK',
-        },
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        CallLogs.load(99).then(c => {
-          let recentCallCreatedAt = logsData?.get(0)?.timestamp;
-          if (recentCallCreatedAt) {
-            let filteredCallLogs = ([...c] || [])
-              .filter(__ => Number(__?.timestamp) > recentCallCreatedAt)
-              .map(_ => ({
+  const getLogs = async () => {
+    if (Platform.OS == 'android') {
+      CallLogs.load(99).then(c => {
+        let recentCallCreatedAt = logsData?.get(0)?.timestamp;
+        if (recentCallCreatedAt) {
+          let filteredCallLogs = ([...c] || [])
+            .filter(__ => Number(__?.timestamp) > recentCallCreatedAt)
+            .map(_ => ({
+              ..._,
+              phoneNumber: (_.phoneNumber || '').replace(/\D/g, '').slice(-10),
+            }));
+          if (filteredCallLogs?.length) {
+            createRecentContacts(filteredCallLogs || []);
+          }
+        } else {
+          if (c?.length) {
+            createRecentContacts(
+              c.map(_ => ({
                 ..._,
                 phoneNumber: (_.phoneNumber || '')
                   .replace(/\D/g, '')
                   .slice(-10),
-              }));
-            if (filteredCallLogs?.length) {
-              createRecentContacts(filteredCallLogs || []);
-            }
-          } else {
-            if (c?.length) {
-              createRecentContacts(
-                c.map(_ => ({
-                  ..._,
-                  phoneNumber: (_.phoneNumber || '')
-                    .replace(/\D/g, '')
-                    .slice(-10),
-                })) || [],
-              );
-            }
+              })) || [],
+            );
           }
-        });
+        }
+      });
+    }
+  };
+
+  const checkPermission = async () => {
+    try {
+      if (Platform.OS == 'android') {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.READ_CALL_LOG,
+          {
+            title: 'KAM App',
+            message: 'Access your call logs',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          },
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          getLogs();
+        } else {
+          console.log('Call Log permission denied');
+        }
       } else {
-        console.log('Call Log permission denied');
+        getLogs();
       }
     } catch (e) {
       console.log(e);
@@ -136,6 +147,42 @@ const ActivityScreen = () => {
 
   const keyExtractor = (item, idx) => {
     return item?.recordID?.toString() || idx.toString();
+  };
+
+  const phoneCallDetector = async userData => {
+    if (Platform.OS == 'ios') {
+      callDetector = new CallDetectorManager(
+        async (event, phoneNumber) => {
+          if (event == 'Disconnected') {
+            let date = new Date();
+            let callData = [
+              {
+                rawType: 2,
+                type: 'OUTGOING',
+                dateTime: date.toGMTString(),
+                phoneNumber: userData.phoneNumber,
+                duration: 0,
+                timestamp: date.getTime(),
+                name: userData.name,
+                userPhoneNumber: userData.phoneNumber,
+                createdAt: date.getTime(),
+              },
+            ];
+            const {data} = await createAllContacts(callData);
+            if (data?.result && data?.result?.length) {
+              dispatch(updateLogs(0, data?.result, data.total));
+            }
+          }
+        },
+        false, // if you want to read the phone number of the incoming call [ANDROID], otherwise false
+        () => {}, // callback if your permission got denied [ANDROID] [only if you want to read incoming number] default: console.error
+        {
+          title: 'Phone State Permission',
+          message:
+            'This app needs access to your phone state in order to react and/or to adapt to incoming calls.',
+        },
+      );
+    }
   };
 
   const Contact = ({contact}) => {
@@ -171,7 +218,12 @@ const ActivityScreen = () => {
               Contact: contact?.phoneNumber,
               Screen_Name: 'Communication',
             });
-            Linking.openURL(`tel:${contact?.phoneNumber}`);
+            phoneCallDetector(contact);
+            Linking.openURL(
+              `${Platform.OS == 'android' ? 'tel' : 'telprompt'}:${
+                contact?.phoneNumber
+              }`,
+            );
           }}>
           <CustomeIcon
             name={'Call-blue'}

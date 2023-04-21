@@ -29,6 +29,10 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Toast from 'react-native-toast-message';
 import NoDataFound from '../../component/NoDataFound';
 import logAnalytics from '../../services/analytics';
+import CallDetectorManager from 'react-native-call-detection';
+import {PERMISSIONS, request, RESULTS} from 'react-native-permissions';
+import {createAllContacts} from '../../services/communication';
+import {updateLogs} from '../../redux/actions/communication';
 
 const ContactScreen = props => {
   const navigation = useNavigation();
@@ -38,6 +42,9 @@ const ContactScreen = props => {
   const contactsData = useSelector(state => state.contactsReducer.get('data'));
   const contactsStatus = useSelector(state =>
     state.contactsReducer.get('status'),
+  );
+  const logsStatus = useSelector(state =>
+    state.communicationReducer.get('status'),
   );
 
   const [contacts, setContacts] = useState([]);
@@ -54,6 +61,8 @@ const ContactScreen = props => {
   const [contactExists, setContactExists] = useState(false);
   const [contactLoading, setContactLoading] = useState(false);
 
+  let callDetector = null;
+
   useEffect(() => {
     setContactsLoader(true);
     getPhoneContacts();
@@ -64,6 +73,12 @@ const ContactScreen = props => {
     setSelectContact(false);
     setSelectedContacts([]);
   }, [pagetype]);
+
+  useEffect(() => {
+    if (logsStatus == STATE_STATUS.FETCHING && callDetector) {
+      callDetector && callDetector.dispose();
+    }
+  }, [logsStatus]);
 
   useEffect(() => {
     if (contactNum.length == 10) {
@@ -179,7 +194,10 @@ const ContactScreen = props => {
               Contact: item.phone,
               Screen_Name: 'Contacts',
             });
-            Linking.openURL(`tel:${item.phone}`);
+            phoneCallDetector(item);
+            Linking.openURL(
+              `${Platform.OS == 'android' ? 'tel' : 'telprompt'}:${item.phone}`,
+            );
           }}>
           <CustomeIcon
             name={'Call-blue'}
@@ -208,7 +226,11 @@ const ContactScreen = props => {
         setContactsLoader(false);
       }
     } else {
-      // readContacts();
+      try {
+        readContacts();
+      } catch (e) {
+        console.error('Permission error: ', e);
+      }
     }
   };
 
@@ -362,7 +384,7 @@ const ContactScreen = props => {
         body = selectedContacts;
       }
       body = body.map(_ => ({
-        name: _.displayName || '',
+        name: _.displayName || `${_.givenName} ${_.middleName} ${_.familyName}`,
         email: (_.emailAddresses.find(__ => __.email) || {}).email || '',
         phone: ((_.phoneNumbers.find(__ => __.number) || {}).number || '')
           .replace(/\D/g, '')
@@ -430,6 +452,42 @@ const ContactScreen = props => {
       Search_Field: searchValue,
       Screen_Name: `Contacts-${pagetype}`,
     });
+  };
+
+  const phoneCallDetector = async userData => {
+    if (Platform.OS == 'ios') {
+      callDetector = new CallDetectorManager(
+        async (event, phoneNumber) => {
+          if (event == 'Disconnected') {
+            let date = new Date();
+            let callData = [
+              {
+                rawType: 2,
+                type: 'OUTGOING',
+                dateTime: date.toGMTString(),
+                phoneNumber: userData.phone,
+                duration: 0,
+                timestamp: date.getTime(),
+                name: userData.name,
+                userPhoneNumber: userData.phone,
+                createdAt: date.getTime(),
+              },
+            ];
+            const {data} = await createAllContacts(callData);
+            if (data?.result && data?.result?.length) {
+              dispatch(updateLogs(0, data?.result, data.total));
+            }
+          }
+        },
+        false, // if you want to read the phone number of the incoming call [ANDROID], otherwise false
+        () => {}, // callback if your permission got denied [ANDROID] [only if you want to read incoming number] default: console.error
+        {
+          title: 'Phone State Permission',
+          message:
+            'This app needs access to your phone state in order to react and/or to adapt to incoming calls.',
+        },
+      );
+    }
   };
 
   return (
