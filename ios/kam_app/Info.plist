@@ -12,6 +12,16 @@
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Moglix KAM would like to access photos</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Moglix KAM would like to access photos</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Moglix KAM would like to open camera</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Moglix KAM would like to access contacts</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>Moglix KAM would like to track your logs</string>
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundlePackageType</key>
@@ -61,6 +71,7 @@
 		<string>Poppins-ExtraLight.ttf</string>
 		<string>Poppins-ExtraLightItalic.ttf</string>
 		<string>Poppins-Italic.ttf</string>
+		<string>icomoon.ttf</string>
 		<string>Poppins-Light.ttf</string>
 		<string>Poppins-LightItalic.ttf</string>
 		<string>Poppins-Medium.ttf</string>

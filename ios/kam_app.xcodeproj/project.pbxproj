@@ -12,6 +12,7 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		32588CFD29F29F3D0013C85E /* icomoon.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 32588CFC29F29F3D0013C85E /* icomoon.ttf */; };
 		327774A529F2995A00364597 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 327774A429F2995A00364597 /* GoogleService-Info.plist */; };
 		7699B88040F8A987B510C191 /* libPods-kam_app-kam_appTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-kam_app-kam_appTests.a */; };
 		B13709B529AF5CA600352B10 /* Poppins-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B13709B429AF5CA600352B10 /* Poppins-Medium.ttf */; };
@@ -41,6 +42,7 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = kam_app/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = kam_app/main.m; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-kam_app-kam_appTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-kam_app-kam_appTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		32588CFC29F29F3D0013C85E /* icomoon.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = icomoon.ttf; path = ../src/assets/fonts/icomoon.ttf; sourceTree = "<group>"; };
 		327774A429F2995A00364597 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-kam_app.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kam_app.debug.xcconfig"; path = "Target Support Files/Pods-kam_app/Pods-kam_app.debug.xcconfig"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-kam_app.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kam_app.release.xcconfig"; path = "Target Support Files/Pods-kam_app/Pods-kam_app.release.xcconfig"; sourceTree = "<group>"; };
@@ -125,6 +127,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				32588CFC29F29F3D0013C85E /* icomoon.ttf */,
 				B13709B829AF5CF700352B10 /* Poppins-Regular.ttf */,
 				B13709B629AF5CC900352B10 /* Poppins-SemiBold.ttf */,
 				B13709B429AF5CA600352B10 /* Poppins-Medium.ttf */,
@@ -256,6 +259,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B13709B929AF5CF700352B10 /* Poppins-Regular.ttf in Resources */,
+				32588CFD29F29F3D0013C85E /* icomoon.ttf in Resources */,
 				B13709B729AF5CC900352B10 /* Poppins-SemiBold.ttf in Resources */,
 				B13709B529AF5CA600352B10 /* Poppins-Medium.ttf in Resources */,
 				B13709BB29AF5E7700352B10 /* LaunchScreen.storyboard in Resources */,
@@ -907,7 +911,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				"EXCLUDED_ARCHS[sdk=*]" = arm64;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -980,7 +984,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				"EXCLUDED_ARCHS[sdk=*]" = arm64;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;

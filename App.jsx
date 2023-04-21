@@ -22,7 +22,6 @@ const App = () => {
       <Routes />
       {/* <Toast /> */}
       <Toast config={toastConfig} ref={ref => Toast.setRef(ref)} />
- 
     </Provider>
   );
 };
