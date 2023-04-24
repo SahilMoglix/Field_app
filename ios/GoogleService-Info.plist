@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>411364200545-59dlk8j8s16u0e4q0gsp96sicq11t763.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.411364200545-59dlk8j8s16u0e4q0gsp96sicq11t763</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAHwvQ1WJvbu6aSPcvsINwd6H_OoB26hT0</string>
+	<key>GCM_SENDER_ID</key>
+	<string>411364200545</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.moglix.field</string>
+	<key>PROJECT_ID</key>
+	<string>field-app-kam</string>
+	<key>STORAGE_BUCKET</key>
+	<string>field-app-kam.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:411364200545:ios:e7c6d6cfe0b6a8968ada20</string>
+</dict>
+</plist>

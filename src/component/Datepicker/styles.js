@@ -58,6 +58,12 @@ const styles = StyleSheet.create({
     paddingRight: Dimension.padding12,
     backgroundColor: colors.DisableStateColor,
   },
+  inputStylesIos: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: Dimension.margin12,
+  },
 });
 
 export default styles;
