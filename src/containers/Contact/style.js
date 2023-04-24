@@ -21,8 +21,10 @@ const styles = StyleSheet.create({
 
     paddingHorizontal: Dimension.padding15,
     marginBottom: Dimension.margin10,
-    paddingVertical: Dimension.padding10,
+    //paddingVertical: Dimension.padding10,
     backgroundColor: '#fff',
+    paddingVertical:
+      Platform.OS == 'ios' ? Dimension.padding15 : Dimension.padding10,
   },
   searchWraper: {
     marginTop: Dimension.margin5,

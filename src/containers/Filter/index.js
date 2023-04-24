@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, TouchableOpacity, Dimensions} from 'react-native';
+import {View, Text, TouchableOpacity, Dimensions, Platform} from 'react-native';
 import Contacts from 'react-native-contacts';
 import Modal from 'react-native-modal';
 import Dimension from '../../Theme/Dimension';
@@ -217,6 +217,7 @@ const FilterModal = props => {
           height: deviceHeight,
           width: deviceWidth,
           backgroundColor: '#fff',
+          paddingTop: Platform.OS === 'ios' ? Dimension.padding40 : 0,
         }}>
         <View style={styles.headerWrap}>
           <View style={styles.TopHeader}>

@@ -26,7 +26,8 @@ const styles = StyleSheet.create({
     shadowRadius: 2.62,
     elevation: 4,
     paddingHorizontal: Dimension.padding15,
-    paddingVertical: Dimension.padding10,
+    paddingVertical:
+      Platform.OS == 'ios' ? Dimension.padding15 : Dimension.padding10,
     backgroundColor: '#fff',
     flexDirection: 'row',
     justifyContent: 'space-between',

@@ -16,7 +16,7 @@ const App = () => {
       <StatusBar translucent backgroundColor="#fff" barStyle={'dark-content'} />
       <View
         style={{
-          marginTop: Platform.OS === 'ios' ? 20 : StatusBar.currentHeight,
+          marginTop: Platform.OS === 'ios' ? 30 : StatusBar.currentHeight,
         }}
       />
       <Routes />

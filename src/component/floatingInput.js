@@ -1,5 +1,12 @@
 import React, {useState, useRef, useEffect} from 'react';
-import {TextInput, Text, StyleSheet, View, Animated} from 'react-native';
+import {
+  TextInput,
+  Text,
+  StyleSheet,
+  View,
+  Animated,
+  Platform,
+} from 'react-native';
 import CustomeIcon from './CustomeIcon';
 import Dimension from '../Theme/Dimension';
 import colors from '../Theme/Colors';
@@ -57,7 +64,8 @@ const MyInput = props => {
               color: colors.FontColor,
               fontFamily: Dimension.CustomMediumFont,
               marginLeft: Dimension.margin20,
-              marginTop: Dimension.margin10,
+              marginTop:
+                Platform.OS == 'ios' ? Dimension.margin15 : Dimension.margin10,
             }}>
             {props.prefix}
             {' -'}
@@ -137,7 +145,7 @@ const styles = StyleSheet.create({
     paddingLeft: 0,
     marginBottom: 0,
     flex: 1,
-    marginTop: Dimension.margin10,
+    marginTop: Platform.OS == 'ios' ? Dimension.margin20 : Dimension.margin10,
 
     lineHeight: Dimension.height20,
   },
