@@ -1,12 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  View,
-  Button,
-  Platform,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-} from 'react-native';
+import {View, Platform, Text, TouchableOpacity} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Dimension from '../../Theme/Dimension';
@@ -16,15 +9,8 @@ import CustomeIcon from '../CustomeIcon';
 import styles from './styles';
 
 const CustomeDatePicker = props => {
-  const {
-    display,
-    value,
-    activeFilter,
-    maxdate,
-    fromCategoryBrand,
-    natureOfBusiness,
-  } = props;
-  const [date, setDate] = useState(new Date());
+  const {display, value, maxdate, fromCategoryBrand, natureOfBusiness} = props;
+  const [date, setDate] = useState(value || new Date());
   const [isFocused, setIsFocused] = useState(false);
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
@@ -90,45 +76,69 @@ const CustomeDatePicker = props => {
   const renderDatePicker = () => {
     return (
       <>
-        <TouchableOpacity onPress={showDatepicker}>
-          <View style={{flexDirection: 'row'}}>
-            <Input
-              {...props}
-              label={() => (
-                <View style={{flexDirection: 'row'}}>
-                  <Text style={styles.labelStyle}>{props.label}</Text>
-                  {props.isImp ? <Text style={styles.starIcon}>*</Text> : null}
-                </View>
-              )}
-              editable={false}
-              selectionColor={'#3c3c3c'}
-              placeholder={'Select ' + props.label}
-              disabled={props.disabled}
-              onFocus={handleFocus}
-              onBlur={() => handleBlur(true)}
-              containerStyle={styles.WrapperStyle}
-              inputContainerStyle={styles.inputContainerStyle}
-              inputStyle={styles.inputStyle}
-              errorStyle={styles.errorText}
-              disabledInputStyle={styles.disabledInputStyle}
-              errorMessage={props.showError ? props.errorMessage : null}
-              rightIcon={
+        {Platform.OS == 'android' ? (
+          <TouchableOpacity onPress={showDatepicker}>
+            <View style={{flexDirection: 'row'}}>
+              <Input
+                {...props}
+                label={() => (
+                  <View style={{flexDirection: 'row'}}>
+                    <Text style={styles.labelStyle}>{props.label}</Text>
+                    {props.isImp ? (
+                      <Text style={styles.starIcon}>*</Text>
+                    ) : null}
+                  </View>
+                )}
+                editable={false}
+                selectionColor={'#3c3c3c'}
+                placeholder={'Select ' + props.label}
+                disabled={props.disabled}
+                onFocus={handleFocus}
+                onBlur={() => handleBlur(true)}
+                containerStyle={styles.WrapperStyle}
+                inputContainerStyle={styles.inputContainerStyle}
+                inputStyle={styles.inputStyle}
+                errorStyle={styles.errorText}
+                disabledInputStyle={styles.disabledInputStyle}
+                errorMessage={props.showError ? props.errorMessage : null}
+                rightIcon={
+                  <CustomeIcon
+                    name={'Calendar-blue'}
+                    size={Dimension.font20}
+                    color={colors.FontColor}
+                  />
+                }
+                rightIconContainerStyle={styles.iconStyle}
+              />
+            </View>
+          </TouchableOpacity>
+        ) : (
+          <View style={styles.WrapperStyle}>
+            <Text>{props.label}</Text>
+            <TouchableOpacity style={[styles.inputContainerStyle]}>
+              <View style={[styles.inputStyle, styles.inputStylesIos]}>
+                <DateTimePicker
+                  testID="dateTimePicker"
+                  value={date || value}
+                  style={{width: '70%'}}
+                  mode={mode}
+                  maximumDate={maxdate}
+                  accentColor={'red'}
+                  is24Hour={true}
+                  display={display}
+                  onChange={onchangeDate}
+                />
                 <CustomeIcon
                   name={'Calendar-blue'}
                   size={Dimension.font20}
                   color={colors.FontColor}
                 />
-              }
-              rightIconContainerStyle={styles.iconStyle}
-            />
-            {/* <View style={{ flexDirection: "row" }}>
-            <Text style={styles.placeholderCss}>{text || 'Select Date'}</Text>
-
-          </View> */}
+              </View>
+            </TouchableOpacity>
           </View>
-        </TouchableOpacity>
+        )}
 
-        {show && (
+        {show && Platform.OS == 'android' && (
           <DateTimePicker
             testID="dateTimePicker"
             value={date}
