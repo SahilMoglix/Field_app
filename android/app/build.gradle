@@ -94,7 +94,7 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.moglix.field"
+    // namespace "com.moglix.field"
     defaultConfig {
         applicationId "com.moglix.field"
         minSdkVersion rootProject.ext.minSdkVersion
