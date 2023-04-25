@@ -191,8 +191,9 @@ const AddContact = props => {
         value: _._id,
         label: _.departmentName,
       })),
-      value: (DepartmentData.toArray().find(_ => _._id == department) || {})
-        .departmentName,
+      value:
+        (DepartmentData.toArray().find(_ => _._id == department) || {})
+          .departmentName || department,
     },
     {
       component: MyInput,
