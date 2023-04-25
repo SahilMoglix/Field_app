@@ -159,8 +159,8 @@ const FilterModal = props => {
       let last = first + 6;
       props.onApplyFilter({
         designation: undefined,
-        company: undefined,
-        plant: undefined,
+        companyId: undefined,
+        plantId: undefined,
         startDate: new Date(
           new Date(curr.setDate(first)).toDateString() + ' 00:00:00',
         ).getTime(),
@@ -181,8 +181,8 @@ const FilterModal = props => {
         } else {
           props.onApplyFilter({
             designation,
-            company,
-            plant: plant ? String(plant) : undefined,
+            companyId: company,
+            plantId: plant ? String(plant) : undefined,
             startDate: new Date(
               dateConverter(startDate, 'datetime', 'from'),
             ).getTime(),
