@@ -157,32 +157,26 @@ const AddContact = props => {
       },
       IconName: 'company-grey',
       label: 'Company',
+      heightFor2Line: true,
       options: CompanyData.toArray().map(_ => ({
         value: _.key,
         label: _.value,
       })),
-      value: (
-        CompanyData.toArray().find(
-          _ => _.value == props.companyId || company,
-        ) || {}
-      ).value,
-      heightFor2Line: true,
+      value: (CompanyData.toArray().find(_ => _.key == company) || {}).value,
     },
+
     {
       component: DropDown,
       onValueChange: val => setPlant(val),
       IconName: 'Plant-grey',
       label: 'Plant',
-      options: (PlantsData.get(params.companyId || company) || []).map(_ => ({
+      heightFor2Line: true,
+      options: (PlantsData.get(company) || []).map(_ => ({
         value: _.key,
         label: _.value,
       })),
-      value: (
-        (PlantsData.get(params.companyId || company) || []).find(
-          _ => _.key == props.plantId || plant,
-        ) || {}
-      ).value,
-      heightFor2Line: true,
+      value: ((PlantsData.get(company) || []).find(_ => _.key == plant) || {})
+        .value,
     },
     {
       component: DropDown,
