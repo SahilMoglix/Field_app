@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, TouchableOpacity, FlatList} from 'react-native';
+import {View, Text, TouchableOpacity, FlatList, Platform} from 'react-native';
 import Calendars from '../../component/Calendars';
 import EventList from '../../component/EventList';
 import styles from './style';
@@ -134,6 +134,7 @@ const CalendarScreen = () => {
             <CustomeIcon
               name={'List-black'}
               size={18}
+              style={{marginTop: Platform.OS === 'ios' ? 2 : 0}}
               color={type != 'cal' ? '#1568E5' : '#3c3c3c'}></CustomeIcon>
           </TouchableOpacity>
           <TouchableOpacity
@@ -144,6 +145,7 @@ const CalendarScreen = () => {
             <CustomeIcon
               name={'Calendar-black'}
               size={18}
+              style={{marginTop: Platform.OS === 'ios' ? 2 : 0}}
               color={type == 'cal' ? '#1568E5' : '#3c3c3c'}></CustomeIcon>
           </TouchableOpacity>
         </View>

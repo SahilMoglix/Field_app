@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import CustomeIcon from './CustomeIcon';
 import Modal from 'react-native-modal';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const {width: SCREEN_WIDTH, height: SCREEN_HEIGHT} = Dimensions.get('window');
 
@@ -24,7 +25,16 @@ const DropDown = props => {
   return (
     <View style={{position: 'relative'}}>
       {value ? <Text style={styles.labelStyle1}>{label}</Text> : null}
-      <TouchableOpacity onPress={showMenu} style={styles.dropDownBtn}>
+      <TouchableOpacity
+        onPress={showMenu}
+        style={[
+          styles.dropDownBtn,
+          {
+            height: props.heightFor2Line
+              ? Dimension.height80
+              : Dimension.height70,
+          },
+        ]}>
         <View style={{flexDirection: 'row', marginTop: 20}}>
           <CustomeIcon
             name={IconName}
@@ -59,6 +69,14 @@ const DropDown = props => {
                 hideMenu();
               }}
               style={itemIndex == 0 ? styles.OptiosTopWrap : styles.OptiosWrap}>
+              {/* radiobox-blank */}
+              <Icon
+                name={
+                  value == item.value ? 'radiobox-marked' : 'radiobox-blank'
+                }
+                size={Dimension.font20}
+                color={value == item.value ? colors.CtaColor : colors.FontColor}
+              />
               <Text style={styles.dropdownval}> {item.label}</Text>
             </TouchableOpacity>
           ))}
@@ -99,7 +117,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: Dimension.padding15,
     paddingVertical: Dimension.padding12,
-    height: Dimension.height70,
+    height: Dimension.height80,
     marginBottom: Dimension.margin10,
     justifyContent: 'space-between',
     width: '100%',
@@ -130,12 +148,14 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     paddingVertical: Dimension.padding15,
     paddingHorizontal: Dimension.padding20,
+    flexDirection: 'row',
   },
   OptiosWrap: {
     borderBottomColor: '#DCE2EA',
     borderBottomWidth: 1,
     paddingVertical: Dimension.padding15,
     paddingHorizontal: Dimension.padding20,
+    flexDirection: 'row',
   },
 
   dropdownval: {
@@ -171,6 +191,7 @@ const styles = StyleSheet.create({
     fontFamily: Dimension.CustomMediumFont,
     // fontWeight:(Platform.OS === 'ios') ? "500" : "",
     marginLeft: Dimension.margin8,
+    width: '90%',
   },
   labelStyle: {
     fontSize: Dimension.font16,

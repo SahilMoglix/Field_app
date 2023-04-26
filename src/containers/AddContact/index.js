@@ -166,6 +166,7 @@ const AddContact = props => {
           _ => _.value == props.companyId || company,
         ) || {}
       ).value,
+      heightFor2Line: true,
     },
     {
       component: DropDown,
@@ -181,6 +182,7 @@ const AddContact = props => {
           _ => _.key == props.plantId || plant,
         ) || {}
       ).value,
+      heightFor2Line: true,
     },
     {
       component: DropDown,

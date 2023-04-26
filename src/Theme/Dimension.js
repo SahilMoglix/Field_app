@@ -115,6 +115,7 @@ const Dimension = {
   height70: normalize(70),
   height71: normalize(71),
   height74: normalize(74),
+  height75: normalize(75),
   height80: normalize(80),
   height90: normalize(90),
   height96: normalize(96),
