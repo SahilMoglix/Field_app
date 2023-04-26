@@ -69,8 +69,8 @@ const CalendarScreen = () => {
     dispatch(
       fetchCustomCalendar({
         designation: undefined,
-        company: undefined,
-        plant: undefined,
+        companyId: undefined,
+        plantId: undefined,
         startDate: new Date(
           new Date(curr.setDate(first)).toDateString() + ' 00:00:00',
         ).getTime(),
