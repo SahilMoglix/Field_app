@@ -32,7 +32,11 @@ const EventList = props => {
         <View style={styles.dateWrap}>
           <Text style={styles.dateTxt}>
             {new Date(data.start.dateTime).toDateString()}{' '}
-            {new Date(data.start.dateTime).toLocaleTimeString()}
+            {new Date(data.start.dateTime)
+              .toLocaleTimeString()
+              .split(':')
+              .slice(0, 2)
+              .join(':')}
           </Text>
         </View>
         <View style={styles.EventWrap}>
