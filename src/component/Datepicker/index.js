@@ -10,7 +10,16 @@ import styles from './styles';
 
 const CustomeDatePicker = props => {
   const {display, value, maxdate, fromCategoryBrand, natureOfBusiness} = props;
-  const [date, setDate] = useState(value || new Date());
+
+  let currDate = new Date();
+  currDate =
+    currDate.getDate() +
+    '-' +
+    (currDate.getMonth() + 1) +
+    '-' +
+    currDate.getFullYear();
+
+  const [date, setDate] = useState(value || currDate);
   const [isFocused, setIsFocused] = useState(false);
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
@@ -73,6 +82,37 @@ const CustomeDatePicker = props => {
     showMode('date');
   };
 
+  const dateConverter = (paramDate, dateType, fromTo) => {
+    if (paramDate) {
+      let updatedparams =
+        typeof paramDate == 'string' ? paramDate : paramDate.toDateString();
+      let date =
+        String(updatedparams.split('-')[0]).length > 2
+          ? updatedparams
+          : updatedparams.split('-')[2] +
+            '-' +
+            updatedparams.split('-')[1] +
+            '-' +
+            updatedparams.split('-')[0];
+      let month =
+        String(new Date(date).getMonth() + 1).length > 1
+          ? String(new Date(date).getMonth() + 1)
+          : 0 + String(new Date(date).getMonth() + 1);
+      let day =
+        String(new Date(date).getDate()).length > 1
+          ? String(new Date(date).getDate())
+          : 0 + String(new Date(date).getDate());
+      if (dateType == 'datetime') {
+        return `${new Date(date).getFullYear()}-${month}-${day} ${
+          fromTo == 'from' ? '00:00:00' : '23:59:59'
+        }`;
+      } else {
+        return `${new Date(date).getFullYear()}-${month}-${day}`;
+      }
+    }
+    return '';
+  };
+
   const renderDatePicker = () => {
     return (
       <>
@@ -119,7 +159,10 @@ const CustomeDatePicker = props => {
               <View style={[styles.inputStyle, styles.inputStylesIos]}>
                 <DateTimePicker
                   testID="dateTimePicker"
-                  value={date || value}
+                  value={
+                    new Date(dateConverter(date)) ||
+                    new Date(dateConverter(value))
+                  }
                   style={{width: '70%'}}
                   mode={mode}
                   maximumDate={maxdate}
@@ -141,7 +184,9 @@ const CustomeDatePicker = props => {
         {show && Platform.OS == 'android' && (
           <DateTimePicker
             testID="dateTimePicker"
-            value={date}
+            value={
+              new Date(dateConverter(date)) || new Date(dateConverter(value))
+            }
             mode={mode}
             maximumDate={maxdate}
             is24Hour={true}

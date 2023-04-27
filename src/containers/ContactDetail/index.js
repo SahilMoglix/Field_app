@@ -66,7 +66,7 @@ const ContactDetail = props => {
     },
     {
       name: 'Department',
-      value: 'department',
+      value: 'departmentValue',
     },
     {
       name: 'Company',

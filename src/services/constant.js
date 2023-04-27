@@ -1,6 +1,6 @@
 const MOCK = 'https://731f9f6b-161f-46c7-bbfc-3541588250cf.mock.pstmn.io';
 const QA = 'https://acc-mgmt.moglilabs.com/app/';
-const PROD = '';
+const PROD = 'https://acc-mgmt.moglix.com/';
 
 const CONSTANTS = {
   BASE_URL: QA,
