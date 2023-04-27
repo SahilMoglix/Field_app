@@ -97,11 +97,11 @@ const Calendars = props => {
         key: k,
         color:
           new Date().setHours(0, 0, 0, 0) <= new Date(dotDate).getTime()
-            ? 'dodgerblue'
+            ? '#1568E5'
             : '#8E8E93',
         selectedDotColor:
           new Date().setHours(0, 0, 0, 0) <= new Date(dotDate).getTime()
-            ? 'dodgerblue'
+            ? '#1568E5'
             : '#8E8E93',
       });
     });
@@ -169,9 +169,11 @@ const Calendars = props => {
           textMonthFontFamily: Dimension.CustomMediumFont,
           textDayHeaderFontFamily: Dimension.CustomMediumFont,
           textDayFontWeight: '500',
-          textDayFontSize: Dimension.font16,
+          textDayFontSize: Dimension.font14,
           textMonthFontSize: Dimension.font16,
           textDayHeaderFontSize: Dimension.font14,
+          todayTextColor: '#1568E5',
+          //dayTextColor: '#1568E5',
 
           //monthTextColor: 'blue',
         }}

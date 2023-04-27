@@ -13,12 +13,14 @@ const ContactData = props => {
     designation: 'Designation-grey',
     plant: 'Plant-grey',
     company: 'company-grey',
-    departmentValue: 'Department-grey',
+    department: 'Department-grey',
     whatsappContact: 'Whatsaap-green',
   };
   const getIconName = () => {
     return IconSet[props.icon];
   };
+
+  console.log(props.label, props.value);
 
   return (
     <View style={styles.WrapperStyle}>
@@ -30,7 +32,7 @@ const ContactData = props => {
       </View>
       <View>
         <Text style={styles.labelStyle}>{props.label}</Text>
-        <Text style={styles.inputStyle}>
+        <Text style={styles.inputStyle} numberOfLines={2}>
           {props.label == 'Contact' ? '+91 -' : ''}
           {props.value}
         </Text>
@@ -45,7 +47,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: Dimension.padding20,
     paddingVertical: Dimension.padding12,
-    height: Dimension.height70,
+    height: Dimension.height80,
     marginBottom: Dimension.margin10,
     flexDirection: 'row',
   },

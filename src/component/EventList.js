@@ -68,8 +68,8 @@ const EventList = props => {
                       name={'icon_Below'}
                       color={colors.CtaColor}
                       size={Dimension.font14}
-                      style={{marginTop: 2}}></CustomeIcon> */}{' '}
-                    //add up icon here....
+                      style={{marginTop: 2}}></CustomeIcon> */}
+                    {/* add up icon here.... */}
                   </View>
                 ) : (
                   <View style={{flexDirection: 'row'}}>

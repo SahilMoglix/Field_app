@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     //paddingVertical: Dimension.padding10,
     backgroundColor: '#fff',
     paddingVertical:
-      Platform.OS == 'ios' ? Dimension.padding15 : Dimension.padding10,
+      Platform.OS === 'ios' ? Dimension.padding15 : Dimension.padding10,
   },
   searchWraper: {
     marginTop: Dimension.margin5,
@@ -49,8 +49,8 @@ const styles = StyleSheet.create({
   },
   searchIcon: {
     position: 'absolute',
-    top: 10,
-    left: 10,
+    top: Platform.OS === 'ios' ? 15 : 10,
+    left: Platform.OS === 'ios' ? 12 : 10,
   },
   SearchInputCss: {
     fontSize: Dimension.font14,
@@ -183,14 +183,14 @@ const styles = StyleSheet.create({
 
   ModalContainer: {
     backgroundColor: '#fff',
-    justifyContent: 'flex-end',
+    // justifyContent: 'flex-end',
     borderRadius: 35,
     borderWidth: 1,
     borderColor: '#D0D0D0',
     paddingHorizontal: Dimension.padding8,
     paddingVertical: Dimension.padding20,
-    position: 'absolute',
-    bottom: Dimension.padding10,
+    //position: 'absolute',
+    // bottom: Dimension.padding10,
     width: '100%',
     left: Dimension.padding10,
   },
@@ -198,7 +198,8 @@ const styles = StyleSheet.create({
     padding: Dimension.padding10,
     margin: 0,
     backgroundColor: 'rgba(0,0,0,.4)',
-    position: 'relative',
+    // position: 'relative',
+    justifyContent: 'flex-end',
   },
   ModalHeading: {
     fontSize: Dimension.font16,

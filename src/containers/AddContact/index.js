@@ -157,17 +157,20 @@ const AddContact = props => {
       },
       IconName: 'company-grey',
       label: 'Company',
+      heightFor2Line: true,
       options: CompanyData.toArray().map(_ => ({
         value: _.key,
         label: _.value,
       })),
       value: (CompanyData.toArray().find(_ => _.key == company) || {}).value,
     },
+
     {
       component: DropDown,
       onValueChange: val => setPlant(val),
       IconName: 'Plant-grey',
       label: 'Plant',
+      heightFor2Line: true,
       options: (PlantsData.get(company) || []).map(_ => ({
         value: _.key,
         label: _.value,

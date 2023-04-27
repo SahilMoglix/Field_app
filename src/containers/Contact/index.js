@@ -9,7 +9,9 @@ import {
   ActivityIndicator,
   TextInput,
   TouchableOpacity,
+  Keyboard,
   Linking,
+  KeyboardAvoidingView,
 } from 'react-native';
 import {Button} from 'react-native-elements';
 import Contacts from 'react-native-contacts';
@@ -46,7 +48,7 @@ const ContactScreen = props => {
   const logsStatus = useSelector(state =>
     state.communicationReducer.get('status'),
   );
-
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const [contacts, setContacts] = useState([]);
   const [syncLoading, setSyncLoading] = useState(false);
   const [pagetype, setpageType] = useState('Focused');
@@ -62,7 +64,24 @@ const ContactScreen = props => {
   const [contactLoading, setContactLoading] = useState(false);
 
   let callDetector = null;
-
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setKeyboardVisible(true); // or some other action
+      },
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setKeyboardVisible(false); // or some other action
+      },
+    );
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
   useEffect(() => {
     setContactsLoader(true);
     getPhoneContacts();
@@ -172,7 +191,8 @@ const ContactScreen = props => {
               <CustomeIcon
                 name={'Arrow-black'}
                 color={Colors.FontColor}
-                size={20}></CustomeIcon>
+                size={18}
+                style={{marginTop: Dimension.margin8}}></CustomeIcon>
             </View>
           ) : (
             <View style={{flexDirection: 'row'}}>
@@ -654,7 +674,12 @@ const ContactScreen = props => {
         onBackButtonPress={() => setModalVisible(false)}
         onBackdropPress={() => setModalVisible(false)}
         isVisible={isModalVisible}
-        style={styles.ModalBg}>
+        style={[
+          styles.ModalBg,
+          isKeyboardVisible
+            ? {justifyContent: 'center'}
+            : {justifyContent: 'flex-end'},
+        ]}>
         <View style={styles.ModalContainer}>
           <Text style={styles.ModalHeading}>Add Contact</Text>
           <View style={styles.InputWrap}>

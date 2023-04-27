@@ -47,7 +47,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#EAF2FF',
     paddingHorizontal: Dimension.padding8,
     paddingTop: Dimension.padding4,
-    paddingBottom: Dimension.padding5,
   },
   InactivRightBtn: {
     paddingHorizontal: Dimension.padding8,
