@@ -47,13 +47,13 @@ const styles = StyleSheet.create({
   },
   crossIcon: {
     position: 'absolute',
-    top: 10,
-    right: 10,
+    top: Platform.OS === 'ios' ? 15 : 10,
+    right: Platform.OS === 'ios' ? 12 : 10,
   },
   searchIcon: {
     position: 'absolute',
-    top: 10,
-    left: 10,
+    top: Platform.OS === 'ios' ? 15 : 10,
+    left: Platform.OS === 'ios' ? 12 : 10,
   },
   SearchInputCss: {
     fontSize: Dimension.font14,

@@ -589,7 +589,7 @@ const ContactScreen = props => {
               ellipsizeMode="tail"
               placeholderTextColor={'#8E8E93'}
               numberOfLines={1}
-              clearButtonMode="always"
+              //clearButtonMode="always"
               style={styles.SearchInputCss}></TextInput>
           </View>
           {searchValue.length > 0 && (
