@@ -20,8 +20,6 @@ const ContactData = props => {
     return IconSet[props.icon];
   };
 
-  console.log(props.label, props.value);
-
   return (
     <View style={styles.WrapperStyle}>
       <View style={styles.iconWrap}>
