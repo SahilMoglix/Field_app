@@ -3,7 +3,7 @@ const QA = 'https://acc-mgmt.moglilabs.com/app/';
 const PROD = 'https://acc-mgmt.moglix.com/app/';
 
 const CONSTANTS = {
-  BASE_URL: PROD,
+  BASE_URL: QA,
   API_BASE_URL: 'https://sales-funnel.moglilabs.com',
   API_URL: {
     USER_DETAIL: '/api/user/mobile/',
