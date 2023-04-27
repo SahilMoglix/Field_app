@@ -1,9 +1,9 @@
 const MOCK = 'https://731f9f6b-161f-46c7-bbfc-3541588250cf.mock.pstmn.io';
 const QA = 'https://acc-mgmt.moglilabs.com/app/';
-const PROD = 'https://acc-mgmt.moglix.com/';
+const PROD = 'https://acc-mgmt.moglix.com/app/';
 
 const CONSTANTS = {
-  BASE_URL: QA,
+  BASE_URL: PROD,
   API_BASE_URL: 'https://sales-funnel.moglilabs.com',
   API_URL: {
     USER_DETAIL: '/api/user/mobile/',

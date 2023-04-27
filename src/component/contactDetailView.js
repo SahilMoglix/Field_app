@@ -13,7 +13,7 @@ const ContactData = props => {
     designation: 'Designation-grey',
     plant: 'Plant-grey',
     company: 'company-grey',
-    department: 'Department-grey',
+    departmentValue: 'Department-grey',
     whatsappContact: 'Whatsaap-green',
   };
   const getIconName = () => {
