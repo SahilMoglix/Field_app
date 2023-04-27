@@ -527,10 +527,10 @@ PODS:
     - Firebase/Analytics (= 10.7.0)
     - React-Core
     - RNFBApp
-  - RNFBApp (17.4.2):
+  - RNFBApp (17.4.1):
     - Firebase/CoreOnly (= 10.7.0)
     - React-Core
-  - RNFBMessaging (17.4.2):
+  - RNFBMessaging (17.4.1):
     - Firebase/Messaging (= 10.7.0)
     - FirebaseCoreExtension (= 10.7.0)
     - React-Core
@@ -855,11 +855,11 @@ SPEC CHECKSUMS:
   RNDateTimePicker: 1dd15d7ed1ab7d999056bc77879a42920d139c12
   RNDeviceInfo: aad3c663b25752a52bf8fce93f2354001dd185aa
   RNFBAnalytics: 203a7683a759a8d647614b6f34692a04e138bef7
-  RNFBApp: 55dbfc574e5ae414f2984394934f79f87eb4b050
-  RNFBMessaging: d365361650cc697294227e1280923f35a31d2501
+  RNFBApp: ac422b09f963ae32cd732953610553bddd4c2b12
+  RNFBMessaging: 912d2ae75161a0c18238dd5893b8fae6cab5ccb4
   RNFlashList: 8ec7f7454721145fe84566bb9e88bcf58981c9fe
   RNGestureHandler: 071d7a9ad81e8b83fe7663b303d132406a7d8f39
-  RNPermissions: 215c54462104b3925b412b0fb3c9c497b21c358b
+  RNPermissions: 47f64be37896b1e6cc694f2a6e8e202246c77713
   RNScreens: 218801c16a2782546d30bd2026bb625c0302d70f
   RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
@@ -868,4 +868,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 9c38b24880f71189d2ef44179d96522fdf2c68db
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.12.1
