@@ -16,8 +16,6 @@ const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 
 const FilterModal = props => {
-  const navigation = useNavigation();
-
   const Designations = useSelector(state =>
     state.homepageReducer.get('designations'),
   );
@@ -32,8 +30,8 @@ const FilterModal = props => {
   const [filterToDate, setFilterToDate] = useState(new Date());
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [designation, setDesignation] = useState(props.designation);
-  const [company, setCompany] = useState(props.company);
-  const [plant, setPlant] = useState(props.plant || '');
+  const [company, setCompany] = useState(props.companyId || '');
+  const [plant, setPlant] = useState(props.plantId || '');
   const [startDate, setStartDate] = useState(new Date(props.startDate));
   const [endDate, setEndDate] = useState(new Date(props.endDate));
 
@@ -104,7 +102,14 @@ const FilterModal = props => {
             title: 'From Date',
             label: 'From Date',
             placeholder: '',
-            value: startDate,
+            value:
+              typeof startDate == 'string'
+                ? startDate
+                : startDate.getDate() +
+                  '-' +
+                  (startDate.getMonth() + 1) +
+                  '-' +
+                  startDate.getFullYear(),
             onChange: date => setStartDate(date),
             component: CustomeDatePicker,
           },
@@ -112,7 +117,14 @@ const FilterModal = props => {
             title: 'To Date',
             label: 'To Date',
             placeholder: '',
-            value: endDate,
+            value:
+              typeof endDate == 'string'
+                ? endDate
+                : endDate.getDate() +
+                  '-' +
+                  (endDate.getMonth() + 1) +
+                  '-' +
+                  endDate.getFullYear(),
             onChange: date => setEndDate(date),
             component: CustomeDatePicker,
           },
@@ -181,7 +193,7 @@ const FilterModal = props => {
         } else {
           props.onApplyFilter({
             designation,
-            companyId: company,
+            companyId: company || undefined,
             plantId: plant ? String(plant) : undefined,
             startDate: new Date(
               dateConverter(startDate, 'datetime', 'from'),

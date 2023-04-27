@@ -81,10 +81,10 @@ const LoginScreen = props => {
         setLoading(false);
       }
     } catch (error) {
-      Toast.show({
-        type: 'error',
-        text1: error?.error_description || 'Something went wrong!',
-      });
+      // Toast.show({
+      //   type: 'error',
+      //   text1: error?.error_description || 'Something went wrong!',
+      // });
       setLoading(false);
       console.log('Error during Azure operation', error);
     }

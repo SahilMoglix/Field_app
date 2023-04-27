@@ -96,13 +96,11 @@ const Calendars = props => {
       dots.push({
         key: k,
         color:
-          new Date(currentDate).setHours(0, 0, 0, 0) <=
-          new Date(dotDate).getTime()
+          new Date().setHours(0, 0, 0, 0) <= new Date(dotDate).getTime()
             ? 'dodgerblue'
             : '#8E8E93',
         selectedDotColor:
-          new Date(currentDate).setHours(0, 0, 0, 0) <=
-          new Date(dotDate).getTime()
+          new Date().setHours(0, 0, 0, 0) <= new Date(dotDate).getTime()
             ? 'dodgerblue'
             : '#8E8E93',
       });
