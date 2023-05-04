@@ -63,19 +63,23 @@ const CalendarScreen = () => {
   };
 
   useEffect(() => {
-    let curr = new Date();
-    let first = curr.getDate() - curr.getDay();
-    let last = first + 6;
+    let date_today = new Date();
+    let first_day_of_the_week = new Date(
+      date_today.setDate(date_today.getDate() - date_today.getDay()),
+    );
+    let last_day_of_the_week = new Date(
+      date_today.setDate(date_today.getDate() - date_today.getDay() + 6),
+    );
     dispatch(
       fetchCustomCalendar({
         designation: undefined,
         companyId: undefined,
         plantId: undefined,
         startDate: new Date(
-          new Date(curr.setDate(first)).toDateString() + ' 00:00:00',
+          new Date(first_day_of_the_week).toDateString() + ' 00:00:00',
         ).getTime(),
         endDate: new Date(
-          new Date(curr.setDate(last)).toDateString() + ' 23:59:59',
+          new Date(last_day_of_the_week).toDateString() + ' 23:59:59',
         ).getTime(),
       }),
     );
