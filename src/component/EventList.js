@@ -58,17 +58,22 @@ const EventList = props => {
                           {address.emailAddress.address}
                         </Text>
                       ))}
-                    <Text
-                      onPress={() => setIsOpen(false)}
-                      style={styles.bluetxt}>
-                      {' '}
-                      Show Less{' '}
-                    </Text>
-                    {/* <CustomeIcon
-                      name={'icon_Below'}
-                      color={colors.CtaColor}
-                      size={Dimension.font14}
-                      style={{marginTop: 2}}></CustomeIcon> */}
+                    <View style={{flexDirection: 'row'}}>
+                      <Text
+                        onPress={() => setIsOpen(false)}
+                        style={styles.bluetxt}>
+                        {' '}
+                        Show Less{' '}
+                      </Text>
+                      <CustomeIcon
+                        name={'icon_Below'}
+                        color={colors.CtaColor}
+                        size={Dimension.font14}
+                        style={{
+                          marginTop: -1,
+                          transform: [{rotate: '180deg'}],
+                        }}></CustomeIcon>
+                    </View>
                     {/* add up icon here.... */}
                   </View>
                 ) : (
