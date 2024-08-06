@@ -1,7 +1,7 @@
 import {StyleSheet, Dimensions} from 'react-native';
 import Colors from '../../Theme/Colors';
 import Dimension from '../../Theme/Dimension';
-import { colors } from 'react-native-elements';
+import {colors} from 'react-native-elements';
 
 const deviceHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
@@ -39,26 +39,26 @@ const styles = StyleSheet.create({
 
     flexDirection: 'row',
   },
-
-  activeBackground: {
-    backgroundColor: Colors.CallingBgColor,
+  leftTextBg: {
     paddingVertical: Dimension.padding15,
-    paddingHorizontal: Dimension.padding20,
+    paddingHorizontal: Dimension.padding15,
+    paddingRight: Dimension.padding10,
   },
-  inactiveBackground: {
+  leftActiveBackground: {
+    backgroundColor: Colors.CallingBgColor,
+  },
+  leftInactiveBackground: {
     backgroundColor: '#fff',
-    paddingVertical: Dimension.padding15,
-    paddingHorizontal: Dimension.padding20,
+  },
+  leftText: {
+    fontSize: Dimension.font14,
+    fontFamily: Dimension.CustomMediumFont,
   },
   LeftInActiveTxt: {
-    fontSize: Dimension.font14,
     color: Colors.FontColor,
-    fontFamily: Dimension.CustomMediumFont,
   },
   LeftActiveTxt: {
-    fontSize: Dimension.font14,
     color: Colors.CtaColor,
-    fontFamily: Dimension.CustomMediumFont,
   },
 
   MidWrapper: {
@@ -67,18 +67,17 @@ const styles = StyleSheet.create({
     height: deviceHeight,
   },
   leftPart: {
-    flex: 4,
+    flex: 0.35,
     borderRightColor: Colors.borderColor,
     borderRightWidth: 1,
     backgroundColor: '#fff',
-    paddingTop: Dimension.padding20,
     height: deviceHeight,
   },
   rightPart: {
-    flex: 6.5,
-
-    paddingTop: Dimension.padding25,
+    flex: 0.65,
+    paddingTop: Dimension.padding5,
     height: deviceHeight,
+    paddingHorizontal: Dimension.padding10,
   },
 
   acceptCtabtn: {
@@ -157,9 +156,7 @@ const styles = StyleSheet.create({
     fontFamily: Dimension.CustomMediumFont,
   },
   searchWraper: {
-  
-    marginHorizontal:Dimension.margin5,
-    position: 'relative',
+    marginHorizontal: Dimension.margin5,
     backgroundColor: '#fff',
     borderRadius: 50,
     borderWidth: 1,
@@ -171,19 +168,17 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.23,
     shadowRadius: 2.62,
     elevation: 4,
-  },
-  searchIcon: {
-    position: 'absolute',
-    top: Platform.OS === 'ios' ? 10 : 10,
-    left: Platform.OS === 'ios' ? 10 : 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    overflow: 'hidden',
   },
   SearchInputCss: {
-    fontSize: Dimension.font14,
+    fontSize: Dimension.font12,
     color: colors.FontColor,
     fontFamily: Dimension.CustomRegularFont,
-    height: Dimension.height40,
-    width: '90%',
-    paddingHorizontal: Dimension.padding25,
+    flex: 1,
+    marginLeft: 5,
+    lineHeight: Dimension.font18,
   },
   seacrhIcon: {
     position: 'absolute',

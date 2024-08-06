@@ -126,9 +126,7 @@ const CalendarScreen = () => {
       }}>
       {/* <StatusBar translucent backgroundColor="#fff" barStyle={'dark-content'} /> */}
       <View style={styles.headerWrap}>
-        <View style={styles.TopHeader}>
-          <Text style={styles.headingTxt}>Calendar</Text>
-        </View>
+        <Text style={styles.headingTxt}>Calendar</Text>
         <View style={styles.rightWrap}>
           <TouchableOpacity
             onPress={() => setType('list')}
@@ -139,7 +137,8 @@ const CalendarScreen = () => {
               name={'List-black'}
               size={18}
               style={{marginTop: Platform.OS === 'ios' ? 2 : 0}}
-              color={type != 'cal' ? '#1568E5' : '#3c3c3c'}></CustomeIcon>
+              color={type != 'cal' ? '#1568E5' : '#3c3c3c'}
+            />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => setType('cal')}
@@ -150,7 +149,8 @@ const CalendarScreen = () => {
               name={'Calendar-black'}
               size={18}
               style={{marginTop: Platform.OS === 'ios' ? 2 : 0}}
-              color={type == 'cal' ? '#1568E5' : '#3c3c3c'}></CustomeIcon>
+              color={type == 'cal' ? '#1568E5' : '#3c3c3c'}
+            />
           </TouchableOpacity>
         </View>
       </View>
@@ -208,7 +208,7 @@ const CalendarScreen = () => {
                 name={'Filter-blue'}
                 color={Colors.CtaColor}
                 size={20}
-                style={{marginTop: 2}}></CustomeIcon>
+              />
               <Text style={styles.filtertxt}>Filter</Text>
             </TouchableOpacity>
           </View>

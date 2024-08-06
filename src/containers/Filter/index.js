@@ -1,5 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, TouchableOpacity, Dimensions, Platform,TextInput} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Dimensions,
+  Platform,
+  TextInput,
+  useWindowDimensions,
+} from 'react-native';
 import Contacts from 'react-native-contacts';
 import Modal from 'react-native-modal';
 import Dimension from '../../Theme/Dimension';
@@ -12,10 +20,9 @@ import CustomeDatePicker from '../../component/Datepicker';
 import {useSelector} from 'react-redux';
 import Colors from '../../Theme/Colors';
 
-const deviceWidth = Dimensions.get('window').width;
-const deviceHeight = Dimensions.get('window').height;
-
 const FilterModal = props => {
+  const {width: deviceWidth, height: deviceHeight} = useWindowDimensions();
+
   const Designations = useSelector(state =>
     state.homepageReducer.get('designations'),
   );
@@ -30,12 +37,12 @@ const FilterModal = props => {
   const [filterToDate, setFilterToDate] = useState(new Date());
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const [designation, setDesignation] = useState(props.designation);
-  const [salesPerson,setSalesPerson]=useState(props.salesPerson)
+  const [salesPerson, setSalesPerson] = useState(props.salesPerson);
   const [company, setCompany] = useState(props.companyId || '');
   const [plant, setPlant] = useState(props.plantId || '');
-  const [region,setRegion]=useState(props.region || "")
+  const [region, setRegion] = useState(props.region || '');
   const [startDate, setStartDate] = useState(new Date(props.startDate));
-  const [branch,setBranch]=useState(props.branch || "")
+  const [branch, setBranch] = useState(props.branch || '');
   const [endDate, setEndDate] = useState(new Date(props.endDate));
   const [searchValue, setSearchValue] = useState('');
 
@@ -137,8 +144,7 @@ const FilterModal = props => {
     ],
   };
 
-
-  const COMM_FILTER_DATA={
+  const COMM_FILTER_DATA = {
     tabs: [
       {
         name: 'Sales Person',
@@ -208,17 +214,15 @@ const FilterModal = props => {
             value: branch,
             onCheck: text => setBranch(text),
             component: DotCheckbox,
-            data:{
-              
-              title:"Region",
-              label: "_.value",
+            data: {
+              title: 'Region',
+              label: '_.value',
             },
           },
         ],
       },
     ],
-
-  }
+  };
 
   const dateConverter = (paramDate, dateType, fromTo) => {
     if (paramDate) {
@@ -250,8 +254,6 @@ const FilterModal = props => {
     }
     return '';
   };
-
-  
 
   const applyFilters = fromReset => {
     if (fromReset) {
@@ -311,18 +313,17 @@ const FilterModal = props => {
         props.setFiltersModal(false);
       }}
       coverScreen={true}
-      style={{padding: 0, margin: 0, width: '100%', height: '100%'}}
-      deviceWidth={deviceWidth}
       deviceHeight={deviceHeight}
+      deviceWidth={deviceWidth}
+      style={{padding: 0, margin: 0}}
+      statusBarTranslucent={true}
       hasBackdrop={true}
       onBackdropPress={() => props.setFiltersModal(false)}
       onBackButtonPress={() => props.setFiltersModal(false)}>
       <View
         style={{
-          height: deviceHeight,
-          width: deviceWidth,
           backgroundColor: '#fff',
-          paddingTop: Platform.OS === 'ios' ? Dimension.padding40 : 0,
+          paddingTop: Dimension.padding40,
         }}>
         <View style={styles.headerWrap}>
           <View style={styles.TopHeader}>
@@ -338,83 +339,88 @@ const FilterModal = props => {
 
         <View style={styles.MidWrapper}>
           <View style={styles.leftPart}>
-            {!props.fromCommunicationFilter ? FILTERS_DATA.tabs.map((_, k) => (
-              <TouchableOpacity
-                onPress={() => setSelectedTabIndex(k)}
-                key={k}
-                style={[
-                  k == selectedTabIndex
-                    ? styles.activeBackground
-                    : styles.inactiveBackground,
-                ]}>
-                <Text
-                  style={[
-                    k == selectedTabIndex
-                      ? styles.LeftActiveTxt
-                      : styles.LeftInActiveTxt,
-                  ]}>
-                  {_.name}
-                </Text>
-              </TouchableOpacity>
-            )): COMM_FILTER_DATA.tabs.map((_, k) => (
-              <TouchableOpacity
-                onPress={() => setSelectedTabIndex(k)}
-                key={k}
-                style={[
-                  k == selectedTabIndex
-                    ? styles.activeBackground
-                    : styles.inactiveBackground,
-                ]}>
-                <Text
-                  style={[
-                    k == selectedTabIndex
-                      ? styles.LeftActiveTxt
-                      : styles.LeftInActiveTxt,
-                  ]}>
-                  {_.name}
-                </Text>
-              </TouchableOpacity>
-            ))      }
+            {!props.fromCommunicationFilter
+              ? FILTERS_DATA.tabs.map((_, k) => (
+                  <TouchableOpacity
+                    onPress={() => setSelectedTabIndex(k)}
+                    key={k}
+                    style={[
+                      styles.leftTextBg,
+                      k == selectedTabIndex
+                        ? styles.leftActiveBackground
+                        : styles.leftInactiveBackground,
+                    ]}>
+                    <Text
+                      style={[
+                        styles.leftText,
+                        k == selectedTabIndex
+                          ? styles.LeftActiveTxt
+                          : styles.LeftInActiveTxt,
+                      ]}>
+                      {_.name}
+                    </Text>
+                  </TouchableOpacity>
+                ))
+              : COMM_FILTER_DATA.tabs.map((_, k) => (
+                  <TouchableOpacity
+                    onPress={() => setSelectedTabIndex(k)}
+                    key={k}
+                    style={[
+                      styles.leftTextBg,
+                      k == selectedTabIndex
+                        ? styles.leftActiveBackground
+                        : styles.leftInactiveBackground,
+                    ]}>
+                    <Text
+                      style={[
+                        styles.leftText,
+                        k == selectedTabIndex
+                          ? styles.LeftActiveTxt
+                          : styles.LeftInActiveTxt,
+                      ]}>
+                      {_.name}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
           </View>
           <View style={styles.rightPart}>
-           
-          <View style={styles.searchWraper}>
-          <CustomeIcon
-            name={'search-grey'}
-            size={20}
-            color={'#8E8E93'}
-            style={styles.searchIcon}></CustomeIcon>
-          <View style={{flex: 4}}>
-            <TextInput
-              placeholder={'Search by name, company'}
-              returnKeyType={'search'}
-              onChangeText={e => setSearchValue(e)}
-              value={searchValue}
-              ellipsizeMode="tail"
-              placeholderTextColor={'#8E8E93'}
-              numberOfLines={1}
-              //clearButtonMode="always"
-              style={styles.SearchInputCss}></TextInput>
-          </View>
-          
-        </View>
-            {!props.fromCommunicationFilter? FILTERS_DATA.tabs[selectedTabIndex].fields.map((_, k) =>
-              _.title == 'Plant' && !company ? (
-                <Text
-                  style={{
-                    fontSize: Dimension.font14,
-                    color: Colors.FontColor,
-                    margin: Dimension.margin8,
-                    fontFamily: Dimension.CustomMediumFont,
-                  }}>
-                  Please select company to view plants
-                </Text>
-              ) : (
-                <View key={k} style={{paddingHorizontal: Dimension.padding15}}>
-                  <_.component {..._} />
-                </View>
-              ),
-            ):null}
+            <View style={styles.searchWraper}>
+              <CustomeIcon name={'search-grey'} size={22} color={'#8E8E93'} />
+              <TextInput
+                placeholder={'Search by name, company'}
+                returnKeyType={'search'}
+                onChangeText={e => setSearchValue(e)}
+                value={searchValue}
+                ellipsizeMode="tail"
+                placeholderTextColor={'#8E8E93'}
+                numberOfLines={1}
+                //clearButtonMode="always"
+                style={styles.SearchInputCss}
+              />
+            </View>
+            <View style={{marginTop: Dimension.margin20}}>
+              {!props.fromCommunicationFilter
+                ? FILTERS_DATA.tabs[selectedTabIndex].fields.map((_, k) =>
+                    _.title == 'Plant' && !company ? (
+                      <Text
+                        style={{
+                          fontSize: Dimension.font14,
+                          color: Colors.FontColor,
+                          margin: Dimension.margin8,
+                          fontFamily: Dimension.CustomMediumFont,
+                        }}>
+                        Please select company to view plants
+                      </Text>
+                    ) : (
+                      <View
+                        key={k}
+                        style={{paddingHorizontal: Dimension.padding15}}>
+                        <_.component {..._} />
+                      </View>
+                    ),
+                  )
+                : null}
+            </View>
           </View>
         </View>
         <View style={styles.bottomAction}>
@@ -426,7 +432,11 @@ const FilterModal = props => {
           <TouchableOpacity
             onPress={() => applyFilters()}
             style={styles.acceptCtabtn}>
-           {props.fromCommunicationFilter? <Text style={styles.acceptCtaTxt}>APPLY</Text>: <Text style={styles.acceptCtaTxt}>APPLY FILTERS</Text>}
+            {props.fromCommunicationFilter ? (
+              <Text style={styles.acceptCtaTxt}>APPLY</Text>
+            ) : (
+              <Text style={styles.acceptCtaTxt}>APPLY FILTERS</Text>
+            )}
           </TouchableOpacity>
         </View>
       </View>

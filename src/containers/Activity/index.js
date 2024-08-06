@@ -36,7 +36,7 @@ const ActivityScreen = () => {
   );
 
   const [searchValue, setSearchValue] = useState('');
-  const[filtersModal,setFiltersModal]=useState(false)
+  const [filtersModal, setFiltersModal] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -290,36 +290,25 @@ const ActivityScreen = () => {
         <View style={styles.TopHeader}>
           <Text style={styles.headingTxt}>Communication</Text>
         </View>
-
-        <View></View>
         <View style={styles.searchWraper}>
-          <CustomeIcon
-            name={'search-grey'}
-            size={20}
-            color={'#8E8E93'}
-            style={styles.searchIcon}></CustomeIcon>
-          <View style={{flex: 4}}>
-            <TextInput
-              placeholder={'Search by name, company'}
-              returnKeyType={'search'}
-              onChangeText={e => setSearchValue(e)}
-              value={searchValue}
-              ellipsizeMode="tail"
-              placeholderTextColor={'#8E8E93'}
-              numberOfLines={1}
-              //clearButtonMode="always"
-              style={styles.SearchInputCss}></TextInput>
-          </View>
-          {searchValue.length > 0 && (
-            <>
-              <TouchableOpacity
-                onPress={() => setSearchValue('')}
-                activeOpacity={0.5}
-                style={styles.crossIcon}>
-                <Icon name={'close-circle'} size={20} color={'#1568E5'}></Icon>
-              </TouchableOpacity>
-            </>
-          )}
+          <CustomeIcon name={'search-grey'} size={22} color={'#8E8E93'} />
+          <TextInput
+            placeholder={'Search '}
+            returnKeyType={'search'}
+            onChangeText={e => setSearchValue(e)}
+            value={searchValue}
+            ellipsizeMode="tail"
+            placeholderTextColor={'#8E8E93'}
+            numberOfLines={1}
+            //clearButtonMode="always"
+            style={styles.SearchInputCss}></TextInput>
+          {searchValue.length > 0 ? (
+            <TouchableOpacity
+              onPress={() => setSearchValue('')}
+              activeOpacity={0.5}>
+              <Icon name={'close-circle'} size={20} color={'#1568E5'} />
+            </TouchableOpacity>
+          ) : null}
         </View>
       </View>
       <FlatList
@@ -339,23 +328,22 @@ const ActivityScreen = () => {
         }
         keyExtractor={keyExtractor}
       />
-     
-       <TouchableOpacity style={styles.filterbtn} onPress={showFilter}>
-              <CustomeIcon
-                name={'Filter-blue'}
-                color={Colors.CtaColor}
-                size={20}
-                style={{marginVertical:2}}
-               ></CustomeIcon>
-              <Text style={styles.filtertxt}>Filter</Text>
-            </TouchableOpacity>
 
-            {filtersModal && (
+      <TouchableOpacity style={styles.filterbtn} onPress={showFilter}>
+        <CustomeIcon
+          name={'Filter-blue'}
+          color={Colors.CtaColor}
+          size={20}
+          style={{marginVertical: 2}}></CustomeIcon>
+        <Text style={styles.filtertxt}>Filter</Text>
+      </TouchableOpacity>
+
+      {filtersModal && (
         <FilterModal
           setFiltersModal={setFiltersModal}
           filtersModal={filtersModal}
           onApplyFilter={applyFilters}
-         fromCommunicationFilter
+          fromCommunicationFilter
         />
       )}
     </View>
