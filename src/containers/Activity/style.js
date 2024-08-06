@@ -156,6 +156,23 @@ const styles = StyleSheet.create({
     fontFamily: Dimension.CustomMediumFont,
     color: '#fff',
   },
+  filterbtn: {
+    flexDirection: 'row',
+    borderWidth: 1,
+    borderColor: colors.CtaColor,
+    borderRadius: 50,
+    paddingHorizontal: Dimension.padding20,
+    // paddingVertical: Dimension.padding5,
+    alignSelf: 'center',
+    marginBottom:12
+  },
+  filtertxt: {
+    fontFamily: Dimension.CustomMediumFont,
+    fontSize: Dimension.font14,
+    color: colors.CtaColor,
+    marginLeft: Dimension.margin6,
+    marginTop: 1,
+  },
 });
 
 export default styles;

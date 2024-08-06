@@ -25,6 +25,7 @@ import logAnalytics from '../../services/analytics';
 import Colors from '../../Theme/Colors';
 import {PERMISSIONS, request} from 'react-native-permissions';
 import CallDetectorManager from 'react-native-call-detection';
+import FilterModal from '../Filter';
 
 const ActivityScreen = () => {
   const total = useSelector(state => state.communicationReducer.get('total'));
@@ -35,6 +36,7 @@ const ActivityScreen = () => {
   );
 
   const [searchValue, setSearchValue] = useState('');
+  const[filtersModal,setFiltersModal]=useState(false)
 
   const dispatch = useDispatch();
 
@@ -55,6 +57,18 @@ const ActivityScreen = () => {
 
   const onRefreshLogs = (pageNo = 0) => {
     dispatch(fetchLogs(pageNo));
+  };
+
+  const showFilter = () => {
+    setFiltersModal(true);
+  };
+
+  const applyFilters = async params => {
+    // await logAnalytics('Calendar_ApplyFilter', {
+    //   Selected_Fields: JSON.stringify(params),
+    // });
+    setFiltersModal(false);
+    // dispatch(fetchCustomCalendar(params));
   };
 
   const setCallType = type => {
@@ -325,6 +339,25 @@ const ActivityScreen = () => {
         }
         keyExtractor={keyExtractor}
       />
+     
+       <TouchableOpacity style={styles.filterbtn} onPress={showFilter}>
+              <CustomeIcon
+                name={'Filter-blue'}
+                color={Colors.CtaColor}
+                size={20}
+                style={{marginVertical:2}}
+               ></CustomeIcon>
+              <Text style={styles.filtertxt}>Filter</Text>
+            </TouchableOpacity>
+
+            {filtersModal && (
+        <FilterModal
+          setFiltersModal={setFiltersModal}
+          filtersModal={filtersModal}
+          onApplyFilter={applyFilters}
+         fromCommunicationFilter
+        />
+      )}
     </View>
   );
 };

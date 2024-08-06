@@ -1,6 +1,8 @@
 import {StyleSheet, Dimensions} from 'react-native';
 import Colors from '../../Theme/Colors';
 import Dimension from '../../Theme/Dimension';
+import { colors } from 'react-native-elements';
+
 const deviceHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
   TopHeader: {
@@ -153,6 +155,42 @@ const styles = StyleSheet.create({
   },
   tooltipBoldTxt: {
     fontFamily: Dimension.CustomMediumFont,
+  },
+  searchWraper: {
+  
+    marginHorizontal:Dimension.margin5,
+    position: 'relative',
+    backgroundColor: '#fff',
+    borderRadius: 50,
+    borderWidth: 1,
+    borderColor: '#D3D3D3',
+    paddingHorizontal: Dimension.padding10,
+    height: Dimension.height40,
+    shadowColor: '#000',
+    shadowOffset: {width: -2, height: 4},
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    elevation: 4,
+  },
+  searchIcon: {
+    position: 'absolute',
+    top: Platform.OS === 'ios' ? 10 : 10,
+    left: Platform.OS === 'ios' ? 10 : 10,
+  },
+  SearchInputCss: {
+    fontSize: Dimension.font14,
+    color: colors.FontColor,
+    fontFamily: Dimension.CustomRegularFont,
+    height: Dimension.height40,
+    width: '90%',
+    paddingHorizontal: Dimension.padding25,
+  },
+  seacrhIcon: {
+    position: 'absolute',
+    top: Dimension.padding12,
+    right: Dimension.padding10,
+    fontSize: Dimension.font22,
+    color: colors.FontColor,
   },
 });
 export default styles;
