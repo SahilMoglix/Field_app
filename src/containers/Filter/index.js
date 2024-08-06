@@ -7,6 +7,8 @@ import {
   Platform,
   TextInput,
   useWindowDimensions,
+  ScrollView,
+  SafeAreaView,
 } from 'react-native';
 import Contacts from 'react-native-contacts';
 import Modal from 'react-native-modal';
@@ -45,6 +47,7 @@ const FilterModal = props => {
   const [branch, setBranch] = useState(props.branch || '');
   const [endDate, setEndDate] = useState(new Date(props.endDate));
   const [searchValue, setSearchValue] = useState('');
+  const [footerHeight, setFooterHeight] = useState(0);
 
   const FILTERS_DATA = {
     tabs: [
@@ -64,7 +67,7 @@ const FilterModal = props => {
               title: _,
               label: _,
             })),
-               fromFilterData: true,
+            fromFilterData: true,
           },
         ],
       },
@@ -84,7 +87,7 @@ const FilterModal = props => {
               title: _.value,
               label: _.value,
             })),
-               fromFilterData: true,
+            fromFilterData: true,
           },
         ],
       },
@@ -104,7 +107,7 @@ const FilterModal = props => {
               title: _.value,
               label: _.value,
             })),
-               fromFilterData: true,
+            fromFilterData: true,
           },
         ],
       },
@@ -161,15 +164,72 @@ const FilterModal = props => {
             onCheck: text => setDesignation(text),
             component: DotCheckbox,
             data: [
-              
-              {key: 'All', title: 'All', label: 'All'}, 
-              
-              {key: 'Amit', title: 'Amit', label: 'Amit'}, 
+              {key: 'All', title: 'All', label: 'All'},
+
+              {key: 'Amit', title: 'Amit', label: 'Amit'},
               {key: 'Rahul', title: 'Rahul', label: 'Rahul'},
-               {key: 'Praveen', title: 'Praveen', label: 'Praveen'},
-               {key: 'Sumrit Suvraman Biswal', title: 'Sumrit Suvraman Biswal', label: 'Sumrit Suvraman Biswal'},
-               {key: 'Rajesh Kumar', title: 'Rajesh Kumar', label: 'Rajesh Kumar'},
-              ],
+              {key: 'Praveen', title: 'Praveen', label: 'Praveen'},
+              {
+                key: 'Sumrit Suvraman Biswal',
+                title: 'Sumrit Suvraman Biswal',
+                label: 'Sumrit Suvraman Biswal',
+              },
+              {
+                key: 'Rajesh Kumar',
+                title: 'Rajesh Kumar',
+                label: 'Rajesh Kumar',
+              },
+              {
+                key: 'posaekp',
+                title: 'posaekp',
+                label: 'posaekp',
+              },
+              {
+                key: '21093sda',
+                title: '21093sda',
+                label: '21093sda',
+              },
+              {
+                key: '093uidsf',
+                title: '093uidsf',
+                label: '093uidsf',
+              },
+              {
+                key: 'mkacmlksa',
+                title: 'mkacmlksa',
+                label: 'mkacmlksa',
+              },
+              {
+                key: '09dufasd',
+                title: '09dufasd',
+                label: '09dufasd',
+              },
+              {
+                key: 'ncsakdosd',
+                title: 'ncsakdosd',
+                label: 'ncsakdosd',
+              },
+              {
+                key: '09123lksandn',
+                title: '09123lksandn',
+                label: '09123lksandn',
+              },
+              {
+                key: '98213jksa',
+                title: '98213jksa',
+                label: '98213jksa',
+              },
+              {
+                key: 'nxzciudsf',
+                title: 'nxzciudsf',
+                label: 'nxzciudsf',
+              },
+              {
+                key: '2145dsah',
+                title: '2145dsah',
+                label: '2145dsah',
+              },
+            ],
           },
         ],
       },
@@ -185,11 +245,23 @@ const FilterModal = props => {
             onCheck: text => setCompany(text),
             component: DotCheckbox,
             data: [
-              {key: 'All', title: 'All', label: 'All'}, 
-              {key: 'ARMOR TECHNOSOFT', title: 'ARMOR TECHNOSOFT', label: 'ARMOR TECHNOSOFT'},
-              {key: 'SAFEHAND FIRE SERVICES LLP', title: 'SAFEHAND FIRE SERVICES LLP', label: 'SAFEHAND FIRE SERVICES LLP'},
-               {key: 'DEEPAK TRADERS', title: 'DEEPAK TRADERS', label: 'DEEPAK TRADERS'}],
-
+              {key: 'All', title: 'All', label: 'All'},
+              {
+                key: 'ARMOR TECHNOSOFT',
+                title: 'ARMOR TECHNOSOFT',
+                label: 'ARMOR TECHNOSOFT',
+              },
+              {
+                key: 'SAFEHAND FIRE SERVICES LLP',
+                title: 'SAFEHAND FIRE SERVICES LLP',
+                label: 'SAFEHAND FIRE SERVICES LLP',
+              },
+              {
+                key: 'DEEPAK TRADERS',
+                title: 'DEEPAK TRADERS',
+                label: 'DEEPAK TRADERS',
+              },
+            ],
           },
         ],
       },
@@ -205,10 +277,11 @@ const FilterModal = props => {
             onCheck: text => setRegion(text),
             component: DotCheckbox,
             data: [
-              {key: 'All', title: 'All', label: 'All'}, 
+              {key: 'All', title: 'All', label: 'All'},
               {key: 'East', title: 'East', label: 'East'},
               {key: 'WEST', title: 'WEST', label: 'WEST'},
-               {key: 'SOUTH', title: 'SOUTH', label: 'SOUTH'}],
+              {key: 'SOUTH', title: 'SOUTH', label: 'SOUTH'},
+            ],
           },
         ],
       },
@@ -224,11 +297,11 @@ const FilterModal = props => {
             onCheck: text => setBranch(text),
             component: DotCheckbox,
             data: [
-              {key: 'All', title: 'All', label: 'All'}, 
+              {key: 'All', title: 'All', label: 'All'},
               {key: 'Lucknow', title: 'Lucknow', label: 'Lucknow'},
-               {key: 'Pune', title: 'Pune', label: 'Pune'}, 
-               {key: 'Bangalore', title: 'Bangalore', label: 'Bangalore'}],
-
+              {key: 'Pune', title: 'Pune', label: 'Pune'},
+              {key: 'Bangalore', title: 'Bangalore', label: 'Bangalore'},
+            ],
           },
         ],
       },
@@ -313,14 +386,12 @@ const FilterModal = props => {
     }
   };
 
-
   const onSearchText = text => {
     setSearchValue(text);
   };
 
   return (
     <Modal
-      overlayPointerEvents={'auto'}
       isVisible={props.filtersModal}
       onTouchOutside={() => {
         props.setFiltersModal(false);
@@ -328,19 +399,16 @@ const FilterModal = props => {
       onDismiss={() => {
         props.setFiltersModal(false);
       }}
-      coverScreen={true}
-
-      style={{padding: 0, margin: 0}}
-      statusBarTranslucent={Platform.OS == 'android' ? true : false}
-      hasBackdrop={true}
+      deviceWidth={deviceWidth}
+      style={{padding: 0, margin: 0, flex: 1}}
       onBackdropPress={() => props.setFiltersModal(false)}
       onBackButtonPress={() => props.setFiltersModal(false)}>
       <View
         style={{
+          flex: 1,
           backgroundColor: '#fff',
-          paddingTop: Dimension.padding40,
+          paddingTop: Platform.OS == 'android' ? 0 : Dimension.padding40,
           height: deviceHeight,
-          width: deviceWidth
         }}>
         <View style={styles.headerWrap}>
           <View style={styles.TopHeader}>
@@ -353,7 +421,6 @@ const FilterModal = props => {
             <Text style={styles.headingTxt}>Filter</Text>
           </View>
         </View>
-
         <View style={styles.MidWrapper}>
           <View style={styles.leftPart}>
             {!props.fromCommunicationFilter
@@ -422,35 +489,46 @@ const FilterModal = props => {
                 </View>
               </View>
             ) : null}
-            {!props.fromCommunicationFilter
-              ? FILTERS_DATA.tabs[selectedTabIndex].fields.map((_, k) =>
-                  _.title == 'Plant' && !company ? (
-                    <Text
-                      style={{
-                        fontSize: Dimension.font14,
-                        color: Colors.FontColor,
-                        margin: Dimension.margin8,
-                        fontFamily: Dimension.CustomMediumFont,
-                      }}>
-                      Please select company to view plants
-                    </Text>
-                  ) : (
-                    <View
-                      key={k}
-                      style={{paddingHorizontal: Dimension.padding15}}>
-                      <_.component {..._}  />
-                    </View>
-                  ),
-                )
-              : COMM_FILTER_DATA.tabs[selectedTabIndex]?.fields?.map((_, k) => (
-                <View
-                      key={k}
-                      style={{paddingHorizontal: Dimension.padding15}}>
-                      <_.component {..._}  />
-                    </View>))}
+            <ScrollView
+              contentContainerStyle={{
+                paddingTop: 20,
+                paddingBottom: footerHeight + Dimension.height40,
+              }}>
+              {!props.fromCommunicationFilter
+                ? FILTERS_DATA.tabs[selectedTabIndex].fields.map((_, k) =>
+                    _.title == 'Plant' && !company ? (
+                      <Text
+                        style={{
+                          fontSize: Dimension.font14,
+                          color: Colors.FontColor,
+                          margin: Dimension.margin8,
+                          fontFamily: Dimension.CustomMediumFont,
+                        }}>
+                        Please select company to view plants
+                      </Text>
+                    ) : (
+                      <View
+                        key={k}
+                        style={{paddingHorizontal: Dimension.padding15}}>
+                        <_.component {..._} />
+                      </View>
+                    ),
+                  )
+                : COMM_FILTER_DATA.tabs[selectedTabIndex]?.fields?.map(
+                    (_, k) => (
+                      <View
+                        key={k}
+                        style={{paddingHorizontal: Dimension.padding15}}>
+                        <_.component {..._} />
+                      </View>
+                    ),
+                  )}
+            </ScrollView>
           </View>
         </View>
-        <View style={styles.bottomAction}>
+        <View
+          onLayout={event => setFooterHeight(event.nativeEvent.layout.height)}
+          style={styles.bottomAction}>
           <TouchableOpacity
             onPress={() => applyFilters(true)}
             style={styles.cancelBtn}>
@@ -467,7 +545,6 @@ const FilterModal = props => {
           </TouchableOpacity>
         </View>
       </View>
-      <Toast />
     </Modal>
   );
 };
