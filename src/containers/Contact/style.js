@@ -28,8 +28,6 @@ const styles = StyleSheet.create({
   },
   searchWraper: {
     marginTop: Dimension.margin5,
-
-    position: 'relative',
     backgroundColor: '#fff',
     borderRadius: 50,
     borderWidth: 1,
@@ -41,25 +39,19 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.23,
     shadowRadius: 2.62,
     elevation: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
-  crossIcon: {
-    position: 'absolute',
-    top: Platform.OS === 'ios' ? 15 : 10,
-    right: Platform.OS === 'ios' ? 12 : 10,
-  },
-  searchIcon: {
-    position: 'absolute',
-    top: Platform.OS === 'ios' ? 15 : 10,
-    left: Platform.OS === 'ios' ? 12 : 10,
-  },
+
   SearchInputCss: {
-    fontSize: Dimension.font14,
+    fontSize: Dimension.font12,
     color: colors.FontColor,
     fontFamily: Dimension.CustomRegularFont,
     height: Dimension.height40,
-    width: '90%',
-    paddingHorizontal: Dimension.padding25,
-
+    paddingLeft: Dimension.padding10,
+    flex: 1,
+    backgroundColor: 'transparent',
+    lineHeight: Dimension.font18,
     // flex: 8,
   },
   seacrhIcon: {

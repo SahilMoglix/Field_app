@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
     elevation: 4,
     flexDirection: 'row',
     alignItems: 'center',
-    overflow: 'hidden',
+    height: Dimension.height40,
   },
   SearchInputCss: {
     fontSize: Dimension.font12,
@@ -180,6 +180,8 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 5,
     lineHeight: Dimension.font18,
+    height: '100%',
+    backgroundColor: 'transparent',
   },
   seacrhIcon: {
     position: 'absolute',
