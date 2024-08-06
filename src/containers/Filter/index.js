@@ -378,7 +378,7 @@ const FilterModal = props => {
           </View>
           <View style={styles.rightPart}>
            
-          <View style={styles.searchWraper}>
+        {props.fromCommunicationFilter?  <View style={styles.searchWraper}>
           <CustomeIcon
             name={'search-grey'}
             size={20}
@@ -397,7 +397,7 @@ const FilterModal = props => {
               style={styles.SearchInputCss}></TextInput>
           </View>
           
-        </View>
+        </View>:null}
             {!props.fromCommunicationFilter? FILTERS_DATA.tabs[selectedTabIndex].fields.map((_, k) =>
               _.title == 'Plant' && !company ? (
                 <Text
