@@ -575,30 +575,24 @@ const ContactScreen = props => {
         </View>
         <View></View>
         <View style={styles.searchWraper}>
-          <CustomeIcon
-            name={'search-grey'}
-            size={20}
-            color={'#8E8E93'}
-            style={styles.searchIcon}></CustomeIcon>
-          <View style={{flex: 4}}>
-            <TextInput
-              placeholder={'Search by name, company'}
-              returnKeyType={'search'}
-              onChangeText={e => onSearchText(e)}
-              defaultValue={searchValue}
-              ellipsizeMode="tail"
-              placeholderTextColor={'#8E8E93'}
-              numberOfLines={1}
-              //clearButtonMode="always"
-              style={styles.SearchInputCss}></TextInput>
-          </View>
+          <CustomeIcon name={'search-grey'} size={22} color={'#8E8E93'} />
+          <TextInput
+            placeholder={'Search by name, company'}
+            returnKeyType={'search'}
+            onChangeText={e => onSearchText(e)}
+            defaultValue={searchValue}
+            ellipsizeMode="tail"
+            placeholderTextColor={'#8E8E93'}
+            numberOfLines={1}
+            //clearButtonMode="always"
+            style={styles.SearchInputCss}
+          />
           {searchValue.length > 0 && (
             <>
               <TouchableOpacity
                 onPress={() => setSearch('')}
-                activeOpacity={0.5}
-                style={styles.crossIcon}>
-                <Icon name={'close-circle'} size={20} color={'#1568E5'}></Icon>
+                activeOpacity={0.5}>
+                <Icon name={'close-circle'} size={20} color={'#1568E5'} />
               </TouchableOpacity>
             </>
           )}

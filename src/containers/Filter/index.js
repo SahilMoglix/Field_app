@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {isValidElement, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
   useWindowDimensions,
   ScrollView,
   SafeAreaView,
+  Keyboard,
 } from 'react-native';
 import Contacts from 'react-native-contacts';
 import Modal from 'react-native-modal';

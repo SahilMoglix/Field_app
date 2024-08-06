@@ -43,18 +43,18 @@ const styles = StyleSheet.create({
     elevation: 4,
     flexDirection: 'row',
     alignItems: 'center',
-    // overflow: 'hidden',
     height: Dimension.height40,
-
   },
   SearchInputCss: {
     fontSize: Dimension.font12,
     color: colors.FontColor,
     fontFamily: Dimension.CustomRegularFont,
-    backgroundColor: '#fff',
+    backgroundColor: 'transparent',
     flex: 1,
     marginLeft: 5,
     lineHeight: Dimension.font18,
+    height: '100%',
+    borderRadius: 50,
   },
   seacrhIcon: {
     position: 'absolute',

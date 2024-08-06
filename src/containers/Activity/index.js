@@ -32,7 +32,7 @@ const ActivityScreen = () => {
   const total = useSelector(state => state.communicationReducer.get('total'));
   const logsData = useSelector(state => state.communicationReducer.get('data'));
   const pageNo = useSelector(state => state.communicationReducer.get('pageNo'));
-  const adminFlag = useSelector(state=>state?.authReducer?.data?.isAdmin)
+  const adminFlag = useSelector(state => state?.authReducer?.data?.isAdmin);
   const logsStatus = useSelector(state =>
     state.communicationReducer.get('status'),
   );
@@ -331,14 +331,16 @@ const ActivityScreen = () => {
         keyExtractor={keyExtractor}
       />
 
-    {adminFlag ? <TouchableOpacity style={styles.filterbtn} onPress={showFilter}>
-        <CustomeIcon
-          name={'Filter-blue'}
-          color={Colors.CtaColor}
-          size={20}
-          style={{marginVertical: 2}}></CustomeIcon>
-        <Text style={styles.filtertxt}>Filter</Text>
-      </TouchableOpacity>:null}
+      {adminFlag ? (
+        <TouchableOpacity style={styles.filterbtn} onPress={showFilter}>
+          <CustomeIcon
+            name={'Filter-blue'}
+            color={Colors.CtaColor}
+            size={20}
+            style={{marginVertical: 2}}></CustomeIcon>
+          <Text style={styles.filtertxt}>Filter</Text>
+        </TouchableOpacity>
+      ) : null}
 
       {filtersModal && (
         <FilterModal
