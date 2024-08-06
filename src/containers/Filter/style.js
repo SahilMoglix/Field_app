@@ -25,8 +25,9 @@ const styles = StyleSheet.create({
     elevation: 4,
     paddingHorizontal: Dimension.padding15,
     marginBottom: Dimension.margin5,
-    paddingVertical: Dimension.padding10,
+    height: Dimension.height40,
     backgroundColor: '#fff',
+    justifyContent: 'center',
   },
   bottomAction: {
     borderTopWidth: 1,

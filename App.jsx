@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {StatusBar, View, Platform} from 'react-native';
+import {StatusBar, View, Platform, SafeAreaView} from 'react-native';
 import Routes from './src/routes';
 import store from './src/redux/store';
 import {Provider} from 'react-redux';
@@ -11,18 +11,16 @@ const App = () => {
   useEffect(() => {
     SplashScreen.hide();
   }, []);
+
   return (
-    <Provider store={store}>
-      <StatusBar translucent backgroundColor="#fff" barStyle={'dark-content'} />
-      <View
-        style={{
-          marginTop: Platform.OS === 'ios' ? 30 : StatusBar.currentHeight,
-        }}
-      />
-      <Routes />
-      {/* <Toast /> */}
-      <Toast config={toastConfig} ref={ref => Toast.setRef(ref)} />
-    </Provider>
+    <SafeAreaView style={{flex: 1}}>
+      <Provider store={store}>
+        <StatusBar backgroundColor="#fff" barStyle={'dark-content'} />
+        <Routes />
+        {/* <Toast /> */}
+        <Toast config={toastConfig} ref={ref => Toast.setRef(ref)} />
+      </Provider>
+    </SafeAreaView>
   );
 };
 
