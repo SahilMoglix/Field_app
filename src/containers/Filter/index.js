@@ -384,43 +384,48 @@ const FilterModal = props => {
                 ))}
           </View>
           <View style={styles.rightPart}>
-            <View style={styles.searchWraper}>
-              <CustomeIcon name={'search-grey'} size={22} color={'#8E8E93'} />
-              <TextInput
-                placeholder={'Search by name, company'}
-                returnKeyType={'search'}
-                onChangeText={e => setSearchValue(e)}
-                value={searchValue}
-                ellipsizeMode="tail"
-                placeholderTextColor={'#8E8E93'}
-                numberOfLines={1}
-                //clearButtonMode="always"
-                style={styles.SearchInputCss}
-              />
-            </View>
-            <View style={{marginTop: Dimension.margin20}}>
-              {!props.fromCommunicationFilter
-                ? FILTERS_DATA.tabs[selectedTabIndex].fields.map((_, k) =>
-                    _.title == 'Plant' && !company ? (
-                      <Text
-                        style={{
-                          fontSize: Dimension.font14,
-                          color: Colors.FontColor,
-                          margin: Dimension.margin8,
-                          fontFamily: Dimension.CustomMediumFont,
-                        }}>
-                        Please select company to view plants
-                      </Text>
-                    ) : (
-                      <View
-                        key={k}
-                        style={{paddingHorizontal: Dimension.padding15}}>
-                        <_.component {..._} />
-                      </View>
-                    ),
-                  )
-                : null}
-            </View>
+            {props.fromCommunicationFilter ? (
+              <View style={styles.searchWraper}>
+                <CustomeIcon
+                  name={'search-grey'}
+                  size={20}
+                  color={'#8E8E93'}
+                  style={styles.searchIcon}></CustomeIcon>
+                <View style={{flex: 4}}>
+                  <TextInput
+                    placeholder={'Search by name, company'}
+                    returnKeyType={'search'}
+                    onChangeText={e => setSearchValue(e)}
+                    value={searchValue}
+                    ellipsizeMode="tail"
+                    placeholderTextColor={'#8E8E93'}
+                    numberOfLines={1}
+                    //clearButtonMode="always"
+                    style={styles.SearchInputCss}></TextInput>
+                </View>
+              </View>
+            ) : null}
+            {!props.fromCommunicationFilter
+              ? FILTERS_DATA.tabs[selectedTabIndex].fields.map((_, k) =>
+                  _.title == 'Plant' && !company ? (
+                    <Text
+                      style={{
+                        fontSize: Dimension.font14,
+                        color: Colors.FontColor,
+                        margin: Dimension.margin8,
+                        fontFamily: Dimension.CustomMediumFont,
+                      }}>
+                      Please select company to view plants
+                    </Text>
+                  ) : (
+                    <View
+                      key={k}
+                      style={{paddingHorizontal: Dimension.padding15}}>
+                      <_.component {..._} />
+                    </View>
+                  ),
+                )
+              : null}
           </View>
         </View>
         <View style={styles.bottomAction}>
