@@ -9,7 +9,7 @@ import {
   useWindowDimensions,
   ScrollView,
   SafeAreaView,
-  Keyboard,
+  Keyboard
 } from 'react-native';
 import Contacts from 'react-native-contacts';
 import Modal from 'react-native-modal';
@@ -391,6 +391,11 @@ const FilterModal = props => {
     setSearchValue(text);
   };
 
+
+                console.log( COMM_FILTER_DATA.tabs[selectedTabIndex]?.fields,'console!!')
+
+
+
   return (
     <Modal
       isVisible={props.filtersModal}
@@ -486,8 +491,8 @@ const FilterModal = props => {
                     placeholderTextColor={'#8E8E93'}
                     numberOfLines={1}
                     //clearButtonMode="always"
-                    style={styles.SearchInputCss}></TextInput>
-                </View>
+                    style={styles.SearchInputCss} />
+                </View>             
               </View>
             ) : null}
             <ScrollView
@@ -515,15 +520,15 @@ const FilterModal = props => {
                       </View>
                     ),
                   )
-                : COMM_FILTER_DATA.tabs[selectedTabIndex]?.fields?.map(
-                    (_, k) => (
-                      <View
-                        key={k}
-                        style={{paddingHorizontal: Dimension.padding15}}>
-                        <_.component {..._} />
-                      </View>
-                    ),
-                  )}
+                :COMM_FILTER_DATA.tabs[selectedTabIndex]?.fields?.map(
+    (_, k) => (
+      <View
+        key={k}
+        style={{paddingHorizontal: Dimension.padding15}}>
+         <_.component {..._} searchvalue={searchValue} />
+      </View>
+    ),
+  )}             
             </ScrollView>
           </View>
         </View>

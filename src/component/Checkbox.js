@@ -6,7 +6,8 @@ import {StyleSheet, View, Text} from 'react-native';
 import CustomeIcon from './CustomeIcon';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const DotCheckbox = props => {
-  const {data, onCheck, value} = props;
+  const {data, onCheck, value,} = props;
+  console.log("data",data)
   return (
     <>
       <View style={props.from == 'addContact' ? styles.WrapperStyle : null}>
@@ -27,7 +28,7 @@ const DotCheckbox = props => {
               ? {flexDirection: 'row', marginLeft: -10, flexWrap: 'wrap'}
               : {flexDirection: 'column'}
           }>
-          {(data || []).map((_, i) => (
+          {(data || [])?.filter((_, i) => _.label?.toLowerCase().includes(props?.searchvalue?.toLowerCase())).map((_, i) => (
             <CheckBox
               title={_.title}
               key={_.key}
