@@ -34,14 +34,14 @@ const DotCheckbox = props => {
               onPress={() => onCheck(_.key)}
               checkedIcon={
                 <Icon
-                  name={'checkbox-marked'}
+                  name={props?.fromFilterData ? 'radiobox-marked' : 'checkbox-marked'}
                   size={Dimension.font20}
                   color={colors.CtaColor}
                 />
               }
               uncheckedIcon={
                 <Icon
-                  name={'checkbox-blank-outline'}
+                  name={props?.fromFilterData ? 'radiobox-blank' : 'checkbox-blank-outline'}
                   size={Dimension.font20}
                   color={colors.FontColor}
                 />

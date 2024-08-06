@@ -64,6 +64,7 @@ const FilterModal = props => {
               title: _,
               label: _,
             })),
+               fromFilterData: true,
           },
         ],
       },
@@ -83,6 +84,7 @@ const FilterModal = props => {
               title: _.value,
               label: _.value,
             })),
+               fromFilterData: true,
           },
         ],
       },
@@ -102,6 +104,7 @@ const FilterModal = props => {
               title: _.value,
               label: _.value,
             })),
+               fromFilterData: true,
           },
         ],
       },
@@ -157,11 +160,16 @@ const FilterModal = props => {
             value: designation,
             onCheck: text => setDesignation(text),
             component: DotCheckbox,
-            data: Designations.toArray().map(_ => ({
-              key: _,
-              title: _,
-              label: _,
-            })),
+            data: [
+              
+              {key: 'All', title: 'All', label: 'All'}, 
+              
+              {key: 'Amit', title: 'Amit', label: 'Amit'}, 
+              {key: 'Rahul', title: 'Rahul', label: 'Rahul'},
+               {key: 'Praveen', title: 'Praveen', label: 'Praveen'},
+               {key: 'Sumrit Suvraman Biswal', title: 'Sumrit Suvraman Biswal', label: 'Sumrit Suvraman Biswal'},
+               {key: 'Rajesh Kumar', title: 'Rajesh Kumar', label: 'Rajesh Kumar'},
+              ],
           },
         ],
       },
@@ -176,11 +184,12 @@ const FilterModal = props => {
             value: company,
             onCheck: text => setCompany(text),
             component: DotCheckbox,
-            data: CompanyData.toArray().map(_ => ({
-              ..._,
-              title: _.value,
-              label: _.value,
-            })),
+            data: [
+              {key: 'All', title: 'All', label: 'All'}, 
+              {key: 'ARMOR TECHNOSOFT', title: 'ARMOR TECHNOSOFT', label: 'ARMOR TECHNOSOFT'},
+              {key: 'SAFEHAND FIRE SERVICES LLP', title: 'SAFEHAND FIRE SERVICES LLP', label: 'SAFEHAND FIRE SERVICES LLP'},
+               {key: 'DEEPAK TRADERS', title: 'DEEPAK TRADERS', label: 'DEEPAK TRADERS'}],
+
           },
         ],
       },
@@ -195,11 +204,11 @@ const FilterModal = props => {
             value: region,
             onCheck: text => setRegion(text),
             component: DotCheckbox,
-            data: (PlantsData.get(company) || []).map(_ => ({
-              ..._,
-              title: _.value,
-              label: _.value,
-            })),
+            data: [
+              {key: 'All', title: 'All', label: 'All'}, 
+              {key: 'East', title: 'East', label: 'East'},
+              {key: 'WEST', title: 'WEST', label: 'WEST'},
+               {key: 'SOUTH', title: 'SOUTH', label: 'SOUTH'}],
           },
         ],
       },
@@ -214,10 +223,12 @@ const FilterModal = props => {
             value: branch,
             onCheck: text => setBranch(text),
             component: DotCheckbox,
-            data: {
-              title: 'Region',
-              label: '_.value',
-            },
+            data: [
+              {key: 'All', title: 'All', label: 'All'}, 
+              {key: 'Lucknow', title: 'Lucknow', label: 'Lucknow'},
+               {key: 'Pune', title: 'Pune', label: 'Pune'}, 
+               {key: 'Bangalore', title: 'Bangalore', label: 'Bangalore'}],
+
           },
         ],
       },
@@ -318,10 +329,9 @@ const FilterModal = props => {
         props.setFiltersModal(false);
       }}
       coverScreen={true}
-      deviceHeight={deviceHeight}
-      deviceWidth={deviceWidth}
+
       style={{padding: 0, margin: 0}}
-      statusBarTranslucent={true}
+      statusBarTranslucent={Platform.OS == 'android' ? true : false}
       hasBackdrop={true}
       onBackdropPress={() => props.setFiltersModal(false)}
       onBackButtonPress={() => props.setFiltersModal(false)}>
@@ -329,6 +339,8 @@ const FilterModal = props => {
         style={{
           backgroundColor: '#fff',
           paddingTop: Dimension.padding40,
+          height: deviceHeight,
+          width: deviceWidth
         }}>
         <View style={styles.headerWrap}>
           <View style={styles.TopHeader}>
@@ -426,11 +438,16 @@ const FilterModal = props => {
                     <View
                       key={k}
                       style={{paddingHorizontal: Dimension.padding15}}>
-                      <_.component {..._} />
+                      <_.component {..._}  />
                     </View>
                   ),
                 )
-              : null}
+              : COMM_FILTER_DATA.tabs[selectedTabIndex]?.fields?.map((_, k) => (
+                <View
+                      key={k}
+                      style={{paddingHorizontal: Dimension.padding15}}>
+                      <_.component {..._}  />
+                    </View>))}
           </View>
         </View>
         <View style={styles.bottomAction}>
