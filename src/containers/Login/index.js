@@ -57,6 +57,8 @@ const LoginScreen = props => {
           let storeRes = {
             access_token: loginResponse?.data?.result?.access_token,
             email: loginResponse?.data?.result?.email,
+            create : loginResponse?.data?.result?.create,
+            isAdmin : loginResponse?.data?.result?.isAdmin
           };
           dispatch(fetchedAuth(storeRes));
           await AsyncStorage.setItem(

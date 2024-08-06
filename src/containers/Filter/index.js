@@ -160,13 +160,13 @@ const FilterModal = props => {
             title: 'Sales Person',
             label: 'Sales Person',
             placeholder: '',
-            value: designation,
-            onCheck: text => setDesignation(text),
+            value: salesPerson,
+            onCheck: text => setSalesPerson(text),
             component: DotCheckbox,
             data: [
-              {key: 'All', title: 'All', label: 'All'},
-
-              {key: 'Amit', title: 'Amit', label: 'Amit'},
+              
+              {key: 'All', title: 'All', label: 'All'},               
+              {key: 'Amit', title: 'Amit', label: 'Amit'}, 
               {key: 'Rahul', title: 'Rahul', label: 'Rahul'},
               {key: 'Praveen', title: 'Praveen', label: 'Praveen'},
               {
@@ -479,7 +479,7 @@ const FilterModal = props => {
                   <TextInput
                     placeholder={'Search by name, company'}
                     returnKeyType={'search'}
-                    onChangeText={e => setSearchValue(e)}
+                    onChangeText={onSearchText}
                     value={searchValue}
                     ellipsizeMode="tail"
                     placeholderTextColor={'#8E8E93'}

@@ -43,7 +43,9 @@ const styles = StyleSheet.create({
     elevation: 4,
     flexDirection: 'row',
     alignItems: 'center',
-    overflow: 'hidden',
+    // overflow: 'hidden',
+    height: Dimension.height40,
+
   },
   SearchInputCss: {
     fontSize: Dimension.font12,

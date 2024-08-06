@@ -26,11 +26,13 @@ import Colors from '../../Theme/Colors';
 import {PERMISSIONS, request} from 'react-native-permissions';
 import CallDetectorManager from 'react-native-call-detection';
 import FilterModal from '../Filter';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ActivityScreen = () => {
   const total = useSelector(state => state.communicationReducer.get('total'));
   const logsData = useSelector(state => state.communicationReducer.get('data'));
   const pageNo = useSelector(state => state.communicationReducer.get('pageNo'));
+  const adminFlag = useSelector(state=>state?.authReducer?.data?.isAdmin)
   const logsStatus = useSelector(state =>
     state.communicationReducer.get('status'),
   );
@@ -329,14 +331,14 @@ const ActivityScreen = () => {
         keyExtractor={keyExtractor}
       />
 
-      <TouchableOpacity style={styles.filterbtn} onPress={showFilter}>
+    {adminFlag ? <TouchableOpacity style={styles.filterbtn} onPress={showFilter}>
         <CustomeIcon
           name={'Filter-blue'}
           color={Colors.CtaColor}
           size={20}
           style={{marginVertical: 2}}></CustomeIcon>
         <Text style={styles.filtertxt}>Filter</Text>
-      </TouchableOpacity>
+      </TouchableOpacity>:null}
 
       {filtersModal && (
         <FilterModal
