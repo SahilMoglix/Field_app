@@ -300,6 +300,11 @@ const FilterModal = props => {
     }
   };
 
+
+  const onSearchText = text => {
+    setSearchValue(text);
+  };
+
   return (
     <Modal
       overlayPointerEvents={'auto'}
@@ -388,7 +393,7 @@ const FilterModal = props => {
             <TextInput
               placeholder={'Search by name, company'}
               returnKeyType={'search'}
-              onChangeText={e => setSearchValue(e)}
+              onChangeText={onSearchText}
               value={searchValue}
               ellipsizeMode="tail"
               placeholderTextColor={'#8E8E93'}
