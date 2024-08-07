@@ -163,7 +163,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#D3D3D3',
     paddingHorizontal: Dimension.padding10,
-    height: Dimension.height40,
     shadowColor: '#000',
     shadowOffset: {width: -2, height: 4},
     shadowOpacity: 0.23,

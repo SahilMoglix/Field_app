@@ -9,7 +9,7 @@ import {
   useWindowDimensions,
   ScrollView,
   SafeAreaView,
-  Keyboard
+  Keyboard,
 } from 'react-native';
 import Contacts from 'react-native-contacts';
 import Modal from 'react-native-modal';
@@ -165,9 +165,8 @@ const FilterModal = props => {
             onCheck: text => setSalesPerson(text),
             component: DotCheckbox,
             data: [
-              
-              {key: 'All', title: 'All', label: 'All'},               
-              {key: 'Amit', title: 'Amit', label: 'Amit'}, 
+              {key: 'All', title: 'All', label: 'All'},
+              {key: 'Amit', title: 'Amit', label: 'Amit'},
               {key: 'Rahul', title: 'Rahul', label: 'Rahul'},
               {key: 'Praveen', title: 'Praveen', label: 'Praveen'},
               {
@@ -471,23 +470,19 @@ const FilterModal = props => {
           <View style={styles.rightPart}>
             {props.fromCommunicationFilter ? (
               <View style={styles.searchWraper}>
-                <CustomeIcon
-                  name={'search-grey'}
-                  size={20}
-                  color={'#8E8E93'}
-                  style={styles.searchIcon}></CustomeIcon>
+                <CustomeIcon name={'search-grey'} size={20} color={'#8E8E93'} />
                 <View style={{flex: 4}}>
                   <TextInput
                     placeholder={'Search by name, company'}
                     returnKeyType={'search'}
                     onChangeText={onSearchText}
                     value={searchValue}
-                    ellipsizeMode="tail"
                     placeholderTextColor={'#8E8E93'}
                     numberOfLines={1}
                     //clearButtonMode="always"
-                    style={styles.SearchInputCss} />
-                </View>             
+                    style={styles.SearchInputCss}
+                  />
+                </View>
               </View>
             ) : null}
             <ScrollView
@@ -515,15 +510,15 @@ const FilterModal = props => {
                       </View>
                     ),
                   )
-                :COMM_FILTER_DATA.tabs[selectedTabIndex]?.fields?.map(
-    (_, k) => (
-      <View
-        key={k}
-        style={{paddingHorizontal: Dimension.padding15}}>
-         <_.component {..._} searchvalue={searchValue} />
-      </View>
-    ),
-  )}             
+                : COMM_FILTER_DATA.tabs[selectedTabIndex]?.fields?.map(
+                    (_, k) => (
+                      <View
+                        key={k}
+                        style={{paddingHorizontal: Dimension.padding15}}>
+                        <_.component {..._} searchvalue={searchValue} />
+                      </View>
+                    ),
+                  )}
             </ScrollView>
           </View>
         </View>
