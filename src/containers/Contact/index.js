@@ -50,6 +50,7 @@ const ContactScreen = props => {
   const logsStatus = useSelector(state =>
     state.communicationReducer.get('status'),
   );
+  const createFlag = useSelector(state => state?.authReducer?.data?.create);
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const [contacts, setContacts] = useState([]);
   const [syncLoading, setSyncLoading] = useState(false);
@@ -545,15 +546,17 @@ const ContactScreen = props => {
       <View style={styles.headerWrap}>
         <View style={styles.TopHeader}>
           <Text style={styles.headingTxt}>Contacts</Text>
-          <TouchableOpacity
-            onPress={addContactModal}
-            style={{flexDirection: 'row'}}>
-            <CustomeIcon
-              name={'Add-blue'}
-              size={18}
-              color={'#1568E5'}></CustomeIcon>
-            <Text style={styles.addBtnTxt}> Add</Text>
-          </TouchableOpacity>
+          {createFlag ? (
+            <TouchableOpacity
+              onPress={addContactModal}
+              style={{flexDirection: 'row'}}>
+              <CustomeIcon
+                name={'Add-blue'}
+                size={18}
+                color={'#1568E5'}></CustomeIcon>
+              <Text style={styles.addBtnTxt}> Add</Text>
+            </TouchableOpacity>
+          ) : null}
         </View>
 
         <View style={styles.HeaderForBtn}>
