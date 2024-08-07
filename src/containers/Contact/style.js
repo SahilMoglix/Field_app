@@ -103,12 +103,29 @@ const styles = StyleSheet.create({
     borderColor: '#D3D3D3',
     position: 'relative',
   },
+  placeholderCopy: {
+    width: 28,
+    height: 28,
+    borderRadius: 28,
+    overflow: 'hidden',
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#D3D3D3',
+    position: 'relative',
+  },
   contactDat: {
     paddingLeft: Dimension.padding10,
     width: '75%',
   },
   txt: {
     fontSize: Dimension.font20,
+    fontFamily: Dimension.CustomBoldFont,
+    color: colors.FontColor,
+  },
+  txtCopy: {
+    fontSize: Dimension.font16,
     fontFamily: Dimension.CustomBoldFont,
     color: colors.FontColor,
   },
@@ -131,7 +148,7 @@ const styles = StyleSheet.create({
   },
   HeaderForBtn: {
     flexDirection: 'row',
-    justifyContent: "flex-end",
+    justifyContent: 'flex-end',
     alignItems: 'center',
     marginBottom: Dimension.margin5,
   },
@@ -172,18 +189,17 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   modalWrap: {
-    alignItems: 'center',
-    paddingHorizontal: Dimension.padding5,
-    backgroundColor:"#FFFFFF",
-    justifyContent:"flex-end",margin:0
+    margin: 0,
+    padding: 0,
+    justifyContent: 'flex-end',
   },
   codContainer: {
-  // flexDirection:"row",
-    backgroundColor: colors.white, 
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: colors.white,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
-    padding:Dimension.padding20,
-   
+    padding: Dimension.padding20,
   },
 
   codCtaContainer: {
@@ -199,6 +215,7 @@ const styles = StyleSheet.create({
     paddingVertical: Dimension.padding16,
     borderRadius: Dimension.borderRadius15,
     backgroundColor: colors.RedThemeColor,
+    marginBottom: Dimension.margin5,
   },
   confirmCtaText: {
     color: colors.WhiteColor,

@@ -38,7 +38,6 @@ import {createAllContacts} from '../../services/communication';
 import {updateLogs} from '../../redux/actions/communication';
 import MatIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-
 const ContactScreen = props => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -65,7 +64,9 @@ const ContactScreen = props => {
   const [contactNum, setContactNum] = useState('');
   const [contactExists, setContactExists] = useState(false);
   const [contactLoading, setContactLoading] = useState(false);
-  const [callModalVisible,setCallModalVisible]=useState(false)
+  const [callModalVisible, setCallModalVisible] = useState(false);
+  const [number, setNumber] = useState('');
+  const [callerName, setCallerName] = useState('');
 
   let callDetector = null;
   useEffect(() => {
@@ -143,6 +144,23 @@ const ContactScreen = props => {
     setModalVisible(!isModalVisible);
   };
 
+  const showModalFn = (it, name) => {
+    setCallModalVisible(true);
+    setNumber(it);
+    setCallerName(name);
+  };
+
+  const openDialerFn = async phNum => {
+    await logAnalytics('Open_Dialer', {
+      Contact: phNum,
+      Screen_Name: 'Contacts',
+    });
+    phoneCallDetector(phNum);
+    Linking.openURL(
+      `${Platform.OS == 'android' ? 'tel' : 'telprompt'}:${phNum}`,
+    );
+  };
+
   const INCLINATION_COLORS = {
     Promoter: '#E2FCD0',
     Detractor: '#FFD8D5',
@@ -213,16 +231,19 @@ const ContactScreen = props => {
         </View>
         <TouchableOpacity
           style={styles.arrowBtn}
-          onPress={async () => {
-            await logAnalytics('Open_Dialer', {
-              Contact: item.phone,
-              Screen_Name: 'Contacts',
-            });
-            phoneCallDetector(item);
-            Linking.openURL(
-              `${Platform.OS == 'android' ? 'tel' : 'telprompt'}:${item.phone}`,
-            );
-            {Platform.OS == 'android'?null:setCallModalVisible(true)}
+          onPress={() => {
+            //   await logAnalytics('Open_Dialer', {
+            //     Contact: item.phone,
+            //     Screen_Name: 'Contacts',
+            //   });
+            //   phoneCallDetector(item);
+            //   Linking.openURL(
+            //     `${Platform.OS == 'android' ? 'tel' : 'telprompt'}:${item.phone}`,
+            //   );
+
+            !Platform.OS == 'android'
+              ? openDialerFn(item.phone)
+              : showModalFn(item.phone, item.name);
           }}>
           <CustomeIcon
             name={'Call-blue'}
@@ -525,17 +546,16 @@ const ContactScreen = props => {
         <View style={styles.TopHeader}>
           <Text style={styles.headingTxt}>Contacts</Text>
           <TouchableOpacity
-                onPress={addContactModal}
-                style={{flexDirection: 'row'}}>
-                <CustomeIcon
-                  name={'Add-blue'}
-                  size={18}
-                  color={'#1568E5'}></CustomeIcon>
-                <Text style={styles.addBtnTxt}> Add</Text>
-              </TouchableOpacity>
-
+            onPress={addContactModal}
+            style={{flexDirection: 'row'}}>
+            <CustomeIcon
+              name={'Add-blue'}
+              size={18}
+              color={'#1568E5'}></CustomeIcon>
+            <Text style={styles.addBtnTxt}> Add</Text>
+          </TouchableOpacity>
         </View>
-        
+
         <View style={styles.HeaderForBtn}>
           {/* <View style={styles.BtnWrap}>
             <TouchableOpacity
@@ -569,7 +589,7 @@ const ContactScreen = props => {
           </View> */}
           <View>
             {/* {pagetype == 'Focused' ? ( */}
-              {/* <TouchableOpacity
+            {/* <TouchableOpacity
                 onPress={addContactModal}
                 style={{flexDirection: 'row'}}>
                 <CustomeIcon
@@ -578,7 +598,6 @@ const ContactScreen = props => {
                   color={'#1568E5'}></CustomeIcon>
                 <Text style={styles.addBtnTxt}> Add</Text>
               </TouchableOpacity> */}
-
 
             {/* ) : (
               <TouchableOpacity
@@ -767,39 +786,57 @@ const ContactScreen = props => {
         </View>
       ) : null}
 
-      {callModalVisible && 
-      <Modal 
-      onBackButtonPress={()=>setCallModalVisible(false)}
-      onBackdropPress={()=>setCallModalVisible(false)}
-      isVisible={callModalVisible}
-      overlayPointerEvents={'auto'}
-      onTouchOutside={()=>setCallModalVisible(false)}
-      onDismiss={()=>setCallModalVisible(false)}
-      onRequestClose={()=>setCallModalVisible(false)}
-      deviceWidth={Dimensions.get("window").width}
-      
-      style={styles.modalWrap}>
+      {callModalVisible && (
+        <Modal
+          onBackButtonPress={() => setCallModalVisible(false)}
+          onBackdropPress={() => setCallModalVisible(false)}
+          isVisible={callModalVisible}
+          overlayPointerEvents={'auto'}
+          onTouchOutside={() => setCallModalVisible(false)}
+          onDismiss={() => setCallModalVisible(false)}
+          onRequestClose={() => setCallModalVisible(false)}
+          deviceWidth={Dimensions.get('window').width}
+          style={styles.modalWrap}>
+          <View style={{backgroundColor: '#fff'}}>
             <View style={styles.codContainer}>
-                <Text>
-                  Do you want to continue?
-                </Text>
-                <TouchableOpacity
-            onPress={() => {
-              setCallModalVisible(false)
-            }}>
-            <MatIcon name={'close-circle'} size={26} color={'#3c3c3c'} />
-          </TouchableOpacity>
-                
+              <View style={styles.placeholderCopy}>
+                <Text style={styles.txtCopy}>{callerName?.[0]}</Text>
               </View>
-              <View style={styles.codCtaContainer}>
-                <TouchableOpacity
-                 style={styles.confirmCta}
-                    onPress={() => {
+
+              <View style={styles.contactDat}>
+                {callerName ? (
+                  <>
+                    <Text style={styles.name}>{callerName} </Text>
+                    <Text style={styles.name}>{number} </Text>
+                  </>
+                ) : null}
+              </View>
+
+              {/* <Text
+                style={{
+                  fontSize: Dimension.font14,
+                  fontFamily: Dimension.CustomSemiBoldFont,
                 }}>
-                    <Text style={styles.confirmCtaText}>CONTINUE</Text>
-                  </TouchableOpacity>
-                </View>
-    </Modal>}
+                Do you want to continue?
+              </Text> */}
+              <TouchableOpacity
+                style={{top: -5, right: -2}}
+                onPress={() => {
+                  setCallModalVisible(false);
+                }}>
+                <MatIcon name={'close-circle'} size={22} color={'#3c3c3c'} />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.codCtaContainer}>
+              <TouchableOpacity
+                style={styles.confirmCta}
+                onPress={() => openDialerFn(number)}>
+                <Text style={styles.confirmCtaText}>CALL NOW</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+      )}
     </View>
   );
 };
