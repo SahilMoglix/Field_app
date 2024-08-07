@@ -234,6 +234,9 @@ const Dimension = {
 
   borderwidth1: 1,
   borderRadius3: normalize(3),
+  borderRadius10: normalize(10),
+  borderRadius1: normalize(1),
+  borderRadius15: normalize(15),
   SCREEN_WIDTH,
   SCREEN_HEIGHT,
 };

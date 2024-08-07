@@ -18,7 +18,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.23,
     shadowRadius: 2.62,
     elevation: 10,
-
     paddingHorizontal: Dimension.padding15,
     marginBottom: Dimension.margin10,
     //paddingVertical: Dimension.padding10,
@@ -132,7 +131,7 @@ const styles = StyleSheet.create({
   },
   HeaderForBtn: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: "flex-end",
     alignItems: 'center',
     marginBottom: Dimension.margin5,
   },
@@ -171,6 +170,41 @@ const styles = StyleSheet.create({
     fontSize: Dimension.font14,
     fontFamily: Dimension.CustomMediumFont,
     color: '#fff',
+  },
+  modalWrap: {
+    alignItems: 'center',
+    paddingHorizontal: Dimension.padding5,
+    backgroundColor:"#FFFFFF",
+    justifyContent:"flex-end",margin:0
+  },
+  codContainer: {
+  // flexDirection:"row",
+    backgroundColor: colors.white, 
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    padding:Dimension.padding20,
+   
+  },
+
+  codCtaContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: Dimension.padding12,
+    width: '100%',
+  },
+
+  confirmCta: {
+    width: '100%',
+    paddingVertical: Dimension.padding16,
+    borderRadius: Dimension.borderRadius15,
+    backgroundColor: colors.RedThemeColor,
+  },
+  confirmCtaText: {
+    color: colors.WhiteColor,
+    fontSize: Dimension.font14,
+    fontFamily: Dimension.CustomBoldFont,
+    textAlign: 'center',
   },
 
   ModalContainer: {

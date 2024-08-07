@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {
   PermissionsAndroid,
   View,
+  Dimensions,
   Text,
   Platform,
   Image,
@@ -35,6 +36,8 @@ import CallDetectorManager from 'react-native-call-detection';
 import {PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 import {createAllContacts} from '../../services/communication';
 import {updateLogs} from '../../redux/actions/communication';
+import MatIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+
 
 const ContactScreen = props => {
   const navigation = useNavigation();
@@ -62,6 +65,7 @@ const ContactScreen = props => {
   const [contactNum, setContactNum] = useState('');
   const [contactExists, setContactExists] = useState(false);
   const [contactLoading, setContactLoading] = useState(false);
+  const [callModalVisible,setCallModalVisible]=useState(false)
 
   let callDetector = null;
   useEffect(() => {
@@ -218,6 +222,7 @@ const ContactScreen = props => {
             Linking.openURL(
               `${Platform.OS == 'android' ? 'tel' : 'telprompt'}:${item.phone}`,
             );
+            {Platform.OS == 'android'?null:setCallModalVisible(true)}
           }}>
           <CustomeIcon
             name={'Call-blue'}
@@ -519,9 +524,20 @@ const ContactScreen = props => {
       <View style={styles.headerWrap}>
         <View style={styles.TopHeader}>
           <Text style={styles.headingTxt}>Contacts</Text>
+          <TouchableOpacity
+                onPress={addContactModal}
+                style={{flexDirection: 'row'}}>
+                <CustomeIcon
+                  name={'Add-blue'}
+                  size={18}
+                  color={'#1568E5'}></CustomeIcon>
+                <Text style={styles.addBtnTxt}> Add</Text>
+              </TouchableOpacity>
+
         </View>
+        
         <View style={styles.HeaderForBtn}>
-          <View style={styles.BtnWrap}>
+          {/* <View style={styles.BtnWrap}>
             <TouchableOpacity
               style={
                 pagetype == 'Focused' ? styles.ActiveTopBtn : styles.TopBtn
@@ -550,10 +566,10 @@ const ContactScreen = props => {
                 Phone
               </Text>
             </TouchableOpacity>
-          </View>
+          </View> */}
           <View>
-            {pagetype == 'Focused' ? (
-              <TouchableOpacity
+            {/* {pagetype == 'Focused' ? ( */}
+              {/* <TouchableOpacity
                 onPress={addContactModal}
                 style={{flexDirection: 'row'}}>
                 <CustomeIcon
@@ -561,8 +577,10 @@ const ContactScreen = props => {
                   size={18}
                   color={'#1568E5'}></CustomeIcon>
                 <Text style={styles.addBtnTxt}> Add</Text>
-              </TouchableOpacity>
-            ) : (
+              </TouchableOpacity> */}
+
+
+            {/* ) : (
               <TouchableOpacity
                 onPress={() => setSelectContact(!selectContact)}
                 style={{flexDirection: 'row'}}>
@@ -570,7 +588,7 @@ const ContactScreen = props => {
                   {selectContact ? 'Cancel' : 'Select'}
                 </Text>
               </TouchableOpacity>
-            )}
+            )} */}
           </View>
         </View>
         <View></View>
@@ -748,6 +766,40 @@ const ContactScreen = props => {
           </View>
         </View>
       ) : null}
+
+      {callModalVisible && 
+      <Modal 
+      onBackButtonPress={()=>setCallModalVisible(false)}
+      onBackdropPress={()=>setCallModalVisible(false)}
+      isVisible={callModalVisible}
+      overlayPointerEvents={'auto'}
+      onTouchOutside={()=>setCallModalVisible(false)}
+      onDismiss={()=>setCallModalVisible(false)}
+      onRequestClose={()=>setCallModalVisible(false)}
+      deviceWidth={Dimensions.get("window").width}
+      
+      style={styles.modalWrap}>
+            <View style={styles.codContainer}>
+                <Text>
+                  Do you want to continue?
+                </Text>
+                <TouchableOpacity
+            onPress={() => {
+              setCallModalVisible(false)
+            }}>
+            <MatIcon name={'close-circle'} size={26} color={'#3c3c3c'} />
+          </TouchableOpacity>
+                
+              </View>
+              <View style={styles.codCtaContainer}>
+                <TouchableOpacity
+                 style={styles.confirmCta}
+                    onPress={() => {
+                }}>
+                    <Text style={styles.confirmCtaText}>CONTINUE</Text>
+                  </TouchableOpacity>
+                </View>
+    </Modal>}
     </View>
   );
 };

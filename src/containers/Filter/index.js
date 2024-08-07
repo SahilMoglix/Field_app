@@ -391,11 +391,6 @@ const FilterModal = props => {
     setSearchValue(text);
   };
 
-
-                console.log( COMM_FILTER_DATA.tabs[selectedTabIndex]?.fields,'console!!')
-
-
-
   return (
     <Modal
       isVisible={props.filtersModal}

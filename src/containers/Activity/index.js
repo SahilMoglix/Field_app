@@ -331,7 +331,7 @@ const ActivityScreen = () => {
         keyExtractor={keyExtractor}
       />
 
-      {adminFlag ? (
+      {!adminFlag ? (
         <TouchableOpacity style={styles.filterbtn} onPress={showFilter}>
           <CustomeIcon
             name={'Filter-blue'}

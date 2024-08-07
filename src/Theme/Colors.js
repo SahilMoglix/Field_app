@@ -26,6 +26,7 @@ const Colors = {
   linkedinColor: '#013C95',
   graySahde1: '#D3D3D3',
   brandColor: '#D9232D',
+  RedThemeColor: '#D9232D',
 };
 
 export default Colors;
