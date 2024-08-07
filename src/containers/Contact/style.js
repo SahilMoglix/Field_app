@@ -134,6 +134,11 @@ const styles = StyleSheet.create({
     fontFamily: Dimension.CustomMediumFont,
     color: colors.FontColor,
   },
+  numberr: {
+    fontSize: Dimension.font20,
+    fontFamily: Dimension.CustomMediumFont,
+    color: colors.FontColor,
+  },
   phoneNumber: {
     fontSize: Dimension.font14,
     fontFamily: Dimension.CustomRegularFont,
@@ -219,7 +224,7 @@ const styles = StyleSheet.create({
   },
   confirmCtaText: {
     color: colors.WhiteColor,
-    fontSize: Dimension.font14,
+    fontSize: Dimension.font16,
     fontFamily: Dimension.CustomBoldFont,
     textAlign: 'center',
   },

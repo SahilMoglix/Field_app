@@ -800,25 +800,21 @@ const ContactScreen = props => {
           <View style={{backgroundColor: '#fff'}}>
             <View style={styles.codContainer}>
               <View style={styles.placeholderCopy}>
-                <Text style={styles.txtCopy}>{callerName?.[0]}</Text>
+                {callerName ? (
+                  <Text style={styles.txtCopy}>{callerName?.[0]}</Text>
+                ) : (
+                  <Text style={styles.txtCopy}>{number?.[0]}</Text>
+                )}
               </View>
 
               <View style={styles.contactDat}>
                 {callerName ? (
                   <>
                     <Text style={styles.name}>{callerName} </Text>
-                    <Text style={styles.name}>{number} </Text>
                   </>
                 ) : null}
+                <Text style={styles.numberr}>{number} </Text>
               </View>
-
-              {/* <Text
-                style={{
-                  fontSize: Dimension.font14,
-                  fontFamily: Dimension.CustomSemiBoldFont,
-                }}>
-                Do you want to continue?
-              </Text> */}
               <TouchableOpacity
                 style={{top: -5, right: -2}}
                 onPress={() => {
