@@ -241,7 +241,7 @@ const ContactScreen = props => {
             //     `${Platform.OS == 'android' ? 'tel' : 'telprompt'}:${item.phone}`,
             //   );
 
-            !Platform.OS == 'android'
+            Platform.OS == 'android'
               ? openDialerFn(item.phone)
               : showModalFn(item.phone, item.name);
           }}>
