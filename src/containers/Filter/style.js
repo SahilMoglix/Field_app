@@ -189,5 +189,10 @@ const styles = StyleSheet.create({
     fontSize: Dimension.font22,
     color: colors.FontColor,
   },
+  allButton: {
+    flexDirection: 'row',
+    marginLeft: Dimension.margin10,
+    marginBottom: Dimension.margin10,
+  },
 });
 export default styles;

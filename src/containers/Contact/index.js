@@ -68,6 +68,7 @@ const ContactScreen = props => {
   const [callModalVisible, setCallModalVisible] = useState(false);
   const [number, setNumber] = useState('');
   const [callerName, setCallerName] = useState('');
+  const [itemDetails, setItemDetails] = useState({});
 
   let callDetector = null;
   useEffect(() => {
@@ -145,20 +146,21 @@ const ContactScreen = props => {
     setModalVisible(!isModalVisible);
   };
 
-  const showModalFn = (it, name) => {
+  const showModalFn = item => {
     setCallModalVisible(true);
-    setNumber(it);
-    setCallerName(name);
+    setNumber(item.phone);
+    setCallerName(item.name);
+    setItemDetails(item);
   };
 
-  const openDialerFn = async phNum => {
+  const openDialerFn = async item => {
     await logAnalytics('Open_Dialer', {
-      Contact: phNum,
+      Contact: item.phone,
       Screen_Name: 'Contacts',
     });
-    phoneCallDetector(phNum);
+    phoneCallDetector(item);
     Linking.openURL(
-      `${Platform.OS == 'android' ? 'tel' : 'telprompt'}:${phNum}`,
+      `${Platform.OS == 'android' ? 'tel' : 'telprompt'}:${item.phone}`,
     );
   };
 
@@ -242,9 +244,7 @@ const ContactScreen = props => {
             //     `${Platform.OS == 'android' ? 'tel' : 'telprompt'}:${item.phone}`,
             //   );
 
-            Platform.OS == 'android'
-              ? openDialerFn(item.phone)
-              : showModalFn(item.phone, item.name);
+            Platform.OS == 'android' ? openDialerFn(item) : showModalFn(item);
           }}>
           <CustomeIcon
             name={'Call-blue'}
@@ -829,7 +829,7 @@ const ContactScreen = props => {
             <View style={styles.codCtaContainer}>
               <TouchableOpacity
                 style={styles.confirmCta}
-                onPress={() => openDialerFn(number)}>
+                onPress={() => openDialerFn(itemDetails)}>
                 <Text style={styles.confirmCtaText}>CALL NOW</Text>
               </TouchableOpacity>
             </View>
