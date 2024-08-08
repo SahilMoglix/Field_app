@@ -196,38 +196,38 @@ const FilterModal = props => {
           },
         ],
       },
-      {
-        name: 'Company',
-        key: 'Company',
-        fields: [
-          {
-            title: 'Company',
-            label: 'Company',
-            placeholder: '',
-            value: company,
-            onCheck: text => setCompany(text),
-            component: DotCheckbox,
-            data: [
-              // {key: 'All', title: 'All', label: 'All'},
-              {
-                key: 'ARMOR TECHNOSOFT',
-                title: 'ARMOR TECHNOSOFT',
-                label: 'ARMOR TECHNOSOFT',
-              },
-              {
-                key: 'SAFEHAND FIRE SERVICES LLP',
-                title: 'SAFEHAND FIRE SERVICES LLP',
-                label: 'SAFEHAND FIRE SERVICES LLP',
-              },
-              {
-                key: 'DEEPAK TRADERS',
-                title: 'DEEPAK TRADERS',
-                label: 'DEEPAK TRADERS',
-              },
-            ],
-          },
-        ],
-      },
+      // {
+      //   name: 'Company',
+      //   key: 'Company',
+      //   fields: [
+      //     {
+      //       title: 'Company',
+      //       label: 'Company',
+      //       placeholder: '',
+      //       value: company,
+      //       onCheck: text => setCompany(text),
+      //       component: DotCheckbox,
+      //       data: [
+      //         // {key: 'All', title: 'All', label: 'All'},
+      //         {
+      //           key: 'ARMOR TECHNOSOFT',
+      //           title: 'ARMOR TECHNOSOFT',
+      //           label: 'ARMOR TECHNOSOFT',
+      //         },
+      //         {
+      //           key: 'SAFEHAND FIRE SERVICES LLP',
+      //           title: 'SAFEHAND FIRE SERVICES LLP',
+      //           label: 'SAFEHAND FIRE SERVICES LLP',
+      //         },
+      //         {
+      //           key: 'DEEPAK TRADERS',
+      //           title: 'DEEPAK TRADERS',
+      //           label: 'DEEPAK TRADERS',
+      //         },
+      //       ],
+      //     },
+      //   ],
+      // },
       {
         name: 'Region',
         key: 'Region',

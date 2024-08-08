@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     fontFamily: Dimension.CustomMediumFont,
   },
   LeftInActiveTxt: {
-    color: Colors.FontColor,
+    color: Colors.graySahde1,
   },
   LeftActiveTxt: {
     color: Colors.CtaColor,

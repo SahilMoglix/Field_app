@@ -6,8 +6,8 @@ import {StyleSheet, View, Text} from 'react-native';
 import CustomeIcon from './CustomeIcon';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const DotCheckbox = props => {
-  const {data, onCheck, value,} = props;
-  console.log("data",data)
+  const {data, onCheck, value} = props;
+  console.log('data', data);
   return (
     <>
       <View style={props.from == 'addContact' ? styles.WrapperStyle : null}>
@@ -28,32 +28,46 @@ const DotCheckbox = props => {
               ? {flexDirection: 'row', marginLeft: -10, flexWrap: 'wrap'}
               : {flexDirection: 'column'}
           }>
-          {(data || [])?.filter((_, i) => _.label?.toLowerCase().includes(props?.searchvalue?.toLowerCase())).map((_, i) => (
-            <CheckBox
-              title={_.title}
-              key={_.key}
-              onPress={() => onCheck(_.key)}
-              checkedIcon={
-                <Icon
-                  name={props?.fromFilterData ? 'radiobox-marked' : 'checkbox-marked'}
-                  size={Dimension.font20}
-                  color={colors.CtaColor}
-                />
-              }
-              uncheckedIcon={
-                <Icon
-                  name={props?.fromFilterData ? 'radiobox-blank' : 'checkbox-blank-outline'}
-                  size={Dimension.font20}
-                  color={colors.FontColor}
-                />
-              }
-              checked={_.key == value}
-              textStyle={styles.checkboxTitle}
-              fontFamily={Dimension.CustomMediumFont}
-              wrapperStyle={styles.checkboxwrapper}
-              containerStyle={styles.checkboxContainer}
-            />
-          ))}
+          {(data || [])
+            ?.filter((_, i) =>
+              _.label
+                ?.toLowerCase()
+                .includes(props?.searchvalue?.toLowerCase()),
+            )
+            .map((_, i) => (
+              <CheckBox
+                title={_.title}
+                key={_.key}
+                onPress={() => onCheck(_.key)}
+                checkedIcon={
+                  <Icon
+                    name={
+                      props?.fromFilterData
+                        ? 'radiobox-marked'
+                        : 'checkbox-marked'
+                    }
+                    size={Dimension.font20}
+                    color={colors.CtaColor}
+                  />
+                }
+                uncheckedIcon={
+                  <Icon
+                    name={
+                      props?.fromFilterData
+                        ? 'radiobox-blank'
+                        : 'checkbox-blank-outline'
+                    }
+                    size={Dimension.font20}
+                    color={colors.FontColor}
+                  />
+                }
+                checked={_.key == value}
+                textStyle={styles.checkboxTitle}
+                fontFamily={Dimension.CustomMediumFont}
+                wrapperStyle={styles.checkboxwrapper}
+                containerStyle={styles.checkboxContainer}
+              />
+            ))}
         </View>
       </View>
     </>
