@@ -135,8 +135,9 @@ const AddContact = props => {
       from: 'addContact',
       data: InclinationData,
       horizontalView: true,
+      searchvalue: '',
       onCheck: val => setInclination(val),
-      value: inclination,
+      selectedValues: [inclination],
     },
     {
       component: DropDown,

@@ -22,8 +22,7 @@ import DotCheckbox from '../../component/Checkbox';
 import CustomeDatePicker from '../../component/Datepicker';
 import {useSelector} from 'react-redux';
 import Colors from '../../Theme/Colors';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import colors from '../../Theme/Colors';
+import {getRegion, getBranch, getUsers} from '../../services/filter';
 
 const FilterModal = props => {
   const {width: deviceWidth, height: deviceHeight} = useWindowDimensions();
@@ -41,17 +40,23 @@ const FilterModal = props => {
   const [filterFromDate, setfilterFromDate] = useState(new Date());
   const [filterToDate, setFilterToDate] = useState(new Date());
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
+
+  const [filters, setFilters] = useState({
+    salesPerson: props.salesPerson || [],
+    region: props.region || [],
+    branch: props.branch || [],
+  });
+
   const [designation, setDesignation] = useState(props.designation);
-  const [salesPerson, setSalesPerson] = useState(props.salesPerson);
+  const [regions, setRegions] = useState([]);
+  const [branches, setBranches] = useState([]);
+  const [users, setUser] = useState([]);
   const [company, setCompany] = useState(props.companyId || '');
   const [plant, setPlant] = useState(props.plantId || '');
-  const [region, setRegion] = useState(props.region || '');
   const [startDate, setStartDate] = useState(new Date(props.startDate));
-  const [branch, setBranch] = useState(props.branch || '');
   const [endDate, setEndDate] = useState(new Date(props.endDate));
   const [searchValue, setSearchValue] = useState('');
   const [footerHeight, setFooterHeight] = useState(0);
-  const [allSelected, setAllSelected] = useState(false);
 
   const FILTERS_DATA = {
     tabs: [
@@ -157,155 +162,84 @@ const FilterModal = props => {
   const COMM_FILTER_DATA = {
     tabs: [
       {
-        name: 'Sales Person',
-        key: 'Sales Person',
-        fields: [
-          {
-            title: 'Sales Person',
-            label: 'Sales Person',
-            placeholder: '',
-            value: salesPerson,
-            onCheck: text => setSalesPerson(text),
-            component: DotCheckbox,
-            data: [
-              // {key: 'All', title: 'All', label: 'All'},
-              {key: 'Amit', title: 'Amit', label: 'Amit'},
-              {key: 'Rahul', title: 'Rahul', label: 'Rahul'},
-              {key: 'Praveen', title: 'Praveen', label: 'Praveen'},
-              {
-                key: 'Sumrit Suvraman Biswal',
-                title: 'Sumrit Suvraman Biswal',
-                label: 'Sumrit Suvraman Biswal',
-              },
-              {
-                key: 'Rajesh Kumar',
-                title: 'Rajesh Kumar',
-                label: 'Rajesh Kumar',
-              },
-              {
-                key: 'posaekp',
-                title: 'posaekp',
-                label: 'posaekp',
-              },
-              {
-                key: '21093sda',
-                title: '21093sda',
-                label: '21093sda',
-              },
-            ],
-          },
-        ],
-      },
-      // {
-      //   name: 'Company',
-      //   key: 'Company',
-      //   fields: [
-      //     {
-      //       title: 'Company',
-      //       label: 'Company',
-      //       placeholder: '',
-      //       value: company,
-      //       onCheck: text => setCompany(text),
-      //       component: DotCheckbox,
-      //       data: [
-      //         // {key: 'All', title: 'All', label: 'All'},
-      //         {
-      //           key: 'ARMOR TECHNOSOFT',
-      //           title: 'ARMOR TECHNOSOFT',
-      //           label: 'ARMOR TECHNOSOFT',
-      //         },
-      //         {
-      //           key: 'SAFEHAND FIRE SERVICES LLP',
-      //           title: 'SAFEHAND FIRE SERVICES LLP',
-      //           label: 'SAFEHAND FIRE SERVICES LLP',
-      //         },
-      //         {
-      //           key: 'DEEPAK TRADERS',
-      //           title: 'DEEPAK TRADERS',
-      //           label: 'DEEPAK TRADERS',
-      //         },
-      //       ],
-      //     },
-      //   ],
-      // },
-      {
         name: 'Region',
-        key: 'Region',
+        key: 'region',
         fields: [
           {
             title: 'Region',
             label: 'Region',
             placeholder: '',
-            value: region,
-            onCheck: text => setRegion(text),
+            value: 'region',
+            onCheck: text => handleCheck('region', text),
             component: DotCheckbox,
-            data: [
-              // {key: 'All', title: 'All', label: 'All'},
-              {key: 'East', title: 'East', label: 'East'},
-              {key: 'WEST', title: 'WEST', label: 'WEST'},
-              {key: 'SOUTH', title: 'SOUTH', label: 'SOUTH'},
-            ],
+            data: regions.map(location => ({
+              key: location,
+              title: location,
+              label: location,
+            })),
           },
         ],
       },
       {
         name: 'Branch',
-        key: 'Branch',
+        key: 'branch',
         fields: [
           {
             title: 'Branch',
             label: 'Branch',
             placeholder: '',
-            value: branch,
-            onCheck: text => setBranch(text),
+            value: 'branch',
+            onCheck: text => handleCheck('branch', text),
             component: DotCheckbox,
-            data: [
-              // {key: 'All', title: 'All', label: 'All'},
-              {key: 'Lucknow', title: 'Lucknow', label: 'Lucknow'},
-              {key: 'Pune', title: 'Pune', label: 'Pune'},
-              {key: 'Bangalore', title: 'Bangalore', label: 'Bangalore'},
-            ],
+            data: branches.map(loc => ({
+              key: loc,
+              title: loc,
+              label: loc,
+            })),
+          },
+        ],
+      },
+      {
+        name: 'Sales Person',
+        key: 'salesPerson',
+        fields: [
+          {
+            title: 'Sales Person',
+            label: 'Sales Person',
+            placeholder: '',
+            value: 'salesPerson',
+            onCheck: text => handleCheck('salesPerson', text),
+            component: DotCheckbox,
+            data: users.map(user => ({
+              key: user,
+              title: user,
+              label: user,
+            })),
           },
         ],
       },
     ],
   };
 
-  const handleAllSelection = item => {
-    const currentTab = COMM_FILTER_DATA.tabs[selectedTabIndex];
-    if (!currentTab) return;
-    const newAllSelected = !allSelected;
-    setAllSelected(newAllSelected);
+  useEffect(() => {
+    showRegions();
+  }, []);
 
-    if (newAllSelected) {
-      const allKeys = currentTab.fields[0].data.map(_ => _.key);
-      switch (item) {
-        case 'Sales Person':
-          return setSalesPerson(allKeys);
-        case 'Company':
-          return setCompany(allKeys);
-        case 'Region':
-          return setRegion(allKeys);
-        case 'Branch':
-          return setBranch(allKeys);
-        default:
-          return null;
-      }
-    } else {
-      switch (item) {
-        case 'Sales Person':
-          return setSalesPerson([]);
-        case 'Company':
-          return setCompany([]);
-        case 'Region':
-          return setRegion([]);
-        case 'Branch':
-          return setBranch([]);
-        default:
-          return null;
-      }
-    }
+  const showRegions = async () => {
+    const {data} = await getRegion();
+    setRegions(data?.result);
   };
+
+  const showBranches = async () => {
+    const {data} = await getBranch(filters.region);
+    setBranches(data?.result);
+  };
+
+  const showUsers = async () => {
+    const {data} = await getUsers(filters.branch);
+    setUser(data?.result?.map(_ => _.name));
+  };
+
   const dateConverter = (paramDate, dateType, fromTo) => {
     if (paramDate) {
       let updatedparams =
@@ -380,12 +314,213 @@ const FilterModal = props => {
             ).getTime(),
           });
         }
+      } else if (
+        filters.branch.length &&
+        filters.region.length &&
+        filters.salesPerson.length
+      ) {
+        props.onApplyFilter({
+          region: regions,
+          branch: branches,
+          salesPerson: users,
+        });
       }
     }
   };
 
   const onSearchText = text => {
     setSearchValue(text);
+  };
+  const handleCheck = (filterType, value) => {
+    let filterData = COMM_FILTER_DATA?.tabs?.find(tab => tab.key === filterType)
+      ?.fields[0].data;
+    if (!filterData) return;
+    let key = filterType;
+    let currentFilterValues = filters?.[key] || [];
+    if (value === 'All') {
+      let isAllSelected =
+        currentFilterValues?.length === filterData?.length - 1;
+      if (isAllSelected) {
+        setFilters(prev => ({...prev, [key]: []}));
+      } else {
+        let allItems = filterData
+          .map(item => item.key)
+          .filter(key => key !== 'All');
+        setFilters(prev => ({...prev, [key]: allItems}));
+      }
+    } else if (value === 'None') {
+      setFilters(prev => ({...prev, [key]: []}));
+    } else if (currentFilterValues.includes(value)) {
+      setFilters(prev => ({
+        ...prev,
+        [key]: prev[key].filter(item => item !== value),
+      }));
+    } else {
+      setFilters(prev => ({
+        ...prev,
+        [key]: [...prev[key], value],
+      }));
+    }
+  };
+  console.log('FILTERSSSS', filters);
+
+  const renderMutatedFilters = () => {
+    //Adding the "All" key to every list
+    COMM_FILTER_DATA.tabs.forEach(tab => {
+      tab.fields.forEach(field => {
+        field.data.unshift({key: 'All', title: 'All', label: 'All'});
+      });
+    });
+    return COMM_FILTER_DATA.tabs[selectedTabIndex]?.fields.map((field, k) => {
+      let key = field.value;
+      return (
+        <View key={k} style={{paddingHorizontal: Dimension.padding15}}>
+          <field.component
+            {...field}
+            searchvalue={searchValue}
+            onCheck={value => handleCheck(key, value)}
+            selectedValues={filters[key] || []}
+          />
+        </View>
+      );
+    });
+  };
+
+  const renderApplyFilterView = () => {
+    return (
+      <TouchableOpacity
+        onPress={() => applyFilters()}
+        style={styles.acceptCtabtn}>
+        <Text style={styles.acceptCtaTxt}>APPLY FILTERS</Text>
+      </TouchableOpacity>
+    );
+  };
+
+  const renderFilterView = () => {
+    return (
+      <TouchableOpacity
+        disabled={
+          filters.branch.length &&
+          filters.region.length &&
+          filters.salesPerson.length
+            ? false
+            : true
+        }
+        onPress={() => applyFilters()}
+        style={
+          filters.branch.length &&
+          filters.region.length &&
+          filters.salesPerson.length
+            ? styles.acceptCtabtn
+            : styles.disabledacceptCtabtn
+        }>
+        <Text style={styles.acceptCtaTxt}>APPLY</Text>
+      </TouchableOpacity>
+    );
+  };
+
+  const renderCorrespondingFilters = () => {
+    return (
+      <View style={styles.MidWrapper}>
+        <View style={styles.leftPart}>
+          {!props.fromCommunicationFilter
+            ? FILTERS_DATA.tabs.map((_, k) => (
+                <TouchableOpacity
+                  onPress={() => setSelectedTabIndex(k)}
+                  key={k}
+                  style={[
+                    styles.leftTextBg,
+                    k == selectedTabIndex
+                      ? styles.leftActiveBackground
+                      : styles.leftInactiveBackground,
+                  ]}>
+                  <Text
+                    style={[
+                      styles.leftText,
+                      k == selectedTabIndex
+                        ? styles.LeftActiveTxt
+                        : styles.LeftInActiveTxt,
+                    ]}>
+                    {_.name}
+                  </Text>
+                </TouchableOpacity>
+              ))
+            : COMM_FILTER_DATA.tabs.map((_, k) => (
+                <TouchableOpacity
+                  onPress={() => {
+                    setSelectedTabIndex(k);
+                    if (_.name == 'Branch') {
+                      showBranches();
+                    } else if (_.name == 'Sales Person') {
+                      showUsers();
+                    }
+                  }}
+                  key={k}
+                  style={[
+                    styles.leftTextBg,
+                    k == selectedTabIndex
+                      ? {backgroundColor: Colors.CallingBgColor}
+                      : {backgroundColor: '#fff'},
+                  ]}>
+                  <Text
+                    style={[
+                      styles.leftText,
+                      k == selectedTabIndex
+                        ? {color: Colors.CtaColor}
+                        : {color: Colors.FontColor},
+                    ]}>
+                    {_.name}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+        </View>
+        <View style={styles.rightPart}>
+          {props.fromCommunicationFilter ? (
+            <View style={styles.searchWraper}>
+              <CustomeIcon name={'search-grey'} size={20} color={'#8E8E93'} />
+              <View style={{flex: 4}}>
+                <TextInput
+                  placeholder={'Search by name, company'}
+                  returnKeyType={'search'}
+                  onChangeText={onSearchText}
+                  value={searchValue}
+                  placeholderTextColor={'#8E8E93'}
+                  numberOfLines={1}
+                  style={styles.SearchInputCss}
+                />
+              </View>
+            </View>
+          ) : null}
+          <ScrollView
+            contentContainerStyle={{
+              paddingTop: 20,
+              paddingBottom: footerHeight + Dimension.height40,
+            }}>
+            {!props.fromCommunicationFilter
+              ? FILTERS_DATA.tabs[selectedTabIndex].fields.map((_, k) =>
+                  _.title == 'Plant' && !company ? (
+                    <Text
+                      style={{
+                        fontSize: Dimension.font14,
+                        color: Colors.FontColor,
+                        margin: Dimension.margin8,
+                        fontFamily: Dimension.CustomMediumFont,
+                      }}>
+                      Please select company to view plants
+                    </Text>
+                  ) : (
+                    <View
+                      key={k}
+                      style={{paddingHorizontal: Dimension.padding15}}>
+                      <_.component {..._} />
+                    </View>
+                  ),
+                )
+              : renderMutatedFilters()}
+          </ScrollView>
+        </View>
+      </View>
+    );
   };
 
   return (
@@ -419,129 +554,7 @@ const FilterModal = props => {
             <Text style={styles.headingTxt}>Filter</Text>
           </View>
         </View>
-        <View style={styles.MidWrapper}>
-          <View style={styles.leftPart}>
-            {!props.fromCommunicationFilter
-              ? FILTERS_DATA.tabs.map((_, k) => (
-                  <TouchableOpacity
-                    onPress={() => setSelectedTabIndex(k)}
-                    key={k}
-                    style={[
-                      styles.leftTextBg,
-                      k == selectedTabIndex
-                        ? styles.leftActiveBackground
-                        : styles.leftInactiveBackground,
-                    ]}>
-                    <Text
-                      style={[
-                        styles.leftText,
-                        k == selectedTabIndex
-                          ? styles.LeftActiveTxt
-                          : styles.LeftInActiveTxt,
-                      ]}>
-                      {_.name}
-                    </Text>
-                  </TouchableOpacity>
-                ))
-              : COMM_FILTER_DATA.tabs.map((_, k) => (
-                  <TouchableOpacity
-                    onPress={() => setSelectedTabIndex(k)}
-                    key={k}
-                    style={[
-                      styles.leftTextBg,
-                      k == selectedTabIndex
-                        ? styles.leftActiveBackground
-                        : styles.leftInactiveBackground,
-                    ]}>
-                    <Text
-                      style={[
-                        styles.leftText,
-                        k == selectedTabIndex
-                          ? styles.LeftActiveTxt
-                          : styles.LeftInActiveTxt,
-                      ]}>
-                      {_.name}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-          </View>
-          <View style={styles.rightPart}>
-            {props.fromCommunicationFilter ? (
-              <View style={styles.searchWraper}>
-                <CustomeIcon name={'search-grey'} size={20} color={'#8E8E93'} />
-                <View style={{flex: 4}}>
-                  <TextInput
-                    placeholder={'Search by name, company'}
-                    returnKeyType={'search'}
-                    onChangeText={onSearchText}
-                    value={searchValue}
-                    placeholderTextColor={'#8E8E93'}
-                    numberOfLines={1}
-                    //clearButtonMode="always"
-                    style={styles.SearchInputCss}
-                  />
-                </View>
-              </View>
-            ) : null}
-            <ScrollView
-              contentContainerStyle={{
-                paddingTop: 20,
-                paddingBottom: footerHeight + Dimension.height40,
-              }}>
-              {!props.fromCommunicationFilter
-                ? FILTERS_DATA.tabs[selectedTabIndex].fields.map((_, k) =>
-                    _.title == 'Plant' && !company ? (
-                      <Text
-                        style={{
-                          fontSize: Dimension.font14,
-                          color: Colors.FontColor,
-                          margin: Dimension.margin8,
-                          fontFamily: Dimension.CustomMediumFont,
-                        }}>
-                        Please select company to view plants
-                      </Text>
-                    ) : (
-                      <View
-                        key={k}
-                        style={{paddingHorizontal: Dimension.padding15}}>
-                        <_.component {..._} />
-                      </View>
-                    ),
-                  )
-                : COMM_FILTER_DATA.tabs[selectedTabIndex]?.fields?.map(
-                    (_, k) => (
-                      <View
-                        key={k}
-                        style={{paddingHorizontal: Dimension.padding15}}>
-                        <View>
-                          <TouchableOpacity
-                            // onPress={handleAllSelection(_.title)}
-                            style={styles.allButton}>
-                            {!allSelected ? (
-                              <Icon
-                                name={'checkbox-blank-outline'}
-                                size={Dimension.font20}
-                                color={colors.FontColor}
-                              />
-                            ) : (
-                              <Icon
-                                name={'checkbox-marked'}
-                                size={Dimension.font20}
-                                color={colors.CtaColor}
-                              />
-                            )}
-                            <Text style={{marginLeft: Dimension.margin10}}>
-                              All
-                            </Text>
-                          </TouchableOpacity>
-                        </View>
-                        <_.component {..._} searchvalue={searchValue} />
-                      </View>
-                    ),
-                  )}
-            </ScrollView>
-          </View>
-        </View>
+        {renderCorrespondingFilters()}
         <View
           onLayout={event => setFooterHeight(event.nativeEvent.layout.height)}
           style={styles.bottomAction}>
@@ -550,15 +563,10 @@ const FilterModal = props => {
             style={styles.cancelBtn}>
             <Text style={styles.canceltxt}>RESET</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => applyFilters()}
-            style={styles.acceptCtabtn}>
-            {props.fromCommunicationFilter ? (
-              <Text style={styles.acceptCtaTxt}>APPLY</Text>
-            ) : (
-              <Text style={styles.acceptCtaTxt}>APPLY FILTERS</Text>
-            )}
-          </TouchableOpacity>
+
+          {props.fromCommunicationFilter
+            ? renderFilterView()
+            : renderApplyFilterView()}
         </View>
       </View>
     </Modal>

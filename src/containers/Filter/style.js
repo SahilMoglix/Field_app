@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     fontFamily: Dimension.CustomMediumFont,
   },
   LeftInActiveTxt: {
-    color: Colors.graySahde1,
+    color: Colors.FontColor,
   },
   LeftActiveTxt: {
     color: Colors.CtaColor,
@@ -84,6 +84,20 @@ const styles = StyleSheet.create({
   acceptCtabtn: {
     flex: 5,
     backgroundColor: Colors.CtaColor,
+    borderRadius: 50,
+    paddingVertical: Dimension.padding12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: Dimension.margin10,
+    shadowColor: 'rgba(21, 104, 229, .80)',
+    shadowOffset: {width: 2, height: 4},
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    elevation: 6,
+  },
+  disabledacceptCtabtn: {
+    flex: 5,
+    backgroundColor: Colors.graySahde1,
     borderRadius: 50,
     paddingVertical: Dimension.padding12,
     justifyContent: 'center',

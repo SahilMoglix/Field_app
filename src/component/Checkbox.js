@@ -6,71 +6,69 @@ import {StyleSheet, View, Text} from 'react-native';
 import CustomeIcon from './CustomeIcon';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const DotCheckbox = props => {
-  const {data, onCheck, value} = props;
-  console.log('data', data);
-  return (
-    <>
-      <View style={props.from == 'addContact' ? styles.WrapperStyle : null}>
-        {props.from == 'addContact' ? (
-          <View style={{flexDirection: 'row'}}>
-            <CustomeIcon
-              name={props.IconName}
-              size={Dimension.font18}
-              color={colors.DateBgColor}
-              style={styles.iconCss}></CustomeIcon>
+  const {data, onCheck, selectedValues, searchvalue, from, horizontalView} =
+    props;
+  const isAllSelected = selectedValues?.length === data?.length - 1;
 
-            <Text style={styles.labelStyle}> {props.label}</Text>
-          </View>
-        ) : null}
-        <View
-          style={
-            props.horizontalView
-              ? {flexDirection: 'row', marginLeft: -10, flexWrap: 'wrap'}
-              : {flexDirection: 'column'}
-          }>
-          {(data || [])
-            ?.filter((_, i) =>
-              _.label
-                ?.toLowerCase()
-                .includes(props?.searchvalue?.toLowerCase()),
-            )
-            .map((_, i) => (
-              <CheckBox
-                title={_.title}
-                key={_.key}
-                onPress={() => onCheck(_.key)}
-                checkedIcon={
-                  <Icon
-                    name={
-                      props?.fromFilterData
-                        ? 'radiobox-marked'
-                        : 'checkbox-marked'
-                    }
-                    size={Dimension.font20}
-                    color={colors.CtaColor}
-                  />
-                }
-                uncheckedIcon={
-                  <Icon
-                    name={
-                      props?.fromFilterData
-                        ? 'radiobox-blank'
-                        : 'checkbox-blank-outline'
-                    }
-                    size={Dimension.font20}
-                    color={colors.FontColor}
-                  />
-                }
-                checked={_.key == value}
-                textStyle={styles.checkboxTitle}
-                fontFamily={Dimension.CustomMediumFont}
-                wrapperStyle={styles.checkboxwrapper}
-                containerStyle={styles.checkboxContainer}
-              />
-            ))}
+  return (
+    <View style={from === 'addContact' ? styles.WrapperStyle : null}>
+      {from === 'addContact' ? (
+        <View style={{flexDirection: 'row'}}>
+          <CustomeIcon
+            name={props.IconName}
+            size={Dimension.font18}
+            color={colors.DateBgColor}
+            style={styles.iconCss}
+          />
+          <Text style={styles.labelStyle}> {props.label}</Text>
         </View>
+      ) : null}
+      <View
+        style={
+          horizontalView
+            ? {flexDirection: 'row', marginLeft: -10, flexWrap: 'wrap'}
+            : {flexDirection: 'column'}
+        }>
+        {(data || [])
+          .filter(item =>
+            item?.label
+              ?.toString()
+              .toLowerCase()
+              .includes(searchvalue?.toLowerCase()),
+          )
+          .map(item => (
+            <CheckBox
+              title={item?.title}
+              key={item?.key}
+              onPress={() => onCheck(item?.key)}
+              checkedIcon={
+                <Icon
+                  name="checkbox-marked"
+                  size={Dimension.font20}
+                  color={colors.CtaColor}
+                />
+              }
+              uncheckedIcon={
+                <Icon
+                  name="checkbox-blank-outline"
+                  size={Dimension.font20}
+                  color={colors.FontColor}
+                />
+              }
+              checked={
+                item?.key === 'All'
+                  ? isAllSelected
+                  : selectedValues.includes(item.key)
+              }
+              // checked={selectedValues.includes(item.key)}
+              textStyle={styles.checkboxTitle}
+              fontFamily={Dimension.CustomMediumFont}
+              wrapperStyle={styles.checkboxwrapper}
+              containerStyle={styles.checkboxContainer}
+            />
+          ))}
       </View>
-    </>
+    </View>
   );
 };
 const styles = StyleSheet.create({

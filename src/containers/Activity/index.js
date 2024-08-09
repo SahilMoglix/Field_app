@@ -26,7 +26,6 @@ import Colors from '../../Theme/Colors';
 import {PERMISSIONS, request} from 'react-native-permissions';
 import CallDetectorManager from 'react-native-call-detection';
 import FilterModal from '../Filter';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ActivityScreen = () => {
   const total = useSelector(state => state.communicationReducer.get('total'));
