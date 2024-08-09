@@ -447,6 +447,11 @@ const FilterModal = props => {
               ))
             : COMM_FILTER_DATA.tabs.map((_, k) => (
                 <TouchableOpacity
+                  disabled={
+                    (!filters.region.length &&
+                      (_.name === 'Branch' || _.name === 'Sales Person')) ||
+                    (_.name === 'Sales Person' && !filters.branch.length)
+                  }
                   onPress={() => {
                     setSelectedTabIndex(k);
                     if (_.name == 'Branch') {
@@ -467,6 +472,11 @@ const FilterModal = props => {
                       styles.leftText,
                       k == selectedTabIndex
                         ? {color: Colors.CtaColor}
+                        : (!filters.region.length &&
+                            (_.name === 'Branch' ||
+                              _.name === 'Sales Person')) ||
+                          (_.name === 'Sales Person' && !filters.branch.length)
+                        ? {color: Colors.graySahde1}
                         : {color: Colors.FontColor},
                     ]}>
                     {_.name}
