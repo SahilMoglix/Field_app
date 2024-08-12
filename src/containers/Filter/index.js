@@ -231,12 +231,16 @@ const FilterModal = props => {
   };
 
   const showBranches = async () => {
-    const {data} = await getBranch(filters.region);
+    const {data} = await getBranch(
+      filters?.region?.length ? filters?.region : regions,
+    );
     setBranches(data?.result);
   };
 
   const showUsers = async () => {
-    const {data} = await getUsers(filters.branch);
+    const {data} = await getUsers(
+      filters?.branch?.length ? filters?.branch : branches,
+    );
     setUser(data?.result?.map(_ => _.name));
   };
 
@@ -362,7 +366,6 @@ const FilterModal = props => {
       }));
     }
   };
-  console.log('FILTERSSSS', filters);
 
   const renderMutatedFilters = () => {
     //Adding the "All" key to every list
@@ -400,16 +403,16 @@ const FilterModal = props => {
     return (
       <TouchableOpacity
         disabled={
-          filters.branch.length &&
-          filters.region.length &&
+          filters.branch.length ||
+          filters.region.length ||
           filters.salesPerson.length
             ? false
             : true
         }
         onPress={() => applyFilters()}
         style={
-          filters.branch.length &&
-          filters.region.length &&
+          filters.branch.length ||
+          filters.region.length ||
           filters.salesPerson.length
             ? styles.acceptCtabtn
             : styles.disabledacceptCtabtn
@@ -447,11 +450,11 @@ const FilterModal = props => {
               ))
             : COMM_FILTER_DATA.tabs.map((_, k) => (
                 <TouchableOpacity
-                  disabled={
-                    (!filters.region.length &&
-                      (_.name === 'Branch' || _.name === 'Sales Person')) ||
-                    (_.name === 'Sales Person' && !filters.branch.length)
-                  }
+                  // disabled={
+                  //   (!filters.region.length &&
+                  //     (_.name === 'Branch' || _.name === 'Sales Person')) ||
+                  //   (_.name === 'Sales Person' && !filters.branch.length)
+                  // }
                   onPress={() => {
                     setSelectedTabIndex(k);
                     if (_.name == 'Branch') {
@@ -472,12 +475,12 @@ const FilterModal = props => {
                       styles.leftText,
                       k == selectedTabIndex
                         ? {color: Colors.CtaColor}
-                        : (!filters.region.length &&
-                            (_.name === 'Branch' ||
-                              _.name === 'Sales Person')) ||
-                          (_.name === 'Sales Person' && !filters.branch.length)
-                        ? {color: Colors.graySahde1}
-                        : {color: Colors.FontColor},
+                        : // : (!filters.region.length &&
+                          //     (_.name === 'Branch' ||
+                          //       _.name === 'Sales Person')) ||
+                          //   (_.name === 'Sales Person' && !filters.branch.length)
+                          // ? {color: Colors.graySahde1}
+                          {color: Colors.FontColor},
                     ]}>
                     {_.name}
                   </Text>

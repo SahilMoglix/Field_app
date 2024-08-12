@@ -91,6 +91,7 @@ const styles = StyleSheet.create({
   },
   contactDat: {
     paddingLeft: 5,
+    // borderBottomColor:"#DCE2EA"
   },
   txt: {
     fontSize: Dimension.font20,
@@ -104,6 +105,26 @@ const styles = StyleSheet.create({
   },
   phoneNumber: {
     fontSize: Dimension.font14,
+    fontFamily: Dimension.CustomRegularFont,
+    color: colors.FontColor,
+    justifyContent: 'flex-start',
+  },
+  compName: {
+    fontSize: Dimension.font12,
+    fontFamily: Dimension.CustomRegularFont,
+    color: colors.FontColor,
+    marginBottom: Dimension.margin10,
+    justifyContent: 'flex-start',
+  },
+  timeDg: {
+    fontSize: Dimension.font12,
+    fontFamily: Dimension.CustomRegularFont,
+    color: colors.FontColor,
+    marginBottom: Dimension.margin5,
+    justifyContent: 'flex-start',
+  },
+  dialerName: {
+    fontSize: Dimension.font12,
     fontFamily: Dimension.CustomRegularFont,
     color: colors.FontColor,
     justifyContent: 'flex-start',
@@ -157,7 +178,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Dimension.padding20,
     // paddingVertical: Dimension.padding5,
     alignSelf: 'center',
-    marginBottom: 12,
+    marginVertical: 5,
   },
   filtertxt: {
     fontFamily: Dimension.CustomMediumFont,

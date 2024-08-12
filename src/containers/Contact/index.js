@@ -154,14 +154,19 @@ const ContactScreen = props => {
   };
 
   const openDialerFn = async item => {
-    await logAnalytics('Open_Dialer', {
-      Contact: item.phone,
-      Screen_Name: 'Contacts',
-    });
-    phoneCallDetector(item);
-    Linking.openURL(
-      `${Platform.OS == 'android' ? 'tel' : 'telprompt'}:${item.phone}`,
-    );
+    try {
+      await logAnalytics('Open_Dialer', {
+        Contact: item.phone,
+        Screen_Name: 'Contacts',
+      });
+      phoneCallDetector(item);
+      Linking.openURL(
+        `${Platform.OS == 'android' ? 'tel' : 'telprompt'}:${item.phone}`,
+      );
+    } catch (e) {
+      console.log(e, 'error');
+      phoneCallDetector(item);
+    }
   };
 
   const INCLINATION_COLORS = {
@@ -217,7 +222,7 @@ const ContactScreen = props => {
                 name={'Arrow-black'}
                 color={Colors.FontColor}
                 size={18}
-                style={{marginTop: Dimension.margin8}}></CustomeIcon>
+                style={{marginTop: Dimension.margin6}}></CustomeIcon>
             </View>
           ) : (
             <View style={{flexDirection: 'row'}}>
@@ -507,6 +512,7 @@ const ContactScreen = props => {
         async (event, phoneNumber) => {
           if (event == 'Disconnected') {
             let date = new Date();
+            console.log('pCD Dateee', date);
             let callData = [
               {
                 rawType: 2,
@@ -520,7 +526,9 @@ const ContactScreen = props => {
                 createdAt: date.getTime(),
               },
             ];
+            console.log('pCD dataaa', callData);
             const {data} = await createAllContacts(callData);
+            console.log('PCD Data', data);
             if (data?.result && data?.result?.length) {
               dispatch(updateLogs(0, data?.result, data.total));
             }
@@ -546,7 +554,7 @@ const ContactScreen = props => {
       <View style={styles.headerWrap}>
         <View style={styles.TopHeader}>
           <Text style={styles.headingTxt}>Contacts</Text>
-          {createFlag ? (
+          {!createFlag ? (
             <TouchableOpacity
               onPress={addContactModal}
               style={{flexDirection: 'row'}}>
@@ -704,63 +712,67 @@ const ContactScreen = props => {
           //style={styles.list}
         />
       ) : null}
-      <Modal
-        onBackButtonPress={() => setModalVisible(false)}
-        onBackdropPress={() => setModalVisible(false)}
-        isVisible={isModalVisible}
-        style={[
-          styles.ModalBg,
-          isKeyboardVisible
-            ? {justifyContent: 'center'}
-            : {justifyContent: 'flex-end'},
-        ]}>
-        <View style={styles.ModalContainer}>
-          <Text style={styles.ModalHeading}>Add Contact</Text>
-          <View style={styles.InputWrap}>
-            <MyInput
-              label="Contact Number"
-              keyboardType="number-pad"
-              maxLength={10}
-              prefix={'+91'}
-              IconName={'call-grey'}
-              defaultValue={contactNum}
-              value={contactNum}
-              onChangeText={newText => setContactNum(newText)}
-              onSubmitEditing={() => {
-                if (contactNum.length == 10) {
-                  checkExistance();
-                }
+      {isModalVisible && (
+        <Modal
+          onBackButtonPress={() => setModalVisible(false)}
+          onBackdropPress={() => setModalVisible(false)}
+          isVisible={isModalVisible}
+          style={[
+            styles.ModalBg,
+            isKeyboardVisible
+              ? {justifyContent: 'center'}
+              : {justifyContent: 'flex-end'},
+          ]}>
+          <View style={styles.ModalContainer}>
+            <Text style={styles.ModalHeading}>Add Contact</Text>
+            <View style={styles.InputWrap}>
+              <MyInput
+                label="Contact Number"
+                keyboardType="number-pad"
+                maxLength={10}
+                prefix={'+91'}
+                IconName={'call-grey'}
+                defaultValue={contactNum}
+                value={contactNum}
+                onChangeText={newText => setContactNum(newText)}
+                onSubmitEditing={() => {
+                  if (contactNum.length == 10) {
+                    checkExistance();
+                  }
+                }}
+              />
+            </View>
+            {contactExists && contactNum.length == 10 ? (
+              <Text style={styles.alreadyExistsTxt}>
+                Contact already exists
+              </Text>
+            ) : null}
+            {contactLoading && (
+              <Text style={styles.searchingtxt}>Searching...</Text>
+            )}
+            {/* disableBtn css */}
+            <TouchableOpacity
+              onPress={() => {
+                props.navigation.navigate('AddContact', {
+                  phone: contactNum,
+                  newContact: true,
+                });
+                setContactNum('');
+                setModalVisible(false);
               }}
-            />
+              disabled={
+                contactExists || contactNum.length != 10 || contactLoading
+              }
+              style={
+                !contactExists && contactNum.length == 10 && !contactLoading
+                  ? styles.enableBtn
+                  : styles.disableBtn
+              }>
+              <Text style={styles.disableBtnTxt}>Add to my Contact</Text>
+            </TouchableOpacity>
           </View>
-          {contactExists && contactNum.length == 10 ? (
-            <Text style={styles.alreadyExistsTxt}>Contact already exists</Text>
-          ) : null}
-          {contactLoading && (
-            <Text style={styles.searchingtxt}>Searching...</Text>
-          )}
-          {/* disableBtn css */}
-          <TouchableOpacity
-            onPress={() => {
-              props.navigation.navigate('AddContact', {
-                phone: contactNum,
-                newContact: true,
-              });
-              setContactNum('');
-              setModalVisible(false);
-            }}
-            disabled={
-              contactExists || contactNum.length != 10 || contactLoading
-            }
-            style={
-              !contactExists && contactNum.length == 10 && !contactLoading
-                ? styles.enableBtn
-                : styles.disableBtn
-            }>
-            <Text style={styles.disableBtnTxt}>Add to my Contact</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
+        </Modal>
+      )}
       {selectContact ? (
         <View style={styles.BtnWrapper}>
           <View style={{flex: 1}}>

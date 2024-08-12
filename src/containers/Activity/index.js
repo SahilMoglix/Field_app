@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   TextInput,
   Linking,
+  Image,
 } from 'react-native';
 import CallLogs from 'react-native-call-log';
 import CustomeIcon from '../../component/CustomeIcon';
@@ -212,8 +213,25 @@ const ActivityScreen = () => {
           <Text style={styles.name}>
             {contact?.name ? contact?.name : contact?.phoneNumber}
           </Text>
+          <Text style={styles.compName}>
+            {!contact.company
+              ? // ? 'Company and other details missing'
+                '--Orion Rfid Solutions--'
+              : contact?.company}
+          </Text>
           <View style={{flexDirection: 'row'}}>
+            {/* <Image
+              source={require('../../assets/images/incoming_call.png')}
+              style={{
+                width: 15,
+                height: 15,
+                marginRight: Dimension.margin8,
+              }}
+              resizeMode={'contain'}
+            /> */}
             <Text style={styles.phoneNumber}>{setCallType(contact?.type)}</Text>
+            {/* <Text style={styles.timeDg}>Yesterday, 7:05 pm</Text>  */}
+
             <View style={styles.datetxt}>
               <DateConvert
                 date={contact?.timestamp}
@@ -221,6 +239,18 @@ const ActivityScreen = () => {
               />
               {/* {contact?.type} */}
             </View>
+          </View>
+          <View style={{flexDirection: 'row'}}>
+            <Image
+              source={require('../../assets/images/dialer.png')}
+              style={{
+                width: 10,
+                height: 15,
+                marginRight: Dimension.margin8,
+              }}
+              resizeMode={'contain'}
+            />
+            <Text style={styles.dialerName}>--Some name--</Text>
           </View>
           {/* <Text style={styles.phoneNumber}>
             {contact?.dateTime}
