@@ -42,9 +42,9 @@ const FilterModal = props => {
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
   const [filters, setFilters] = useState({
-    salesPerson: props.salesPerson || [],
-    region: props.region || [],
-    branch: props.branch || [],
+    salesPerson: props?.paramsData?.salesPerson || [],
+    region: props?.paramsData?.region || [],
+    branch: props?.paramsData?.branch || [],
   });
 
   const [designation, setDesignation] = useState(props.designation);
@@ -211,9 +211,9 @@ const FilterModal = props => {
             onCheck: text => handleCheck('salesPerson', text),
             component: DotCheckbox,
             data: users.map(user => ({
-              key: user,
-              title: user,
-              label: user,
+              key: user?.key,
+              title: user?.label,
+              label: user?.label,
             })),
           },
         ],
@@ -241,7 +241,7 @@ const FilterModal = props => {
     const {data} = await getUsers(
       filters?.branch?.length ? filters?.branch : branches,
     );
-    setUser(data?.result?.map(_ => _.name));
+    setUser(data?.result?.map(_ => ({key: _.id, label: _.name})));
   };
 
   const dateConverter = (paramDate, dateType, fromTo) => {
@@ -273,6 +273,26 @@ const FilterModal = props => {
       }
     }
     return '';
+  };
+
+  const applyCommFilter = fromResetFilter => {
+    if (fromResetFilter) {
+      props.onApplyFilter({
+        region: [],
+        branch: [],
+        salesPerson: [],
+      });
+    } else if (
+      filters.branch.length ||
+      filters.region.length ||
+      filters.salesPerson.length
+    ) {
+      props.onApplyFilter({
+        region: filters.region,
+        branch: filters.branch,
+        salesPerson: filters.salesPerson,
+      });
+    }
   };
 
   const applyFilters = fromReset => {
@@ -318,16 +338,6 @@ const FilterModal = props => {
             ).getTime(),
           });
         }
-      } else if (
-        filters.branch.length &&
-        filters.region.length &&
-        filters.salesPerson.length
-      ) {
-        props.onApplyFilter({
-          region: regions,
-          branch: branches,
-          salesPerson: users,
-        });
       }
     }
   };
@@ -336,6 +346,7 @@ const FilterModal = props => {
     setSearchValue(text);
   };
   const handleCheck = (filterType, value) => {
+    console.log(filterType, value, 'wfwebgfwuebfuwefew');
     let filterData = COMM_FILTER_DATA?.tabs?.find(tab => tab.key === filterType)
       ?.fields[0].data;
     if (!filterData) return;
@@ -409,7 +420,7 @@ const FilterModal = props => {
             ? false
             : true
         }
-        onPress={() => applyFilters()}
+        onPress={() => applyCommFilter()}
         style={
           filters.branch.length ||
           filters.region.length ||
@@ -536,6 +547,8 @@ const FilterModal = props => {
     );
   };
 
+  console.log(users, regions);
+
   return (
     <Modal
       isVisible={props.filtersModal}
@@ -572,7 +585,11 @@ const FilterModal = props => {
           onLayout={event => setFooterHeight(event.nativeEvent.layout.height)}
           style={styles.bottomAction}>
           <TouchableOpacity
-            onPress={() => applyFilters(true)}
+            onPress={() =>
+              props.fromCommunicationFilter
+                ? applyCommFilter(true)
+                : applyFilters(true)
+            }
             style={styles.cancelBtn}>
             <Text style={styles.canceltxt}>RESET</Text>
           </TouchableOpacity>

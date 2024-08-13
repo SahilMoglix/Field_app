@@ -31,7 +31,12 @@ import FilterModal from '../Filter';
 const ActivityScreen = () => {
   const total = useSelector(state => state.communicationReducer.get('total'));
   const logsData = useSelector(state => state.communicationReducer.get('data'));
-  const pageNo = useSelector(state => state.communicationReducer.get('pageNo'));
+  const pageNo = useSelector(state =>
+    state.communicationReducer.getIn(['params', 'pageNo']),
+  );
+  const paramsData = useSelector(state =>
+    state.communicationReducer.get('params'),
+  );
   const adminFlag = useSelector(state => state?.authReducer?.data?.isAdmin);
   const logsStatus = useSelector(state =>
     state.communicationReducer.get('status'),
@@ -45,7 +50,13 @@ const ActivityScreen = () => {
   let callDetector = null;
 
   useEffect(() => {
-    onRefreshLogs(0);
+    onRefreshLogs({
+      pageNo: 0,
+      pageSize: 20,
+      userList: [],
+      regionList: [],
+      branchList: [],
+    });
   }, []);
 
   useEffect(() => {
@@ -57,8 +68,15 @@ const ActivityScreen = () => {
     }
   }, [logsStatus]);
 
-  const onRefreshLogs = (pageNo = 0) => {
-    dispatch(fetchLogs(pageNo));
+  const onRefreshLogs = objData => {
+    let obj = {
+      pageNo: objData?.pageNo || 0,
+      pageSize: objData?.pageSize || 20,
+      userList: objData?.userList || [],
+      regionList: objData?.regionList || [],
+      branchList: objData?.branchList || [],
+    };
+    dispatch(fetchLogs(obj));
   };
 
   const showFilter = () => {
@@ -66,11 +84,16 @@ const ActivityScreen = () => {
   };
 
   const applyFilters = async params => {
-    // await logAnalytics('Calendar_ApplyFilter', {
-    //   Selected_Fields: JSON.stringify(params),
-    // });
+    obj = {
+      pageNo: 0,
+      pageSize: 20,
+      userList: params.salesPerson,
+      regionList: params.region,
+      branchList: params.branch,
+    };
+    dispatch(fetchLogs(obj));
+
     setFiltersModal(false);
-    // dispatch(fetchCustomCalendar(params));
   };
 
   const setCallType = type => {
@@ -213,12 +236,13 @@ const ActivityScreen = () => {
           <Text style={styles.name}>
             {contact?.name ? contact?.name : contact?.phoneNumber}
           </Text>
-          <Text style={styles.compName}>
-            {!contact.company
-              ? // ? 'Company and other details missing'
-                '--Orion Rfid Solutions--'
-              : contact?.company}
-          </Text>
+          {contact?.contact?.company ? (
+            <Text style={styles.compName}>
+              {/* ? ''
+              : // '--Orion Rfid Solutions--' */}
+              {contact?.contact?.company}
+            </Text>
+          ) : null}
           <View style={{flexDirection: 'row'}}>
             {/* <Image
               source={require('../../assets/images/incoming_call.png')}
@@ -250,7 +274,7 @@ const ActivityScreen = () => {
               }}
               resizeMode={'contain'}
             />
-            <Text style={styles.dialerName}>--Some name--</Text>
+            <Text style={styles.dialerName}>{contact?.createdBy?.name}</Text>
           </View>
           {/* <Text style={styles.phoneNumber}>
             {contact?.dateTime}
@@ -307,7 +331,7 @@ const ActivityScreen = () => {
       [STATE_STATUS.FETCHED, STATE_STATUS.UPDATED].includes(logsStatus) &&
       total / 20 > pageNo + 1
     ) {
-      onRefreshLogs(pageNo + 1);
+      onRefreshLogs({...paramsData, pageNo: pageNo + 1});
     }
   };
 
@@ -347,7 +371,12 @@ const ActivityScreen = () => {
         refreshing={[STATE_STATUS.FETCHING, STATE_STATUS.UNFETCHED].includes(
           logsStatus,
         )}
-        onRefresh={onRefreshLogs}
+        onRefresh={() =>
+          onRefreshLogs({
+            ...paramsData,
+            pageNo: 0,
+          })
+        }
         renderItem={renderItem}
         onEndReachedThreshold={0.8}
         onEndReached={onEndReached}
@@ -375,6 +404,11 @@ const ActivityScreen = () => {
         <FilterModal
           setFiltersModal={setFiltersModal}
           filtersModal={filtersModal}
+          paramsData={{
+            salesPerson: paramsData?.userList,
+            region: paramsData?.regionList,
+            branch: paramsData?.branchList,
+          }}
           onApplyFilter={applyFilters}
           fromCommunicationFilter
         />

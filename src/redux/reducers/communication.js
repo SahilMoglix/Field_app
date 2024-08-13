@@ -5,7 +5,11 @@ import {List, Map} from 'immutable';
 
 const initialState = new Map({
   status: STATE_STATUS.UNFETCHED,
-  pageNo: 0,
+  params: {
+    userList: [],
+    regionList: [],
+    branchList: [],
+  },
   data: new List([]),
   total: 0,
   error: null,
@@ -16,20 +20,20 @@ export const communicationReducer = (state = initialState, action) => {
 
   switch (type) {
     case COMMUNICATION_ACTIONS.FETCH_LOGS:
-      if (payload.pageNo == 0) {
+      if (payload.params.pageNo == 0) {
         return state
           .set('status', STATE_STATUS.FETCHING)
           .set('data', new List([]))
-          .set('pageNo', payload.pageNo)
+          .set('params', payload.params)
           .set('error', null);
       } else {
         return state
           .set('status', STATE_STATUS.FETCHING)
-          .set('pageNo', payload.pageNo)
+          .set('params', payload.params)
           .set('error', null);
       }
     case COMMUNICATION_ACTIONS.FETCHED_LOGS:
-      if (payload.pageNo == 0) {
+      if (payload.params.pageNo == 0) {
         return state
           .set('status', STATE_STATUS.FETCHED)
           .set('data', new List(payload.data))
@@ -43,12 +47,8 @@ export const communicationReducer = (state = initialState, action) => {
           .set('error', null);
       }
     case COMMUNICATION_ACTIONS.FAILED_FETCH_LOGS:
-      return (
-        state
-          .set('status', STATE_STATUS.FAILED_FETCH)
-          // .set('data', new List([]))
-          .set('error', error)
-      );
+      return state.set('status', STATE_STATUS.FAILED_FETCH).set('error', error);
+
     case COMMUNICATION_ACTIONS.UPDATE_LOGS:
       return state
         .set('status', STATE_STATUS.UPDATED)

@@ -102,6 +102,7 @@ const styles = StyleSheet.create({
     fontSize: Dimension.font16,
     fontFamily: Dimension.CustomMediumFont,
     color: colors.FontColor,
+    marginBottom: Dimension.margin5,
   },
   phoneNumber: {
     fontSize: Dimension.font14,

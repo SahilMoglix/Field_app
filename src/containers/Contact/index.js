@@ -164,9 +164,9 @@ const ContactScreen = props => {
         `${Platform.OS == 'android' ? 'tel' : 'telprompt'}:${item.phone}`,
       );
     } catch (e) {
-      console.log(e, 'error');
       phoneCallDetector(item);
     }
+    setCallModalVisible(false);
   };
 
   const INCLINATION_COLORS = {
@@ -512,7 +512,6 @@ const ContactScreen = props => {
         async (event, phoneNumber) => {
           if (event == 'Disconnected') {
             let date = new Date();
-            console.log('pCD Dateee', date);
             let callData = [
               {
                 rawType: 2,
@@ -526,9 +525,7 @@ const ContactScreen = props => {
                 createdAt: date.getTime(),
               },
             ];
-            console.log('pCD dataaa', callData);
             const {data} = await createAllContacts(callData);
-            console.log('PCD Data', data);
             if (data?.result && data?.result?.length) {
               dispatch(updateLogs(0, data?.result, data.total));
             }
