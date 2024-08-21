@@ -551,7 +551,7 @@ const ContactScreen = props => {
       <View style={styles.headerWrap}>
         <View style={styles.TopHeader}>
           <Text style={styles.headingTxt}>Contacts</Text>
-          {!createFlag ? (
+          {createFlag ? (
             <TouchableOpacity
               onPress={addContactModal}
               style={{flexDirection: 'row'}}>

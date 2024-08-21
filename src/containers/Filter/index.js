@@ -222,8 +222,10 @@ const FilterModal = props => {
   };
 
   useEffect(() => {
-    showRegions();
-  }, []);
+    if (props.fromCommunicationFilter) {
+      showRegions();
+    }
+  }, [props.fromCommunicationFilter]);
 
   const showRegions = async () => {
     const {data} = await getRegion();
@@ -391,6 +393,7 @@ const FilterModal = props => {
         <View key={k} style={{paddingHorizontal: Dimension.padding15}}>
           <field.component
             {...field}
+            fromCommunicationFilter={props.fromCommunicationFilter}
             searchvalue={searchValue}
             onCheck={value => handleCheck(key, value)}
             selectedValues={filters[key] || []}
@@ -546,8 +549,6 @@ const FilterModal = props => {
       </View>
     );
   };
-
-  console.log(users, regions);
 
   return (
     <Modal

@@ -18,7 +18,7 @@ import CustomeIcon from '../component/CustomeIcon';
 import colors from '../Theme/Colors';
 import Dimension from '../Theme/Dimension';
 import LoginScreen from '../containers/Login';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {fetchedAuth} from '../redux/actions/auth';
 import firebase from '@react-native-firebase/app';
@@ -73,6 +73,8 @@ const Routes = props => {
   const navigationRef = useNavigationContainerRef();
   const routeNameRef = useRef();
   const dispatch = useDispatch();
+
+  const adminFlag = useSelector(state => state?.authReducer?.data?.isAdmin);
 
   const [loading, setLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -162,6 +164,10 @@ const Routes = props => {
   const linking = {
     prefixes: ['com.moglix.field://'],
   };
+
+  const filteredTabs = BOTTOM_TAB_SCREENS.filter(
+    tab => adminFlag || tab.name !== 'Sales Team',
+  );
   const TabNavigator = () => {
     return (
       <Tab.Navigator
@@ -184,7 +190,7 @@ const Routes = props => {
           },
         })}
         tabBarOptions={tabBarOptions}>
-        {BOTTOM_TAB_SCREENS.map((screen, key) => (
+        {filteredTabs.map((screen, key) => (
           <Tab.Screen
             key={key}
             lazy={false}

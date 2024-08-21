@@ -3,7 +3,7 @@ import CalendarScreen from '../containers/Calendar';
 import ContactScreen from '../containers/Contact';
 import ActivityScreen from '../containers/Activity';
 import LoginScreen from '../containers/Login';
-
+import SalesTeamScreen from '../containers/SalesTeamDetail';
 import AddContactScreen from '../containers/AddContact';
 import ContactDetail from '../containers/ContactDetail';
 import FilterScreen from '../containers/Filter';
@@ -17,10 +17,17 @@ export const BOTTOM_TAB_SCREENS = [
     activeIcon: 'Calendar-Blue-Tab',
   },
   {
-    name: 'Communication',
+    name: 'Call Logs',
     component: ActivityScreen,
     inactiveIcon: 'Comm-grey',
     activeIcon: 'Comm-blue',
+  },
+
+  {
+    name: 'Sales Team',
+    component: SalesTeamScreen,
+    inactiveIcon: 'Contact-grey-tab',
+    activeIcon: 'Contact-blue-tab',
   },
 
   {

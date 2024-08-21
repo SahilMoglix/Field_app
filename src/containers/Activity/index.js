@@ -37,7 +37,7 @@ const ActivityScreen = () => {
   const paramsData = useSelector(state =>
     state.communicationReducer.get('params'),
   );
-  const adminFlag = useSelector(state => state?.authReducer?.data?.isAdmin);
+
   const logsStatus = useSelector(state =>
     state.communicationReducer.get('status'),
   );
@@ -79,22 +79,22 @@ const ActivityScreen = () => {
     dispatch(fetchLogs(obj));
   };
 
-  const showFilter = () => {
-    setFiltersModal(true);
-  };
+  // const showFilter = () => {
+  //   setFiltersModal(true);
+  // };
 
-  const applyFilters = async params => {
-    obj = {
-      pageNo: 0,
-      pageSize: 20,
-      userList: params.salesPerson,
-      regionList: params.region,
-      branchList: params.branch,
-    };
-    dispatch(fetchLogs(obj));
+  // const applyFilters = async params => {
+  //   obj = {
+  //     pageNo: 0,
+  //     pageSize: 20,
+  //     userList: params.salesPerson,
+  //     regionList: params.region,
+  //     branchList: params.branch,
+  //   };
+  //   dispatch(fetchLogs(obj));
 
-    setFiltersModal(false);
-  };
+  //   setFiltersModal(false);
+  // };
 
   const setCallType = type => {
     let IconName;
@@ -307,10 +307,11 @@ const ActivityScreen = () => {
     return <Contact contact={item} />;
   };
 
-  let searchedData = logsData.filter(
+  let searchedData = logsData?.filter(
     _ =>
       _.name?.toLowerCase().includes(searchValue.toLowerCase()) ||
       _.phoneNumber?.toLowerCase().includes(searchValue.toLowerCase()),
+    // _?.company?.toLowerCase().includes(searchValue?.toLowerCase()),
   );
 
   useEffect(() => {
@@ -389,7 +390,7 @@ const ActivityScreen = () => {
         keyExtractor={keyExtractor}
       />
 
-      {!adminFlag ? (
+      {/* {!adminFlag ? (
         <TouchableOpacity style={styles.filterbtn} onPress={showFilter}>
           <CustomeIcon
             name={'Filter-blue'}
@@ -412,7 +413,7 @@ const ActivityScreen = () => {
           onApplyFilter={applyFilters}
           fromCommunicationFilter
         />
-      )}
+      )} */}
     </View>
   );
 };
