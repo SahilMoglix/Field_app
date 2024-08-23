@@ -283,6 +283,12 @@ const FilterModal = props => {
         region: [],
         branch: [],
         salesPerson: [],
+        startDate: new Date(
+          new Date(first_day_of_the_week).toDateString() + ' 00:00:00',
+        ).getTime(),
+        endDate: new Date(
+          new Date(last_day_of_the_week).toDateString() + ' 23:59:59',
+        ).getTime(),
       });
     } else if (
       filters.branch.length ||
@@ -293,6 +299,10 @@ const FilterModal = props => {
         region: filters.region,
         branch: filters.branch,
         salesPerson: filters.salesPerson,
+        startDate: new Date(
+          dateConverter(startDate, 'datetime', 'from'),
+        ).getTime(),
+        endDate: new Date(dateConverter(endDate, 'datetime', 'to')).getTime(),
       });
     }
   };
@@ -348,7 +358,6 @@ const FilterModal = props => {
     setSearchValue(text);
   };
   const handleCheck = (filterType, value) => {
-    console.log(filterType, value, 'wfwebgfwuebfuwefew');
     let filterData = COMM_FILTER_DATA?.tabs?.find(tab => tab.key === filterType)
       ?.fields[0].data;
     if (!filterData) return;

@@ -155,7 +155,10 @@ const CustomeDatePicker = props => {
         ) : (
           <View style={styles.WrapperStyle}>
             <Text>{props.label}</Text>
-            <TouchableOpacity style={[styles.inputContainerStyle]}>
+            <TouchableOpacity
+              // onPress={()=>}
+
+              style={[styles.inputContainerStyle]}>
               <View style={[styles.inputStyle, styles.inputStylesIos]}>
                 <DateTimePicker
                   testID="dateTimePicker"
@@ -163,9 +166,9 @@ const CustomeDatePicker = props => {
                     new Date(dateConverter(date)) ||
                     new Date(dateConverter(value))
                   }
-                  style={{width: '70%'}}
+                  style={{width: props.fromSalesTab ? '60%' : '70%'}}
                   mode={mode}
-                  maximumDate={maxdate}
+                  maximumDate={props?.fromSalesTab ? new Date() : maxdate}
                   accentColor={'red'}
                   is24Hour={true}
                   display={display}
@@ -188,7 +191,7 @@ const CustomeDatePicker = props => {
               new Date(dateConverter(date)) || new Date(dateConverter(value))
             }
             mode={mode}
-            maximumDate={maxdate}
+            maximumDate={props?.fromSalesTab ? new Date() : maxdate}
             is24Hour={true}
             display={display}
             onChange={onchangeDate}

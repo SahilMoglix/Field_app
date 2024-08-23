@@ -8,10 +8,10 @@ import SplashScreen from 'react-native-splash-screen';
 import {toastConfig} from './src/generic/index';
 
 const App = () => {
-  console.log = () => {};
-  console.info = () => {};
-  console.warn = () => {};
-  console.error = () => {};
+  // console.log = () => {};
+  // console.info = () => {};
+  // console.warn = () => {};
+  // console.error = () => {};
 
   useEffect(() => {
     SplashScreen.hide();

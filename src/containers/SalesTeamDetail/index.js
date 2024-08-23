@@ -1,15 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import {
   Text,
-  PermissionsAndroid,
   View,
   Platform,
   TouchableOpacity,
-  TextInput,
-  Linking,
+  FlatList,
   Image,
   Dimensions,
-  ScrollView,
 } from 'react-native';
 import CallLogs from 'react-native-call-log';
 import CustomeIcon from '../../component/CustomeIcon';
@@ -18,43 +15,44 @@ import styles from './style';
 import DateConvert from '../../component/DateConvert';
 import {useDispatch, useSelector} from 'react-redux';
 import {STATE_STATUS} from '../../redux/constants';
-import {fetchLogs, updateLogs} from '../../redux/actions/communication';
 import {createAllContacts} from '../../services/communication';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import AntIcon from 'react-native-vector-icons/AntDesign';
 import logAnalytics from '../../services/analytics';
 import MatIcon from 'react-native-vector-icons/MaterialIcons';
 import Colors from '../../Theme/Colors';
-import {PERMISSIONS, request} from 'react-native-permissions';
-import CallDetectorManager from 'react-native-call-detection';
 import FilterModal from '../Filter';
 import Modal from 'react-native-modal';
 import CustomeDatePicker from '../../component/Datepicker';
+import NoDataFound from '../../component/NoDataFound';
+import {fetchSalesLogs, updateSalesLogs} from '../../redux/actions/salesTab';
 
 const SalesTeamScreen = props => {
-  const total = useSelector(state => state.communicationReducer.get('total'));
-  const logsData = useSelector(state => state.communicationReducer.get('data'));
+  const total = useSelector(state => state.salesTabReducer.get('total'));
+  const logsData = useSelector(state => state.salesTabReducer.get('data'));
   const pageNo = useSelector(state =>
-    state.communicationReducer.getIn(['params', 'pageNo']),
+    state.salesTabReducer.getIn(['params', 'pageNo']),
   );
-  const paramsData = useSelector(state =>
-    state.communicationReducer.get('params'),
-  );
-  const logsStatus = useSelector(state =>
-    state.communicationReducer.get('status'),
-  );
+  const paramsData = useSelector(state => state.salesTabReducer.get('params'));
+  const logsStatus = useSelector(state => state.salesTabReducer.get('status'));
+
+  const today = new Date();
+  const day = today.getDate();
+  const month = today.getMonth() + 1;
+  const year = today.getFullYear();
+  const formattedDate = `${day}-${month}-${year}`;
 
   const [searchValue, setSearchValue] = useState('');
   const [filtersModal, setFiltersModal] = useState(false);
   const [showCallLog, setShowCallLog] = useState(false);
   const [dateFilterVisible, setDateFilterVisible] = useState(false);
   const [dateFilterValue, setDateFilterValue] = useState('Last 7 Days');
-  const [isCustomFilter, setCustomFilter] = useState(false);
-  const [startDate, setStartDate] = useState(new Date(props.startDate));
-  const [endDate, setEndDate] = useState(new Date(props.endDate));
-  const [selectedRange, setSelectedRange] = useState({
-    startDate: '',
-    endDate: '',
-  });
+  const [startDate, setStartDate] = useState(formattedDate);
+  const [endDate, setEndDate] = useState(formattedDate);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [numberOfDays, setNumberOfDays] = useState('');
+  const [salesPerson, setSalesPerson] = useState('');
+  const [timestamps, setTimestamps] = React.useState({start: 0, end: 0});
 
   const dispatch = useDispatch();
 
@@ -67,17 +65,10 @@ const SalesTeamScreen = props => {
       userList: [],
       regionList: [],
       branchList: [],
+      startDate: '',
+      endDate: '',
     });
   }, []);
-
-  useEffect(() => {
-    if (logsStatus == STATE_STATUS.FETCHED && pageNo == 0) {
-      checkPermission();
-    }
-    if (logsStatus == STATE_STATUS.FETCHING && callDetector) {
-      callDetector && callDetector.dispose();
-    }
-  }, [logsStatus]);
 
   const onRefreshLogs = objData => {
     let obj = {
@@ -86,8 +77,10 @@ const SalesTeamScreen = props => {
       userList: objData?.userList || [],
       regionList: objData?.regionList || [],
       branchList: objData?.branchList || [],
+      startDate: '1682068000000',
+      endDate: '1724437799999',
     };
-    dispatch(fetchLogs(obj));
+    dispatch(fetchSalesLogs(obj));
   };
 
   const showFilter = () => {
@@ -95,50 +88,17 @@ const SalesTeamScreen = props => {
   };
 
   const applyFilters = async params => {
-    obj = {
+    let obj = {
       pageNo: 0,
       pageSize: 20,
       userList: params.salesPerson,
       regionList: params.region,
       branchList: params.branch,
+      startDate: params.startDate || '',
+      endDate: params.endDate || '',
     };
-    dispatch(fetchLogs(obj));
-
+    dispatch(fetchSalesLogs(obj));
     setFiltersModal(false);
-  };
-
-  const convertDateFilter = period => {
-    const today = new Date();
-    switch (period) {
-      case 'today':
-        return format(today, 'yyyy-MM-dd');
-
-      case 'yesterday':
-        const yesterday = new Date(today);
-        yesterday.setDate(today.getDate() - 1);
-        return format(yesterday, 'yyyy-MM-dd');
-
-      case 'last 7 days':
-        const end7Days = format(today, 'yyyy-MM-dd');
-        const start7Days = new Date(today);
-        start7Days.setDate(today.getDate() - 6); // 6 days before today
-        return {
-          start: format(start7Days, 'yyyy-MM-dd'),
-          end: end7Days,
-        };
-
-      case 'last 30 days':
-        const end30Days = format(today, 'yyyy-MM-dd');
-        const start30Days = new Date(today);
-        start30Days.setDate(today.getDate() - 29); // 29 days before today
-        return {
-          start: format(start30Days, 'yyyy-MM-dd'),
-          end: end30Days,
-        };
-
-      default:
-        throw new Error('Invalid period');
-    }
   };
 
   const setCallType = type => {
@@ -161,22 +121,118 @@ const SalesTeamScreen = props => {
     );
   };
 
-  const handleFilterPress = filterType => {
-    if (filterType === 'Custom') {
-      setCustomFilter(true);
-      setDateFilterVisible(false);
-    } else {
-      setDateFilterValue(filterType);
-      setDateFilterVisible(false);
+  const parseDate = dateStr => {
+    const [day, month, year] = dateStr.split('-').map(Number);
+    return new Date(year, month - 1, day);
+  };
+
+  const calculateDaysBetweenDates = (startDate, endDate) => {
+    const startDt = parseDate(startDate);
+    const endDt = parseDate(endDate);
+    const start = new Date(startDt);
+    const end = new Date(endDt);
+    const differenceInTime = Math.abs(end - start);
+    const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
+
+    return differenceInDays;
+  };
+
+  const totalNoOfDays = () => {
+    if (startDate && endDate) {
+      const days = calculateDaysBetweenDates(startDate, endDate);
+      setNumberOfDays(days);
+    }
+    setDateFilterVisible(false);
+  };
+
+  const computeTimeStamp = range => {
+    const now = new Date();
+    const startOfDay = date => {
+      return new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate(),
+      ).getTime();
+    };
+    const endOfDay = date => {
+      return new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate(),
+        23,
+        59,
+        59,
+        999,
+      ).getTime();
+    };
+
+    switch (range) {
+      case 'Today':
+        return {
+          start: startOfDay(now),
+          end: endOfDay(now),
+        };
+
+      case 'Yesterday':
+        const yesterday = new Date(now);
+        yesterday.setDate(yesterday.getDate() - 1);
+        return {
+          start: startOfDay(yesterday),
+          end: endOfDay(yesterday),
+        };
+
+      case 'Last 7 Days':
+        const sevenDaysAgo = new Date(now);
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+        return {
+          start: startOfDay(sevenDaysAgo),
+          end: endOfDay(now),
+        };
+
+      case 'Last 30 Days':
+        const thirtyDaysAgo = new Date(now);
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+        return {
+          start: startOfDay(thirtyDaysAgo),
+          end: endOfDay(now),
+        };
+
+      default:
+        return {
+          start: startOfDay(now),
+          end: endOfDay(now),
+        };
     }
   };
 
-  const handleCustomFilterConfirm = () => {
-    console.log(
-      `Custom Range Selected: ${selectedRange.startDate} to ${selectedRange.endDate}`,
-    );
-    setCustomFilter(false);
-    setDateFilterValue('Custom Date');
+  const getSalesTeamContacts = (startTimeStamp, endTimeStamp) => {
+    let obj = {
+      pageNo: 0,
+      pageSize: 20,
+      userList: [],
+      regionList: [],
+      branchList: [],
+      startDate: startTimeStamp,
+      endDate: endTimeStamp,
+    };
+    dispatch(fetchSalesLogs(obj));
+  };
+
+  useEffect(() => {
+    const {start, end} = computeTimeStamp(dateFilterValue || 'Last 7 days');
+    setTimestamps({start, end});
+    setDateFilterVisible(false);
+    getSalesTeamContacts(start, end);
+  }, [dateFilterValue]);
+
+  const handleFilterPress = filterType => {
+    if (filterType === 'Custom') {
+      setDateFilterValue(filterType);
+      totalNoOfDays();
+      setShowDatePicker(false);
+    } else {
+      setDateFilterValue(filterType);
+    }
   };
 
   const getLogs = async () => {
@@ -209,38 +265,12 @@ const SalesTeamScreen = props => {
     }
   };
 
-  const checkPermission = async () => {
-    try {
-      if (Platform.OS == 'android') {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.READ_CALL_LOG,
-          {
-            title: 'KAM App',
-            message: 'Access your call logs',
-            buttonNeutral: 'Ask Me Later',
-            buttonNegative: 'Cancel',
-            buttonPositive: 'OK',
-          },
-        );
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          getLogs();
-        } else {
-          console.log('Call Log permission denied');
-        }
-      } else {
-        getLogs();
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   const createRecentContacts = async recentCallLogs => {
     try {
       let limitCallLogs = [...recentCallLogs].slice(0, 100);
       const {data} = await createAllContacts(limitCallLogs);
       if (data?.result && data?.result?.length) {
-        dispatch(updateLogs(0, data?.result, data.total));
+        dispatch(updateSalesLogs(0, data?.result, data.total));
       }
     } catch (error) {
       console.log(error);
@@ -252,90 +282,52 @@ const SalesTeamScreen = props => {
   };
 
   // Call log for modal
-  const contactDetail = () => {
+  const rendercontactDetail = contact => {
     return (
       <View style={styles.contactParentView}>
         <View style={styles.placeholderCopy}>
-          <Text style={styles.txtCopy}>
-            {/* {contact?.name ? contact?.name[0] : 'U'} */}H
-          </Text>
+          <Text style={styles.txtCopy}>{contact?.item?.name[0]}</Text>
         </View>
         <View style={styles.contactDat}>
-          <Text style={styles.name}>
-            {/* {contact?.name ? contact?.name : contact?.phoneNumber} */}
-            Hemant Bambulkar
-          </Text>
+          <Text style={styles.name}>{contact?.item?.name}</Text>
 
           <View style={{flexDirection: 'row', marginTop: Dimension.margin10}}>
-            <Image
-              source={require('../../assets/images/phone-call.png')}
-              style={{
-                width: 15,
-                height: 15,
-                marginRight: Dimension.margin8,
-              }}
-              resizeMode={'contain'}
-            />
-            {/* <Text style={styles.phoneNumber}>{setCallType(contact?.type)}</Text> */}
-            <Text style={styles.timeDg}>Yesterday, 7:05 pm</Text>
+            <Text
+              style={[styles.phoneNumber, {marginRight: Dimension.margin8}]}>
+              {setCallType(contact?.item?.type)}
+            </Text>
+            <View style={styles.datetxt}>
+              <DateConvert
+                date={contact?.item?.timestamp}
+                contactType={contact?.item?.type}
+              />
+            </View>
           </View>
         </View>
       </View>
     );
   };
 
-  const phoneCallDetector = async userData => {
-    if (Platform.OS == 'ios') {
-      callDetector = new CallDetectorManager(
-        async (event, phoneNumber) => {
-          if (event == 'Disconnected') {
-            let date = new Date();
-            let callData = [
-              {
-                rawType: 2,
-                type: 'OUTGOING',
-                dateTime: date.toGMTString(),
-                phoneNumber: userData.phoneNumber,
-                duration: 0,
-                timestamp: date.getTime(),
-                name: userData.name,
-                userPhoneNumber: userData.phoneNumber,
-                createdAt: date.getTime(),
-              },
-            ];
-            const {data} = await createAllContacts(callData);
-            if (data?.result && data?.result?.length) {
-              dispatch(updateLogs(0, data?.result, data.total));
-            }
-          }
-        },
-        false, // if you want to read the phone number of the incoming call [ANDROID], otherwise false
-        () => {}, // callback if your permission got denied [ANDROID] [only if you want to read incoming number] default: console.error
-        {
-          title: 'Phone State Permission',
-          message:
-            'This app needs access to your phone state in order to react and/or to adapt to incoming calls.',
-        },
-      );
-    }
+  const toggleCallLogModal = item => {
+    setSalesPerson(item);
+    setShowCallLog(true);
   };
 
-  const Contact = () => {
+  const Contact = ({contact}) => {
     return (
       <TouchableOpacity
-        onPress={() => setShowCallLog(true)}
+        onPress={() => toggleCallLogModal(contact)}
         style={styles.contactCon}>
         <View style={styles.placeholder}>
           <Text style={styles.txt}>
-            {/* {contact?.name ? contact?.name[0] : 'U'} */}H
+            {contact?.appUser?.name ? contact?.appUser?.name[0] : 'U'}
           </Text>
         </View>
         <View style={styles.contactDat}>
-          <Text style={styles.name}>
-            {/* {contact?.name ? contact?.name : contact?.phoneNumber} */}
-            Hemant Bambulkar
+          <Text style={styles.name}>{contact?.appUser?.name}</Text>
+          <Text>
+            {contact?.appUser?.region} - {contact?.appUser?.branch}
           </Text>
-          <Text>Pune - West</Text>
           <View style={{flexDirection: 'row', marginTop: Dimension.margin10}}>
             <Image
               source={require('../../assets/images/phone-call.png')}
@@ -347,12 +339,14 @@ const SalesTeamScreen = props => {
               resizeMode={'contain'}
             />
             {/* <Text style={styles.phoneNumber}>{setCallType(contact?.type)}</Text> */}
-            <Text style={styles.timeDg}>5 calls across 2 customers</Text>
+            <Text style={styles.timeDg}>
+              {contact?.communicationCount} calls across{' '}
+              {contact?.uniqueContactsCount} customers
+            </Text>
           </View>
         </View>
         <View style={[styles.arrowBtn, {backgroundColor: '#272727'}]}>
-          {/* if call count is 0 then background colour: #D9232D , have to handle this after api integration*/}
-          <Text style={styles.arrwTxt}>10</Text>
+          <Text style={styles.arrwTxt}>{contact?.communicationCount}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -364,9 +358,10 @@ const SalesTeamScreen = props => {
 
   let searchedData = logsData?.filter(
     _ =>
-      _.name?.toLowerCase().includes(searchValue.toLowerCase()) ||
-      _.phoneNumber?.toLowerCase().includes(searchValue.toLowerCase()),
-    // _?.company?.toLowerCase().includes(searchValue?.toLowerCase()),
+      _?.appUser?.name?.toLowerCase()?.includes(searchValue?.toLowerCase()) ||
+      _?.appUser?.phoneNumber
+        ?.toLowerCase()
+        ?.includes(searchValue?.toLowerCase()),
   );
 
   useEffect(() => {
@@ -409,7 +404,11 @@ const SalesTeamScreen = props => {
                 paddingHorizontal: Dimension.padding10,
                 paddingVertical: Dimension.padding8,
               }}>
-              <Text style={styles.fltrtxt}>{dateFilterValue}</Text>
+              <Text style={styles.fltrtxt}>
+                {dateFilterValue !== 'Custom'
+                  ? dateFilterValue
+                  : `${numberOfDays} Days`}
+              </Text>
               <Icon
                 name={'calendar-range-outline'}
                 size={20}
@@ -418,9 +417,8 @@ const SalesTeamScreen = props => {
           </View>
         </View>
       </View>
-      {Contact()}
 
-      {/* <FlatList
+      <FlatList
         data={searchedData.toArray()}
         refreshing={[STATE_STATUS.FETCHING, STATE_STATUS.UNFETCHED].includes(
           logsStatus,
@@ -441,27 +439,15 @@ const SalesTeamScreen = props => {
           ) : null
         }
         keyExtractor={keyExtractor}
-      /> */}
+      />
 
       {dateFilterVisible && (
         <Modal
           isVisible={dateFilterVisible}
           onBackButtonPress={() => setDateFilterVisible(false)}
           onBackdropPress={() => setDateFilterVisible(false)}
-          //   coverScreen={false}
-          //   hasBackdrop={true}
           style={styles.modalbgView}>
           <View style={styles.modalbg}>
-            {/* <View>
-              <TouchableOpacity
-                //   style={styles.cancelBtn}
-                onPress={() => {
-                  setDateFilterVisible(false);
-                }}>
-                <MatIcon name={'cancel'} size={22} color={'#272727'} />
-              </TouchableOpacity>
-            </View> */}
-
             <TouchableOpacity onPress={() => handleFilterPress('Today')}>
               <Text style={styles.optionText}>Today</Text>
             </TouchableOpacity>
@@ -474,25 +460,60 @@ const SalesTeamScreen = props => {
             <TouchableOpacity onPress={() => handleFilterPress('Last 30 Days')}>
               <Text style={styles.optionText}>Last 30 Days</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleFilterPress('Custom')}>
+            <TouchableOpacity
+              style={{flexDirection: 'row'}}
+              onPress={() => setShowDatePicker(!showDatePicker)}>
               <Text style={styles.optionText}>Custom</Text>
-              {/* <CustomeDatePicker
-                value={
-                  typeof startDate == 'string'
-                    ? startDate
-                    : startDate.getDate() +
-                      '-' +
-                      (startDate.getMonth() + 1) +
-                      '-' +
-                      startDate.getFullYear()
-                }
-              /> */}
+              {!showDatePicker ? (
+                <Icon
+                  name={'arrow-down-drop-circle'}
+                  size={20}
+                  style={{marginTop: 12, marginLeft: 10}}
+                />
+              ) : (
+                <Icon
+                  name={'arrow-up-drop-circle'}
+                  size={20}
+                  style={{marginTop: 12, marginLeft: 10}}
+                />
+              )}
             </TouchableOpacity>
+
+            {showDatePicker && (
+              <>
+                <CustomeDatePicker
+                  value={startDate}
+                  onChange={startDate => setStartDate(startDate)}
+                  label={'From Date'}
+                  fromSalesTab
+                  mode={'date'}
+                  display={'default'}
+                />
+                <CustomeDatePicker
+                  value={endDate}
+                  onChange={endDate => setEndDate(endDate)}
+                  label={'To Date'}
+                  fromSalesTab
+                  mode={'date'}
+                  display={'default'}
+                />
+                <TouchableOpacity
+                  onPress={() => {
+                    handleFilterPress('Custom');
+                  }}
+                  style={{paddingVertical: 5}}>
+                  <Icon name={'check-circle'} size={28} color={'#1568E5'} />
+                </TouchableOpacity>
+              </>
+            )}
           </View>
         </Modal>
       )}
 
-      <TouchableOpacity style={styles.filterbtn} onPress={showFilter}>
+      <TouchableOpacity
+        activeOpacity={0.9}
+        style={styles.filterbtn}
+        onPress={showFilter}>
         <CustomeIcon
           name={'Filter-blue'}
           color={Colors.CtaColor}
@@ -533,15 +554,15 @@ const SalesTeamScreen = props => {
                     styles.name,
                     {paddingHorizontal: Dimension.padding15},
                   ]}>
-                  {/* {contact?.name ? contact?.name : contact?.phoneNumber} */}
-                  Hemant Bambulkar
+                  {salesPerson?.appUser?.name}
                 </Text>
                 <Text
                   style={{
                     paddingHorizontal: Dimension.padding15,
                     fontSize: 12,
                   }}>
-                  Pune - West
+                  {salesPerson?.appUser?.region} -{' '}
+                  {salesPerson?.appUser?.branch}
                 </Text>
                 <View
                   style={{
@@ -559,74 +580,29 @@ const SalesTeamScreen = props => {
                     resizeMode={'contain'}
                   />
                   {/* <Text style={styles.phoneNumber}>{setCallType(contact?.type)}</Text> */}
-                  <Text style={styles.timeDg}>5 calls across 2 customers</Text>
+                  <Text style={styles.timeDg}>
+                    {salesPerson?.communicationCount} calls across{' '}
+                    {salesPerson?.uniqueContactsCount} customers
+                  </Text>
                 </View>
               </View>
             </View>
 
             {/* call detail view to be implemented using scroll view or flatlist*/}
-            <View style={styles.contactParentView}>
-              <View style={styles.placeholderCopy}>
-                <Text style={styles.txtCopy}>
-                  {/* {contact?.name ? contact?.name[0] : 'U'} */}H
-                </Text>
-              </View>
-              <View style={styles.contactDat}>
-                <Text style={styles.name}>
-                  {/* {contact?.name ? contact?.name : contact?.phoneNumber} */}
-                  Hemant Bambulkar
-                </Text>
-
-                <View
-                  style={{flexDirection: 'row', marginTop: Dimension.margin10}}>
-                  <Image
-                    source={require('../../assets/images/phone-call.png')}
-                    style={{
-                      width: 15,
-                      height: 15,
-                      marginRight: Dimension.margin8,
-                    }}
-                    resizeMode={'contain'}
-                  />
-                  {/* <Text style={styles.phoneNumber}>{setCallType(contact?.type)}</Text> */}
-                  <Text style={styles.timeDg}>Yesterday, 7:05 pm</Text>
-                </View>
-              </View>
+            <View style={{marginBottom: 30}}>
+              <FlatList
+                data={salesPerson?.communications}
+                keyExtractor={item => item.id}
+                renderItem={rendercontactDetail}
+              />
             </View>
-            <View style={styles.contactParentView}>
-              <View style={styles.placeholderCopy}>
-                <Text style={styles.txtCopy}>
-                  {/* {contact?.name ? contact?.name[0] : 'U'} */}H
-                </Text>
-              </View>
-              <View style={styles.contactDat}>
-                <Text style={styles.name}>
-                  {/* {contact?.name ? contact?.name : contact?.phoneNumber} */}
-                  Hemant Bambulkar
-                </Text>
 
-                <View
-                  style={{flexDirection: 'row', marginTop: Dimension.margin10}}>
-                  <Image
-                    source={require('../../assets/images/phone-call.png')}
-                    style={{
-                      width: 15,
-                      height: 15,
-                      marginRight: Dimension.margin8,
-                    }}
-                    resizeMode={'contain'}
-                  />
-                  {/* <Text style={styles.phoneNumber}>{setCallType(contact?.type)}</Text> */}
-                  <Text style={styles.timeDg}>Yesterday, 7:05 pm</Text>
-                </View>
-              </View>
-            </View>
             <TouchableOpacity
               style={styles.cancelBtn}
               onPress={() => {
                 setShowCallLog(false);
               }}>
-              <MatIcon name={'cancel'} size={40} color={'#1568E5'} />
+              <AntIcon name={'closecircleo'} size={30} color={'#1568E5'} />
             </TouchableOpacity>
           </View>
         </Modal>

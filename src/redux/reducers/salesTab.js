@@ -1,5 +1,5 @@
 import {STATE_STATUS} from '../constants/index';
-import {COMMUNICATION_ACTIONS} from '../constants/communication';
+import {SALES_ACTIONS} from '../constants/salesTab';
 import {AUTH_ACTIONS} from '../constants/auth';
 import {List, Map} from 'immutable';
 
@@ -9,16 +9,18 @@ const initialState = new Map({
     userList: [],
     regionList: [],
     branchList: [],
+    startDate: '',
+    endDate: '',
   },
   data: new List([]),
   total: 0,
   error: null,
 });
 
-export const communicationReducer = (state = initialState, action) => {
+export const salesTabReducer = (state = initialState, action) => {
   const {type, payload, error} = action;
   switch (type) {
-    case COMMUNICATION_ACTIONS.FETCH_LOGS:
+    case SALES_ACTIONS.FETCH_SALES_LOGS:
       if (payload.params.pageNo == 0) {
         return state
           .set('status', STATE_STATUS.FETCHING)
@@ -31,7 +33,7 @@ export const communicationReducer = (state = initialState, action) => {
           .set('params', payload.params)
           .set('error', null);
       }
-    case COMMUNICATION_ACTIONS.FETCHED_LOGS:
+    case SALES_ACTIONS.FETCHED_SALES_LOGS:
       if (payload.params.pageNo == 0) {
         return state
           .set('status', STATE_STATUS.FETCHED)
@@ -45,10 +47,10 @@ export const communicationReducer = (state = initialState, action) => {
           .mergeIn(['data'], new List(payload.data))
           .set('error', null);
       }
-    case COMMUNICATION_ACTIONS.FAILED_FETCH_LOGS:
+    case SALES_ACTIONS.FAILED_FETCH_SALES_LOGS:
       return state.set('status', STATE_STATUS.FAILED_FETCH).set('error', error);
 
-    case COMMUNICATION_ACTIONS.UPDATE_LOGS:
+    case SALES_ACTIONS.UPDATE_SALES_LOGS:
       return state
         .set('status', STATE_STATUS.UPDATED)
         .set('pageNo', payload.pageNo)

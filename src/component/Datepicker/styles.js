@@ -36,8 +36,8 @@ const styles = StyleSheet.create({
     fontSize: Dimension.font12,
     color: colors.FontColor,
     fontFamily: Dimension.CustomRegularFont,
-    paddingLeft: Dimension.padding12,
-    paddingRight: Dimension.padding12,
+    // paddingLeft: Dimension.padding12,
+    paddingHorizontal: Dimension.padding12,
   },
   iconStyle: {
     width: Dimension.width25,

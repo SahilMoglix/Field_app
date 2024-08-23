@@ -68,6 +68,8 @@ const ActivityScreen = () => {
     }
   }, [logsStatus]);
 
+  console.log('logs data on comm', logsData);
+
   const onRefreshLogs = objData => {
     let obj = {
       pageNo: objData?.pageNo || 0,
@@ -237,24 +239,10 @@ const ActivityScreen = () => {
             {contact?.name ? contact?.name : contact?.phoneNumber}
           </Text>
           {contact?.contact?.company ? (
-            <Text style={styles.compName}>
-              {/* ? ''
-              : // '--Orion Rfid Solutions--' */}
-              {contact?.contact?.company}
-            </Text>
+            <Text style={styles.compName}>{contact?.contact?.company}</Text>
           ) : null}
           <View style={{flexDirection: 'row'}}>
-            {/* <Image
-              source={require('../../assets/images/incoming_call.png')}
-              style={{
-                width: 15,
-                height: 15,
-                marginRight: Dimension.margin8,
-              }}
-              resizeMode={'contain'}
-            /> */}
             <Text style={styles.phoneNumber}>{setCallType(contact?.type)}</Text>
-            {/* <Text style={styles.timeDg}>Yesterday, 7:05 pm</Text>  */}
 
             <View style={styles.datetxt}>
               <DateConvert

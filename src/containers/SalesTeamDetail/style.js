@@ -44,11 +44,11 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 8,
+      height: 3,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 8,
-    elevation: 5,
+    shadowOpacity: 0.29,
+    shadowRadius: 4.65,
+    elevation: 7,
   },
 
   headerWrap: {
@@ -262,8 +262,9 @@ const styles = StyleSheet.create({
     // flex: 1,
     // justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 10,
-    height: '50%',
+    paddingVertical: 20,
+
+    // height: '50%',
   },
   optionText: {
     fontSize: 20,
@@ -295,10 +296,13 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   filterbtn: {
+    position: 'absolute',
+    bottom: 20,
     flexDirection: 'row',
     borderWidth: 1,
     borderColor: colors.CtaColor,
     borderRadius: 50,
+    backgroundColor: colors.WhiteColor,
     paddingHorizontal: Dimension.padding20,
     // paddingVertical: Dimension.padding5,
     alignSelf: 'center',
