@@ -6,9 +6,29 @@ import {StyleSheet, View, Text} from 'react-native';
 import CustomeIcon from './CustomeIcon';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const DotCheckbox = props => {
-  const {data, onCheck, selectedValues, searchvalue, from, horizontalView} =
-    props;
+  const {
+    data,
+    onCheck,
+    selectedValues,
+    searchvalue,
+    from,
+    horizontalView,
+    value,
+  } = props;
   const isAllSelected = selectedValues?.length === data?.length - 1;
+
+  const filteredData = () => {
+    if (searchvalue?.trim()) {
+      return (data || []).filter(item =>
+        item?.label
+          ?.toString()
+          .toLowerCase()
+          .includes(searchvalue?.toLowerCase()),
+      );
+    } else {
+      return (data || []).filter(item => item?.label?.toString().toLowerCase());
+    }
+  };
 
   return (
     <View style={from === 'addContact' ? styles.WrapperStyle : null}>
@@ -29,44 +49,37 @@ const DotCheckbox = props => {
             ? {flexDirection: 'row', marginLeft: -10, flexWrap: 'wrap'}
             : {flexDirection: 'column'}
         }>
-        {(data || [])
-          .filter(item =>
-            item?.label
-              ?.toString()
-              .toLowerCase()
-              .includes(searchvalue?.toLowerCase()),
-          )
-          .map(item => (
-            <CheckBox
-              title={item?.title}
-              key={item?.key}
-              onPress={() => onCheck(item?.key)}
-              checkedIcon={
-                <Icon
-                  name="checkbox-marked"
-                  size={Dimension.font20}
-                  color={colors.CtaColor}
-                />
-              }
-              uncheckedIcon={
-                <Icon
-                  name="checkbox-blank-outline"
-                  size={Dimension.font20}
-                  color={colors.FontColor}
-                />
-              }
-              checked={
-                item?.key === 'All'
-                  ? isAllSelected
-                  : selectedValues.includes(item.key)
-              }
-              // checked={selectedValues.includes(item.key)}
-              textStyle={styles.checkboxTitle}
-              fontFamily={Dimension.CustomMediumFont}
-              wrapperStyle={styles.checkboxwrapper}
-              containerStyle={styles.checkboxContainer}
-            />
-          ))}
+        {filteredData()?.map(item => (
+          <CheckBox
+            title={item?.title}
+            key={item?.key}
+            onPress={() => onCheck(item?.key)}
+            checkedIcon={
+              <Icon
+                name="checkbox-marked"
+                size={Dimension.font20}
+                color={colors.CtaColor}
+              />
+            }
+            uncheckedIcon={
+              <Icon
+                name="checkbox-blank-outline"
+                size={Dimension.font20}
+                color={colors.FontColor}
+              />
+            }
+            checked={
+              item?.key === 'All'
+                ? isAllSelected
+                : selectedValues?.includes(item.key) || item?.key == value
+            }
+            // checked={selectedValues.includes(item.key)}
+            textStyle={styles.checkboxTitle}
+            fontFamily={Dimension.CustomMediumFont}
+            wrapperStyle={styles.checkboxwrapper}
+            containerStyle={styles.checkboxContainer}
+          />
+        ))}
       </View>
     </View>
   );

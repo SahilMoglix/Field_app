@@ -254,7 +254,7 @@ const ContactScreen = props => {
           <CustomeIcon
             name={'Call-blue'}
             color={Colors.CtaColor}
-            size={20}></CustomeIcon>
+            size={25}></CustomeIcon>
         </TouchableOpacity>
       </TouchableOpacity>
     );

@@ -332,7 +332,7 @@ const ActivityScreen = () => {
       }}>
       <View style={styles.headerWrap}>
         <View style={styles.TopHeader}>
-          <Text style={styles.headingTxt}>Communication</Text>
+          <Text style={styles.headingTxt}>My Call Logs</Text>
         </View>
         <View style={styles.searchWraper}>
           <CustomeIcon name={'search-grey'} size={22} color={'#8E8E93'} />

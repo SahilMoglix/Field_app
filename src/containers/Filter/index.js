@@ -390,7 +390,6 @@ const FilterModal = props => {
   };
 
   const renderMutatedFilters = () => {
-    //Adding the "All" key to every list
     COMM_FILTER_DATA.tabs.forEach(tab => {
       tab.fields.forEach(field => {
         field.data.unshift({key: 'All', title: 'All', label: 'All'});
@@ -473,11 +472,6 @@ const FilterModal = props => {
               ))
             : COMM_FILTER_DATA.tabs.map((_, k) => (
                 <TouchableOpacity
-                  // disabled={
-                  //   (!filters.region.length &&
-                  //     (_.name === 'Branch' || _.name === 'Sales Person')) ||
-                  //   (_.name === 'Sales Person' && !filters.branch.length)
-                  // }
                   onPress={() => {
                     setSelectedTabIndex(k);
                     if (_.name == 'Branch') {
@@ -548,7 +542,7 @@ const FilterModal = props => {
                     <View
                       key={k}
                       style={{paddingHorizontal: Dimension.padding15}}>
-                      <_.component {..._} />
+                      <_.component {..._} searchValue={searchValue} />
                     </View>
                   ),
                 )

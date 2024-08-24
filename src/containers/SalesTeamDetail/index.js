@@ -77,8 +77,8 @@ const SalesTeamScreen = props => {
       userList: objData?.userList || [],
       regionList: objData?.regionList || [],
       branchList: objData?.branchList || [],
-      startDate: '1682068000000',
-      endDate: '1724437799999',
+      startDate: objData?.startDate || '',
+      endDate: objData?.endDate || '',
     };
     dispatch(fetchSalesLogs(obj));
   };
