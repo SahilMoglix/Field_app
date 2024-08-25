@@ -37,14 +37,14 @@ export const salesTabReducer = (state = initialState, action) => {
       if (payload.params.pageNo == 0) {
         return state
           .set('status', STATE_STATUS.FETCHED)
-          .set('data', new List(payload.data))
+          .set('data', new List(payload.data.data))
           .set('total', payload.total)
           .set('error', null);
       } else {
         return state
           .set('status', STATE_STATUS.FETCHED)
           .set('total', payload.total)
-          .mergeIn(['data'], new List(payload.data))
+          .mergeIn(['data'], new List(payload.data.data))
           .set('error', null);
       }
     case SALES_ACTIONS.FAILED_FETCH_SALES_LOGS:

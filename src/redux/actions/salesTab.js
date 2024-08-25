@@ -13,8 +13,8 @@ export const fetchedSalesLogs = (params, data, total) => {
   return {
     type: SALES_ACTIONS.FETCHED_SALES_LOGS,
     payload: {
-      data,
       params,
+      data,
       total,
     },
   };

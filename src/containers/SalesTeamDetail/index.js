@@ -58,17 +58,17 @@ const SalesTeamScreen = props => {
 
   let callDetector = null;
 
-  useEffect(() => {
-    onRefreshLogs({
-      pageNo: 0,
-      pageSize: 20,
-      userList: [],
-      regionList: [],
-      branchList: [],
-      startDate: '',
-      endDate: '',
-    });
-  }, []);
+  // useEffect(() => {
+  //   onRefreshLogs({
+  //     pageNo: 0,
+  //     pageSize: 20,
+  //     userList: [],
+  //     regionList: [],
+  //     branchList: [],
+  //     startDate: '',
+  //     endDate: '',
+  //   });
+  // }, []);
 
   const onRefreshLogs = objData => {
     let obj = {
@@ -137,24 +137,64 @@ const SalesTeamScreen = props => {
     return differenceInDays;
   };
 
+  const startOfDay = date => {
+    return new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+    ).getTime();
+  };
+
+  const endOfDay = date => {
+    return new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+      23,
+      59,
+      59,
+      999,
+    ).getTime();
+  };
+
   const totalNoOfDays = () => {
-    if (startDate && endDate) {
-      const days = calculateDaysBetweenDates(startDate, endDate);
-      setNumberOfDays(days);
+    try {
+      if (startDate && endDate) {
+        let days = calculateDaysBetweenDates(startDate, endDate);
+        setNumberOfDays(days);
+
+        let startDt = parseDate(startDate);
+        let endDt = parseDate(endDate);
+
+        console.log(startDt, startDate, endDate, 'Parsed Dates');
+
+        let startTimestamp = startOfDay(startDt);
+        let endTimestamp = endOfDay(endDt);
+
+        console.log(startTimestamp, endTimestamp, 'Timestamps');
+
+        setTimestamps({start: startTimestamp, end: endTimestamp});
+        getSalesTeamContacts(startTimestamp, endTimestamp);
+      }
+    } catch (error) {
+      console.error('Error processing dates:', error);
     }
+
     setDateFilterVisible(false);
   };
 
   const computeTimeStamp = range => {
     const now = new Date();
-    const startOfDay = date => {
+
+    let startOfDay = date => {
       return new Date(
         date.getFullYear(),
         date.getMonth(),
         date.getDate(),
       ).getTime();
     };
-    const endOfDay = date => {
+
+    let endOfDay = date => {
       return new Date(
         date.getFullYear(),
         date.getMonth(),
@@ -168,70 +208,60 @@ const SalesTeamScreen = props => {
 
     switch (range) {
       case 'Today':
-        return {
-          start: startOfDay(now),
-          end: endOfDay(now),
-        };
+        return {start: startOfDay(now), end: endOfDay(now)};
 
       case 'Yesterday':
         const yesterday = new Date(now);
         yesterday.setDate(yesterday.getDate() - 1);
-        return {
-          start: startOfDay(yesterday),
-          end: endOfDay(yesterday),
-        };
+        return {start: startOfDay(yesterday), end: endOfDay(yesterday)};
 
       case 'Last 7 Days':
         const sevenDaysAgo = new Date(now);
         sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-        return {
-          start: startOfDay(sevenDaysAgo),
-          end: endOfDay(now),
-        };
+        return {start: startOfDay(sevenDaysAgo), end: endOfDay(now)};
 
       case 'Last 30 Days':
         const thirtyDaysAgo = new Date(now);
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-        return {
-          start: startOfDay(thirtyDaysAgo),
-          end: endOfDay(now),
-        };
+        return {start: startOfDay(thirtyDaysAgo), end: endOfDay(now)};
 
       default:
-        return {
-          start: startOfDay(now),
-          end: endOfDay(now),
-        };
+        return {start: startOfDay(now), end: endOfDay(now)};
     }
   };
 
   const getSalesTeamContacts = (startTimeStamp, endTimeStamp) => {
-    let obj = {
-      pageNo: 0,
-      pageSize: 20,
-      userList: [],
-      regionList: [],
-      branchList: [],
-      startDate: startTimeStamp,
-      endDate: endTimeStamp,
-    };
-    dispatch(fetchSalesLogs(obj));
+    if (startTimeStamp && endTimeStamp) {
+      let obj = {
+        pageNo: 0,
+        pageSize: 20,
+        userList: [],
+        regionList: [],
+        branchList: [],
+        startDate: startTimeStamp,
+        endDate: endTimeStamp,
+      };
+      dispatch(fetchSalesLogs(obj));
+    }
   };
 
   useEffect(() => {
-    const {start, end} = computeTimeStamp(dateFilterValue || 'Last 7 days');
-    setTimestamps({start, end});
-    setDateFilterVisible(false);
-    getSalesTeamContacts(start, end);
+    if (dateFilterValue === 'Custom') {
+    } else {
+      const {start, end} = computeTimeStamp(dateFilterValue || 'Last 7 Days');
+      setTimestamps({start, end});
+      getSalesTeamContacts(start, end);
+    }
   }, [dateFilterValue]);
 
   const handleFilterPress = filterType => {
     if (filterType === 'Custom') {
       setDateFilterValue(filterType);
       totalNoOfDays();
-      setShowDatePicker(false);
+      setDateFilterVisible(false);
     } else {
       setDateFilterValue(filterType);
+      setDateFilterVisible(false);
     }
   };
 
@@ -281,7 +311,6 @@ const SalesTeamScreen = props => {
     return item?.recordID?.toString() || idx.toString();
   };
 
-  // Call log for modal
   const rendercontactDetail = contact => {
     return (
       <View style={styles.contactParentView}>

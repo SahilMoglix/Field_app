@@ -13,6 +13,7 @@ function* fetchSalesCallLogs({payload: {params}}) {
       yield put(fetchedSalesLogs(params, data?.result, data?.total));
     }
   } catch (error) {
+    console.log('erorr', error);
     yield put(failedFetchSalesLogs(params, error));
   }
 }

@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
   },
 
   topFilter: {
-    height: Dimension.height30,
+    height: Dimension.height32,
     width: Dimension.width110,
     borderColor: '#1568E5',
     borderWidth: Dimension.borderwidth1,
