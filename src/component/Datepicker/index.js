@@ -123,7 +123,14 @@ const CustomeDatePicker = props => {
                 {...props}
                 label={() => (
                   <View style={{flexDirection: 'row'}}>
-                    <Text style={styles.labelStyle}>{props.label}</Text>
+                    <Text
+                      style={
+                        props.fromSalesTab
+                          ? styles.labelStyleCopy
+                          : styles.labelStyle
+                      }>
+                      {props.label}
+                    </Text>
                     {props.isImp ? (
                       <Text style={styles.starIcon}>*</Text>
                     ) : null}
@@ -136,7 +143,11 @@ const CustomeDatePicker = props => {
                 onFocus={handleFocus}
                 onBlur={() => handleBlur(true)}
                 containerStyle={styles.WrapperStyle}
-                inputContainerStyle={styles.inputContainerStyle}
+                inputContainerStyle={
+                  props.fromSalesTab
+                    ? styles.inputContainerStyleCopy
+                    : styles.inputContainerStyle
+                }
                 inputStyle={styles.inputStyle}
                 errorStyle={styles.errorText}
                 disabledInputStyle={styles.disabledInputStyle}

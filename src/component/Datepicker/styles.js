@@ -13,6 +13,17 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     height: Dimension.height40,
     paddingBottom: 0,
+    // width: '50%',
+    // alignSelf: 'center',
+  },
+  inputContainerStyleCopy: {
+    borderWidth: 1,
+    borderColor: colors.FontColor,
+    borderRadius: 4,
+    height: Dimension.height40,
+    paddingBottom: 0,
+    width: '50%',
+    alignSelf: 'center',
   },
   placeholderCss: {
     fontSize: Dimension.font14,
@@ -27,6 +38,15 @@ const styles = StyleSheet.create({
     marginBottom: Dimension.margin5,
     fontWeight: 'normal',
   },
+  labelStyleCopy: {
+    fontSize: Dimension.font12,
+    color: colors.FontColor,
+    fontFamily: Dimension.CustomMediumFont,
+    marginLeft: Dimension.margin75,
+    marginBottom: Dimension.margin5,
+    fontWeight: 'normal',
+  },
+
   starIcon: {
     fontSize: Dimension.font12,
     color: colors.brandColor,

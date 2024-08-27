@@ -516,7 +516,7 @@ const SalesTeamScreen = props => {
                   label={'From Date'}
                   fromSalesTab
                   mode={'date'}
-                  display={'default'}
+                  // display={'default'}
                 />
                 <CustomeDatePicker
                   value={endDate}
@@ -524,7 +524,7 @@ const SalesTeamScreen = props => {
                   label={'To Date'}
                   fromSalesTab
                   mode={'date'}
-                  display={'default'}
+                  // display={'default'}
                 />
                 <TouchableOpacity
                   onPress={() => {
