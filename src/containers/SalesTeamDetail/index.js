@@ -53,6 +53,7 @@ const SalesTeamScreen = props => {
   const [numberOfDays, setNumberOfDays] = useState('');
   const [salesPerson, setSalesPerson] = useState('');
   const [timestamps, setTimestamps] = React.useState({start: 0, end: 0});
+  const [showCheck, setShowCheck] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -99,6 +100,15 @@ const SalesTeamScreen = props => {
     };
     dispatch(fetchSalesLogs(obj));
     setFiltersModal(false);
+  };
+
+  const toggleStartDate = date => {
+    setShowCheck(true);
+    setStartDate(date);
+  };
+  const toggleEndDate = date => {
+    setShowCheck(true);
+    setEndDate(date);
   };
 
   const setCallType = type => {
@@ -181,6 +191,7 @@ const SalesTeamScreen = props => {
     }
 
     setDateFilterVisible(false);
+    setShowCheck(false);
   };
 
   const computeTimeStamp = range => {
@@ -259,10 +270,17 @@ const SalesTeamScreen = props => {
       setDateFilterValue(filterType);
       totalNoOfDays();
       setDateFilterVisible(false);
+      setShowCheck(false);
     } else {
       setDateFilterValue(filterType);
       setDateFilterVisible(false);
+      setShowCheck(false);
     }
+  };
+
+  const toggleDateFilterModal = () => {
+    setDateFilterVisible(false);
+    setShowCheck(false);
   };
 
   const getLogs = async () => {
@@ -473,8 +491,8 @@ const SalesTeamScreen = props => {
       {dateFilterVisible && (
         <Modal
           isVisible={dateFilterVisible}
-          onBackButtonPress={() => setDateFilterVisible(false)}
-          onBackdropPress={() => setDateFilterVisible(false)}
+          onBackButtonPress={toggleDateFilterModal}
+          onBackdropPress={toggleDateFilterModal}
           style={styles.modalbgView}>
           <View style={styles.modalbg}>
             <TouchableOpacity onPress={() => handleFilterPress('Today')}>
@@ -512,7 +530,7 @@ const SalesTeamScreen = props => {
               <>
                 <CustomeDatePicker
                   value={startDate}
-                  onChange={startDate => setStartDate(startDate)}
+                  onChange={startDate => toggleStartDate(startDate)}
                   label={'From Date'}
                   fromSalesTab
                   mode={'date'}
@@ -520,18 +538,19 @@ const SalesTeamScreen = props => {
                 />
                 <CustomeDatePicker
                   value={endDate}
-                  onChange={endDate => setEndDate(endDate)}
+                  onChange={endDate => toggleEndDate(endDate)}
                   label={'To Date'}
                   fromSalesTab
                   mode={'date'}
-                  // display={'default'}
                 />
                 <TouchableOpacity
                   onPress={() => {
                     handleFilterPress('Custom');
                   }}
                   style={{paddingVertical: 5}}>
-                  <Icon name={'check-circle'} size={28} color={'#1568E5'} />
+                  {showCheck ? (
+                    <Icon name={'check-circle'} size={28} color={'#1568E5'} />
+                  ) : null}
                 </TouchableOpacity>
               </>
             )}

@@ -6,6 +6,7 @@ const styles = StyleSheet.create({
   TopHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
   },
   modalbgg: {
     margin: 0,
@@ -127,11 +128,12 @@ const styles = StyleSheet.create({
   },
 
   topFilter: {
-    height: Dimension.height32,
+    height: Dimension.height34,
     width: Dimension.width110,
     borderColor: '#1568E5',
     borderWidth: Dimension.borderwidth1,
     borderRadius: Dimension.borderRadius40,
+    paddingHorizontal: 5,
   },
   contactDat: {
     paddingLeft: Dimension.padding10,
@@ -242,6 +244,7 @@ const styles = StyleSheet.create({
     color: '#1568E5',
     fontSize: Dimension.font14,
     fontFamily: Dimension.CustomMediumFont,
+    marginRight: 5,
   },
   ModalBg: {
     padding: Dimension.padding10,

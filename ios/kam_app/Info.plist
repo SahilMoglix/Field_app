@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>kam_app</string>
+	<string>SalesSync</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -13,15 +13,15 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Moglix KAM would like to access photos</string>
+	<string>SalesSync would like to access photos</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Moglix KAM would like to access photos</string>
+	<string>SalesSync would like to access photos</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Moglix KAM would like to open camera</string>
+	<string>SalesSync would like to open camera</string>
 	<key>NSContactsUsageDescription</key>
-	<string>Moglix KAM would like to access contacts</string>
+	<string>SalesSync would like to access contacts</string>
 	<key>NSUserTrackingUsageDescription</key>
-	<string>Moglix KAM would like to track your logs</string>
+	<string>SalesSync would like to track your logs</string>
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundlePackageType</key>

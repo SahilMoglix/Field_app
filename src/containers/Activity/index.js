@@ -68,8 +68,6 @@ const ActivityScreen = () => {
     }
   }, [logsStatus]);
 
-  console.log('logs data on comm', logsData);
-
   const onRefreshLogs = objData => {
     let obj = {
       pageNo: objData?.pageNo || 0,
