@@ -59,18 +59,6 @@ const SalesTeamScreen = props => {
 
   let callDetector = null;
 
-  // useEffect(() => {
-  //   onRefreshLogs({
-  //     pageNo: 0,
-  //     pageSize: 20,
-  //     userList: [],
-  //     regionList: [],
-  //     branchList: [],
-  //     startDate: '',
-  //     endDate: '',
-  //   });
-  // }, []);
-
   const onRefreshLogs = objData => {
     let obj = {
       pageNo: objData?.pageNo || 0,
@@ -433,6 +421,11 @@ const SalesTeamScreen = props => {
     }
   };
 
+  const parseDateString = dateString => {
+    const [day, month, year] = dateString.split('-').map(Number);
+    return new Date(year, month - 1, day);
+  };
+
   return (
     <View
       style={{
@@ -530,11 +523,12 @@ const SalesTeamScreen = props => {
               <>
                 <CustomeDatePicker
                   value={startDate}
-                  onChange={startDate => toggleStartDate(startDate)}
+                  onChange={startDate => {
+                    toggleStartDate(startDate);
+                  }}
                   label={'From Date'}
                   fromSalesTab
                   mode={'date'}
-                  // display={'default'}
                 />
                 <CustomeDatePicker
                   value={endDate}
@@ -542,6 +536,8 @@ const SalesTeamScreen = props => {
                   label={'To Date'}
                   fromSalesTab
                   mode={'date'}
+                  minDate={parseDateString(startDate)}
+                  fromSalesTabToDate
                 />
                 <TouchableOpacity
                   onPress={() => {

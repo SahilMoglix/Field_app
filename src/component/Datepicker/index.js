@@ -180,6 +180,7 @@ const CustomeDatePicker = props => {
                   style={{width: props.fromSalesTab ? '60%' : '70%'}}
                   mode={mode}
                   maximumDate={props?.fromSalesTab ? new Date() : maxdate}
+                  minimumDate={props.fromSalesTabToDate ? props.minDate : null}
                   accentColor={'red'}
                   is24Hour={true}
                   display={display}
@@ -203,6 +204,7 @@ const CustomeDatePicker = props => {
             }
             mode={mode}
             maximumDate={props?.fromSalesTab ? new Date() : maxdate}
+            minimumDate={props.fromSalesTabToDate ? props.minDate : null}
             is24Hour={true}
             display={display}
             onChange={onchangeDate}
