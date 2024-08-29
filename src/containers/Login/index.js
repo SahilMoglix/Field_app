@@ -57,8 +57,8 @@ const LoginScreen = props => {
           let storeRes = {
             access_token: loginResponse?.data?.result?.access_token,
             email: loginResponse?.data?.result?.email,
-            create : loginResponse?.data?.result?.create,
-            isAdmin : loginResponse?.data?.result?.isAdmin
+            create: loginResponse?.data?.result?.create,
+            isAdmin: loginResponse?.data?.result?.isAdmin,
           };
           dispatch(fetchedAuth(storeRes));
           await AsyncStorage.setItem(
@@ -79,14 +79,18 @@ const LoginScreen = props => {
         }
         setLoading(false);
       } else {
+        Toast.show({
+          type: 'error',
+          text1: 'Something went wrong!',
+        });
         console.log('Something went wrong!!');
         setLoading(false);
       }
     } catch (error) {
-      // Toast.show({
-      //   type: 'error',
-      //   text1: error?.error_description || 'Something went wrong!',
-      // });
+      Toast.show({
+        type: 'error',
+        text1: error?.error_description || 'Something went wrong!',
+      });
       setLoading(false);
       console.log('Error during Azure operation', error);
     }
