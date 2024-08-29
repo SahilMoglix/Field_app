@@ -26,18 +26,16 @@ const CustomeDatePicker = props => {
   const [text, setText] = useState('Select Date');
 
   const onchangeDate = (event, selectedDate) => {
-    const currentDate = selectedDate;
+    const currentDate =
+      Platform.OS == 'ios'
+        ? selectedDate.toISOString().split('T')[0]
+        : selectedDate;
     setShow(Platform.OS === 'ios');
     if (event.type != 'dismissed') {
       setDate(currentDate);
 
-      let tempDate = new Date(currentDate);
-      let fDate =
-        tempDate.getDate() +
-        '-' +
-        (tempDate.getMonth() + 1) +
-        '-' +
-        tempDate.getFullYear();
+      let tempDate = Platform.OS == 'ios' ? currentDate : new Date(currentDate);
+      let fDate = tempDate.split('-').reverse().join('-');
 
       props.onChange(fDate);
       setText(fDate);
@@ -49,6 +47,8 @@ const CustomeDatePicker = props => {
     if (props.autoFocus) {
       handleFocus();
     }
+    let x = new Date(dateConverter(date)) || new Date(dateConverter(value));
+    // alert(`${dateConverter(date)} ${dateConverter(value)} wertfghfedef`);
   }, []);
 
   const showMode = currentMode => {
@@ -88,20 +88,33 @@ const CustomeDatePicker = props => {
         typeof paramDate == 'string' ? paramDate : paramDate.toDateString();
       let date =
         String(updatedparams.split('-')[0]).length > 2
-          ? updatedparams
-          : updatedparams.split('-')[2] +
-            '-' +
-            updatedparams.split('-')[1] +
-            '-' +
-            updatedparams.split('-')[0];
+          ? `${String(updatedparams.split('-')[0])}-${
+              String(updatedparams.split('-')[1]).length > 1
+                ? String(updatedparams.split('-')[1])
+                : 0 + String(updatedparams.split('-')[1])
+            }-${
+              String(updatedparams.split('-')[2]) > 1
+                ? String(updatedparams.split('-')[2])
+                : 0 + String(updatedparams.split('-')[2])
+            }`
+          : `${String(updatedparams.split('-')[2])}-${
+              String(updatedparams.split('-')[1]).length > 1
+                ? String(updatedparams.split('-')[1])
+                : 0 + String(updatedparams.split('-')[1])
+            }-${
+              String(updatedparams.split('-')[0]) > 1
+                ? String(updatedparams.split('-')[0])
+                : 0 + String(updatedparams.split('-')[0])
+            }`;
+
       let month =
         String(new Date(date).getMonth() + 1).length > 1
           ? String(new Date(date).getMonth() + 1)
-          : 0 + String(new Date(date).getMonth() + 1);
+          : '0' + String(new Date(date).getMonth() + 1);
       let day =
         String(new Date(date).getDate()).length > 1
           ? String(new Date(date).getDate())
-          : 0 + String(new Date(date).getDate());
+          : '0' + String(new Date(date).getDate());
       if (dateType == 'datetime') {
         return `${new Date(date).getFullYear()}-${month}-${day} ${
           fromTo == 'from' ? '00:00:00' : '23:59:59'
@@ -174,6 +187,7 @@ const CustomeDatePicker = props => {
                 <DateTimePicker
                   testID="dateTimePicker"
                   value={
+                    // new Date()
                     new Date(dateConverter(date)) ||
                     new Date(dateConverter(value))
                   }
@@ -200,6 +214,7 @@ const CustomeDatePicker = props => {
           <DateTimePicker
             testID="dateTimePicker"
             value={
+              // new Date()
               new Date(dateConverter(date)) || new Date(dateConverter(value))
             }
             mode={mode}
