@@ -266,12 +266,12 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: 20,
-
-    // height: '50%',
+    // height: '60%',
   },
   optionText: {
     fontSize: 20,
     marginVertical: 10,
+    // paddingRight: 5,
   },
 
   InputWrap: {
@@ -317,6 +317,32 @@ const styles = StyleSheet.create({
     color: colors.CtaColor,
     marginLeft: Dimension.margin6,
     marginTop: 1,
+  },
+  WrapperStyle: {
+    paddingHorizontal: 0,
+    marginVertical: 10,
+  },
+  inputContainerStyle: {
+    borderWidth: 1,
+    borderColor: colors.FontColor,
+    borderRadius: 4,
+    height: Dimension.height40,
+    paddingBottom: 0,
+    width: '70%',
+    // alignSelf: 'center',
+  },
+  inputStyle: {
+    fontSize: Dimension.font12,
+    color: colors.FontColor,
+    fontFamily: Dimension.CustomRegularFont,
+    // paddingLeft: Dimension.padding12,
+    paddingHorizontal: Dimension.padding12,
+  },
+  inputStylesIos: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: Dimension.margin12,
   },
 });
 

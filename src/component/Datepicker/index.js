@@ -214,8 +214,8 @@ const CustomeDatePicker = props => {
           <DateTimePicker
             testID="dateTimePicker"
             value={
-              // new Date()
-              new Date(dateConverter(date)) || new Date(dateConverter(value))
+              new Date()
+              // new Date(dateConverter(date)) || new Date(dateConverter(value))
             }
             mode={mode}
             maximumDate={props?.fromSalesTab ? new Date() : maxdate}

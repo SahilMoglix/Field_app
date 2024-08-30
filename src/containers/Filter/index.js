@@ -279,6 +279,13 @@ const FilterModal = props => {
 
   const applyCommFilter = fromResetFilter => {
     if (fromResetFilter) {
+      let date_today = new Date();
+      let first_day_of_the_week = new Date(
+        date_today.setDate(date_today.getDate() - date_today.getDay()),
+      );
+      let last_day_of_the_week = new Date(
+        date_today.setDate(date_today.getDate() - date_today.getDay() + 6),
+      );
       props.onApplyFilter({
         region: [],
         branch: [],

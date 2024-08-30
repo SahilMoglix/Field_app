@@ -26,6 +26,8 @@ import Modal from 'react-native-modal';
 import CustomeDatePicker from '../../component/Datepicker';
 import NoDataFound from '../../component/NoDataFound';
 import {fetchSalesLogs, updateSalesLogs} from '../../redux/actions/salesTab';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import colors from '../../Theme/Colors';
 
 const SalesTeamScreen = props => {
   const total = useSelector(state => state.salesTabReducer.get('total'));
@@ -55,9 +57,16 @@ const SalesTeamScreen = props => {
   const [timestamps, setTimestamps] = React.useState({start: 0, end: 0});
   const [showCheck, setShowCheck] = useState(false);
 
+  const [fromDate, setFromDate] = useState(new Date());
+  const [toDate, setToDate] = useState(new Date());
+  const [mode, setMode] = useState('date');
+  const [show, setShow] = useState(false);
+  const [filtersList, setFiltersList] = useState({
+    userList: [],
+    regionList: [],
+    branchList: [],
+  });
   const dispatch = useDispatch();
-
-  let callDetector = null;
 
   const onRefreshLogs = objData => {
     let obj = {
@@ -77,14 +86,20 @@ const SalesTeamScreen = props => {
   };
 
   const applyFilters = async params => {
+    const {start, end} = computeTimeStamp(dateFilterValue || 'Last 7 Days');
+    setFiltersList({
+      userList: params?.salesPerson,
+      regionList: params.region,
+      branchList: params.branch,
+    });
     let obj = {
       pageNo: 0,
       pageSize: 20,
       userList: params.salesPerson,
       regionList: params.region,
       branchList: params.branch,
-      startDate: params.startDate || '',
-      endDate: params.endDate || '',
+      startDate: start || params.startDate || '',
+      endDate: end || params.endDate || '',
     };
     dispatch(fetchSalesLogs(obj));
     setFiltersModal(false);
@@ -125,10 +140,11 @@ const SalesTeamScreen = props => {
   };
 
   const calculateDaysBetweenDates = (startDate, endDate) => {
-    const startDt = parseDate(startDate);
-    const endDt = parseDate(endDate);
-    const start = new Date(startDt);
-    const end = new Date(endDt);
+    console.log('start date', startDate, endDate);
+    const startDt = createDate(convertDateToYYYYMMDD(startDate));
+    const endDt = createDate(convertDateToYYYYMMDD(endDate));
+    const start = new Date(fromDate);
+    const end = new Date(toDate);
     const differenceInTime = Math.abs(end - start);
     const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
 
@@ -155,27 +171,30 @@ const SalesTeamScreen = props => {
     ).getTime();
   };
 
+  const calculateDaysBetween = (date1, date2) => {
+    const d1 = new Date(date1);
+    const d2 = new Date(date2);
+    const diffTime = Math.abs(d2 - d1);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  };
+
+  const convertToTimestamp = dateString => {
+    const date = new Date(dateString);
+    const timestamp = date.getTime();
+    return timestamp;
+  };
+
   const totalNoOfDays = () => {
     try {
-      if (startDate && endDate) {
-        let days = calculateDaysBetweenDates(startDate, endDate);
-        setNumberOfDays(days);
-
-        let startDt = parseDate(startDate);
-        let endDt = parseDate(endDate);
-
-        console.log(startDt, startDate, endDate, 'Parsed Dates');
-
-        let startTimestamp = startOfDay(startDt);
-        let endTimestamp = endOfDay(endDt);
-
-        console.log(startTimestamp, endTimestamp, 'Timestamps');
-
-        setTimestamps({start: startTimestamp, end: endTimestamp});
-        getSalesTeamContacts(startTimestamp, endTimestamp);
-      }
+      let days = calculateDaysBetween(fromDate, toDate);
+      setNumberOfDays(days);
+      let startTimestamp = convertToTimestamp(fromDate);
+      let endTimestamp = convertToTimestamp(toDate);
+      setTimestamps({start: startTimestamp, end: endTimestamp});
+      getSalesTeamContacts(startTimestamp, endTimestamp);
     } catch (error) {
-      console.error('Error processing dates:', error);
+      console.log(error);
     }
 
     setDateFilterVisible(false);
@@ -234,9 +253,9 @@ const SalesTeamScreen = props => {
       let obj = {
         pageNo: 0,
         pageSize: 20,
-        userList: [],
-        regionList: [],
-        branchList: [],
+        userList: filtersList?.userList || [],
+        regionList: filtersList?.regionList || [],
+        branchList: filtersList?.branchList || [],
         startDate: startTimeStamp,
         endDate: endTimeStamp,
       };
@@ -248,6 +267,7 @@ const SalesTeamScreen = props => {
     if (dateFilterValue === 'Custom') {
     } else {
       const {start, end} = computeTimeStamp(dateFilterValue || 'Last 7 Days');
+      console.log('timeStamps', start, end);
       setTimestamps({start, end});
       getSalesTeamContacts(start, end);
     }
@@ -259,6 +279,7 @@ const SalesTeamScreen = props => {
       totalNoOfDays();
       setDateFilterVisible(false);
       setShowCheck(false);
+      setShowDatePicker(false);
     } else {
       setDateFilterValue(filterType);
       setDateFilterVisible(false);
@@ -343,6 +364,11 @@ const SalesTeamScreen = props => {
     );
   };
 
+  const parseDateString = dateString => {
+    const [day, month, year] = dateString.split('-').map(Number);
+    return new Date(year, month - 1, day);
+  };
+
   const toggleCallLogModal = item => {
     setSalesPerson(item);
     setShowCallLog(true);
@@ -421,10 +447,54 @@ const SalesTeamScreen = props => {
     }
   };
 
-  const parseDateString = dateString => {
-    const [day, month, year] = dateString.split('-').map(Number);
+  const onChangeFromDateIOS = (event, selectedDate) => {
+    let currentDate = selectedDate || fromDate;
+    if (currentDate instanceof Date && !isNaN(currentDate.getTime())) {
+      setFromDate(currentDate);
+    }
+    setShow(Platform.OS === 'ios');
+    setShowCheck(true);
+  };
+
+  const onChangeToDateIOS = (event, selectedDate) => {
+    let currentDate = selectedDate || fromDate;
+    if (currentDate instanceof Date && !isNaN(currentDate.getTime())) {
+      setToDate(currentDate);
+    }
+    setShow(Platform.OS === 'ios');
+    setShowCheck(true);
+  };
+
+  const showMode = currentMode => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  // const convertDateToYYYYMMDD = date => {
+  //   if (date) {
+  //     const year = date.getFullYear();
+  //     const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+  //     const day = String(date.getDate()).padStart(2, '0');
+  //     return [year, month, day];
+  //   } else {
+  //     return [1950, 0, 1];
+  //   }
+  // };
+
+  const convertDateToYYYYMMDD = date => {
+    if (!(date instanceof Date) || isNaN(date.getTime())) {
+      throw new Error('Invalid date object');
+    }
+    return date.toISOString().split('T')[0];
+  };
+
+  const createDate = dateString => {
+    const [year, month, day] = dateString.split('-').map(Number);
     return new Date(year, month - 1, day);
   };
+
+  const minimumDate = createDate(convertDateToYYYYMMDD(fromDate));
+  const maximumDate = new Date();
 
   return (
     <View
@@ -441,7 +511,12 @@ const SalesTeamScreen = props => {
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
-                paddingHorizontal: Dimension.padding10,
+
+                paddingHorizontal:
+                  //   Platform.OS == 'ios'
+                  //     ?
+                  Dimension.padding10,
+                // : Dimension.padding6,
                 paddingVertical: Dimension.padding8,
               }}>
               <Text style={styles.fltrtxt}>
@@ -451,7 +526,7 @@ const SalesTeamScreen = props => {
               </Text>
               <Icon
                 name={'calendar-range-outline'}
-                size={20}
+                size={18}
                 color={'#1568E5'}></Icon>
             </TouchableOpacity>
           </View>
@@ -521,7 +596,77 @@ const SalesTeamScreen = props => {
 
             {showDatePicker && (
               <>
-                <CustomeDatePicker
+                <View style={styles.WrapperStyle}>
+                  {Platform.OS == 'ios' ? (
+                    <>
+                      <Text style={{}}>From Date</Text>
+                      <TouchableOpacity style={[styles.inputContainerStyle]}>
+                        <View
+                          style={[styles.inputStyle, styles.inputStylesIos]}>
+                          <DateTimePicker
+                            testID="dateTimePicker"
+                            value={fromDate}
+                            mode={mode}
+                            display="default"
+                            onChange={onChangeFromDateIOS}
+                            style={{width: '70%'}}
+                            maximumDate={new Date()}
+                          />
+                          <CustomeIcon
+                            name={'Calendar-blue'}
+                            size={Dimension.font20}
+                            color={colors.FontColor}
+                          />
+                        </View>
+                      </TouchableOpacity>
+                      <Text>To Date</Text>
+                      <TouchableOpacity style={[styles.inputContainerStyle]}>
+                        <View
+                          style={[styles.inputStyle, styles.inputStylesIos]}>
+                          <DateTimePicker
+                            testID="dateTimePicker"
+                            value={toDate}
+                            mode={mode}
+                            display="default"
+                            onChange={onChangeToDateIOS}
+                            style={{width: '70%'}}
+                            maximumDate={maximumDate}
+                            minimumDate={minimumDate}
+                            // maximumDate={new Date()}
+                            // minimumDate={new Date(convertDateToYYYYMMDD(fromDate))}
+                          />
+                          <CustomeIcon
+                            name={'Calendar-blue'}
+                            size={Dimension.font20}
+                            color={colors.FontColor}
+                          />
+                        </View>
+                      </TouchableOpacity>
+                    </>
+                  ) : (
+                    <>
+                      <CustomeDatePicker
+                        value={startDate}
+                        onChange={startDate => {
+                          toggleStartDate(startDate);
+                        }}
+                        label={'From Date'}
+                        fromSalesTab
+                        mode={'date'}
+                      />
+                      <CustomeDatePicker
+                        value={endDate}
+                        onChange={endDate => toggleEndDate(endDate)}
+                        label={'To Date'}
+                        fromSalesTab
+                        mode={'date'}
+                        minDate={parseDateString(startDate)}
+                        fromSalesTabToDate
+                      />
+                    </>
+                  )}
+
+                  {/* <CustomeDatePicker
                   value={startDate}
                   onChange={startDate => {
                     toggleStartDate(startDate);
@@ -538,16 +683,27 @@ const SalesTeamScreen = props => {
                   mode={'date'}
                   minDate={parseDateString(startDate)}
                   fromSalesTabToDate
-                />
-                <TouchableOpacity
-                  onPress={() => {
-                    handleFilterPress('Custom');
-                  }}
-                  style={{paddingVertical: 5}}>
-                  {showCheck ? (
-                    <Icon name={'check-circle'} size={28} color={'#1568E5'} />
-                  ) : null}
-                </TouchableOpacity>
+                /> */}
+                  <>
+                    <TouchableOpacity
+                      onPress={() => {
+                        handleFilterPress('Custom');
+                      }}
+                      style={{
+                        marginVertical: 15,
+                        justifyContent: 'center',
+                        alignSelf: 'center',
+                      }}>
+                      {showCheck ? (
+                        <Icon
+                          name={'check-circle'}
+                          size={28}
+                          color={'#1568E5'}
+                        />
+                      ) : null}
+                    </TouchableOpacity>
+                  </>
+                </View>
               </>
             )}
           </View>
