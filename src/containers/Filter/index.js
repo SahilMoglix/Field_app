@@ -53,10 +53,14 @@ const FilterModal = props => {
   const [users, setUser] = useState([]);
   const [company, setCompany] = useState(props.companyId || '');
   const [plant, setPlant] = useState(props.plantId || '');
-  const [startDate, setStartDate] = useState(new Date(props.startDate));
-  const [endDate, setEndDate] = useState(new Date(props.endDate));
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
   const [searchValue, setSearchValue] = useState('');
   const [footerHeight, setFooterHeight] = useState(0);
+  const [startReadbleDate, setStartReadbleDate] = useState('');
+  const [endReadbleDate, setEndReadbleDate] = useState('');
+
+  console.log('start date and end date', startDate, endDate);
 
   const FILTERS_DATA = {
     tabs: [
@@ -128,14 +132,15 @@ const FilterModal = props => {
             title: 'From Date',
             label: 'From Date',
             placeholder: '',
-            value:
-              typeof startDate == 'string'
-                ? startDate
-                : startDate.getDate() +
-                  '-' +
-                  (startDate.getMonth() + 1) +
-                  '-' +
-                  startDate.getFullYear(),
+            value: startDate,
+            // value:
+            //   typeof startDate == 'string'
+            //     ? startDate
+            //     : startDate.getDate() +
+            //       '-' +
+            //       (startDate.getMonth() + 1) +
+            //       '-' +
+            //       startDate.getFullYear(),
             onChange: date => setStartDate(date),
             component: CustomeDatePicker,
           },
@@ -143,14 +148,15 @@ const FilterModal = props => {
             title: 'To Date',
             label: 'To Date',
             placeholder: '',
-            value:
-              typeof endDate == 'string'
-                ? endDate
-                : endDate.getDate() +
-                  '-' +
-                  (endDate.getMonth() + 1) +
-                  '-' +
-                  endDate.getFullYear(),
+            value: endDate,
+            // value:
+            //   typeof endDate == 'string'
+            //     ? endDate
+            //     : endDate.getDate() +
+            //       '-' +
+            //       (endDate.getMonth() + 1) +
+            //       '-' +
+            //       endDate.getFullYear(),
             onChange: date => setEndDate(date),
             component: CustomeDatePicker,
           },
@@ -247,34 +253,63 @@ const FilterModal = props => {
   };
 
   const dateConverter = (paramDate, dateType, fromTo) => {
-    if (paramDate) {
-      let updatedparams =
-        typeof paramDate == 'string' ? paramDate : paramDate.toDateString();
-      let date =
-        String(updatedparams.split('-')[0]).length > 2
-          ? updatedparams
-          : updatedparams.split('-')[2] +
-            '-' +
-            updatedparams.split('-')[1] +
-            '-' +
-            updatedparams.split('-')[0];
-      let month =
-        String(new Date(date).getMonth() + 1).length > 1
-          ? String(new Date(date).getMonth() + 1)
-          : 0 + String(new Date(date).getMonth() + 1);
-      let day =
-        String(new Date(date).getDate()).length > 1
-          ? String(new Date(date).getDate())
-          : 0 + String(new Date(date).getDate());
-      if (dateType == 'datetime') {
-        return `${new Date(date).getFullYear()}-${month}-${day} ${
-          fromTo == 'from' ? '00:00:00' : '23:59:59'
-        }`;
-      } else {
-        return `${new Date(date).getFullYear()}-${month}-${day}`;
+    if (!paramDate) return new Date();
+
+    // Convert input to string and trim whitespace
+    let dateStr =
+      typeof paramDate === 'string'
+        ? paramDate.trim()
+        : paramDate.toDateString();
+
+    // Handle "dd-mm-yyyy" format specifically
+    const datePattern = /^(\d{2})-(\d{2})-(\d{4})$/;
+    let match = dateStr.match(datePattern);
+
+    if (match) {
+      // Convert to "yyyy-mm-dd" format
+      dateStr = `${match[3]}-${match[2]}-${match[1]}`;
+    } else {
+      // Handle other formats and default to ISO format
+      try {
+        let parsedDate = new Date(paramDate);
+        if (isNaN(parsedDate.getTime())) throw new Error('Invalid date');
+        dateStr = parsedDate.toISOString().split('T')[0];
+      } catch (e) {
+        console.error('Date parsing error:', e.message);
+        return '';
       }
     }
-    return '';
+
+    // Create a Date object
+    let date = new Date(dateStr);
+    if (isNaN(date.getTime())) {
+      console.error('Invalid date format:', dateStr);
+      return '';
+    }
+
+    // Format the date components
+    let year = date.getFullYear();
+    let month = String(date.getMonth() + 1).padStart(2, '0');
+    let day = String(date.getDate()).padStart(2, '0');
+
+    if (dateType === 'datetime') {
+      let time = fromTo === 'from' ? '00:00:00' : '23:59:59';
+      // Construct ISO 8601 datetime string
+      let dateTimeStr = `${year}-${month}-${day}T${time}`;
+      try {
+        let dateTime = new Date(dateTimeStr);
+        if (isNaN(dateTime.getTime())) {
+          console.error('Invalid time value:', dateTimeStr);
+          return '';
+        }
+        return dateTimeStr; // Return in 'yyyy-mm-ddTHH:MM:SS' format
+      } catch (error) {
+        console.error('DateTime parsing error:', error.message);
+        return '';
+      }
+    } else {
+      return `${year}-${month}-${day}`;
+    }
   };
 
   const applyCommFilter = fromResetFilter => {
@@ -327,12 +362,46 @@ const FilterModal = props => {
         designation: undefined,
         companyId: undefined,
         plantId: undefined,
-        startDate: new Date(
-          new Date(first_day_of_the_week).toDateString() + ' 00:00:00',
-        ).getTime(),
-        endDate: new Date(
-          new Date(last_day_of_the_week).toDateString() + ' 23:59:59',
-        ).getTime(),
+
+        // startDate: new Date(
+        //   startDate?.split('-').reverse().join('-') + 'T00:00:00Z',
+        // ).getTime(),
+        // endDate: new Date(
+        //   endDate?.split('-').reverse().join('-') + 'T00:00:00Z',
+        // ).getTime(),
+        // fromDate: new Date(
+        //   startDate?.split('-').reverse().join('-'),
+        // ).toLocaleDateString('en-GB', {
+        //   day: '2-digit',
+        //   month: 'short',
+        //   year: 'numeric',
+        // }),
+        // toDate: new Date(
+        //   endDate?.split('-').reverse().join('-'),
+        // ).toLocaleDateString('en-GB', {
+        //   day: '2-digit',
+        //   month: 'short',
+        //   year: 'numeric',
+        // }),
+        // startDate: new Date(
+        //   new Date(first_day_of_the_week).toDateString() + ' 00:00:00',
+        // ).getTime(),
+        // endDate: new Date(
+        //   new Date(last_day_of_the_week).toDateString() + ' 23:59:59',
+        // ).getTime(),
+        // fromDate: startDate,
+        // toDate: endDate,
+        // start_date_format: new Date(
+        //   new Date(
+        //     new Date(first_day_of_the_week).toDateString() + ' 00:00:00',
+        //   ).getTime(),
+        // )?.toDateString(),
+
+        // end_date_format: new Date(
+        //   new Date(
+        //     new Date(last_day_of_the_week).toDateString() + ' 23:59:59',
+        //   ).getTime(),
+        // )?.toDateString(),
       });
     } else {
       if (startDate && endDate) {
@@ -350,11 +419,53 @@ const FilterModal = props => {
             companyId: company || undefined,
             plantId: plant ? String(plant) : undefined,
             startDate: new Date(
-              dateConverter(startDate, 'datetime', 'from'),
+              startDate?.split('-').reverse().join('-') + 'T00:00:00Z',
             ).getTime(),
             endDate: new Date(
-              dateConverter(endDate, 'datetime', 'to'),
+              endDate?.split('-').reverse().join('-') + 'T00:00:00Z',
             ).getTime(),
+            fromDate: startDate,
+            toDate: endDate,
+            // fromDate: new Date(
+            //   startDate?.split('-').reverse().join('-'),
+            // ).toLocaleDateString('en-GB', {
+            //   day: '2-digit',
+            //   month: 'short',
+            //   year: 'numeric',
+            // }),
+            // toDate: new Date(
+            //   endDate?.split('-').reverse().join('-'),
+            // ).toLocaleDateString('en-GB', {
+            //   day: '2-digit',
+            //   month: 'short',
+            //   year: 'numeric',
+            // }),
+            // startDate:   new Date(
+            //   dateConverter(startDate, 'datetime', 'from'),
+            // ).getTime(),
+            // endDate: new Date(
+            //   dateConverter(endDate, 'datetime', 'to'),
+            // ).getTime(),
+            // fromDate: startDate,
+            // toDate: endDate,
+            // fromDate: new Date(
+            //   dateConverter(startDate, 'datetime', 'from'),
+            // ).getTime(),
+            // toDate: new Date(
+            //   dateConverter(endDate, 'datetime', 'to'),
+            // ).getTime(),
+
+            // start_date_format: new Date(
+            //   new Date(
+            //     new Date(
+            //       dateConverter(startDate, 'datetime', 'from'),
+            //     ).getTime(),
+            //   ),
+            // )?.toDateString(),
+
+            // end_date_format: new Date(
+            //   new Date(dateConverter(endDate, 'datetime', 'to')).getTime(),
+            // )?.toDateString(),
           });
         }
       }

@@ -140,14 +140,12 @@ const SalesTeamScreen = props => {
   };
 
   const calculateDaysBetweenDates = (startDate, endDate) => {
-    console.log('start date', startDate, endDate);
     const startDt = createDate(convertDateToYYYYMMDD(startDate));
     const endDt = createDate(convertDateToYYYYMMDD(endDate));
     const start = new Date(fromDate);
     const end = new Date(toDate);
     const differenceInTime = Math.abs(end - start);
     const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
-
     return differenceInDays;
   };
 
@@ -196,14 +194,12 @@ const SalesTeamScreen = props => {
     } catch (error) {
       console.log(error);
     }
-
     setDateFilterVisible(false);
     setShowCheck(false);
   };
 
   const computeTimeStamp = range => {
     const now = new Date();
-
     let startOfDay = date => {
       return new Date(
         date.getFullYear(),
@@ -267,7 +263,7 @@ const SalesTeamScreen = props => {
     if (dateFilterValue === 'Custom') {
     } else {
       const {start, end} = computeTimeStamp(dateFilterValue || 'Last 7 Days');
-      console.log('timeStamps', start, end);
+
       setTimestamps({start, end});
       getSalesTeamContacts(start, end);
     }
@@ -364,9 +360,10 @@ const SalesTeamScreen = props => {
     );
   };
 
-  const parseDateString = dateString => {
+  const convertDateFormat = dateString => {
     const [day, month, year] = dateString.split('-').map(Number);
-    return new Date(year, month - 1, day);
+
+    return `(${year},${month},${day})`;
   };
 
   const toggleCallLogModal = item => {
@@ -386,9 +383,14 @@ const SalesTeamScreen = props => {
         </View>
         <View style={styles.contactDat}>
           <Text style={styles.name}>{contact?.appUser?.name}</Text>
-          <Text>
-            {contact?.appUser?.region} - {contact?.appUser?.branch}
-          </Text>
+          {contact?.appUser?.region ? (
+            <Text>
+              {contact?.appUser?.region}{' '}
+              {contact?.appUser?.branch ? (
+                <Text> - {contact?.appUser?.branch}</Text>
+              ) : null}
+            </Text>
+          ) : null}
           <View style={{flexDirection: 'row', marginTop: Dimension.margin10}}>
             <Image
               source={require('../../assets/images/phone-call.png')}
@@ -496,6 +498,28 @@ const SalesTeamScreen = props => {
   const minimumDate = createDate(convertDateToYYYYMMDD(fromDate));
   const maximumDate = new Date();
 
+  const convertDateToArray = dateString => {
+    const [day, month, year] = dateString?.split('-').map(Number);
+
+    if (isNaN(day) || isNaN(month) || isNaN(year)) {
+      throw new Error('Invalid date string');
+    }
+
+    const date = new Date(year, month - 1, day);
+
+    if (isNaN(date.getTime())) {
+      throw new Error('Invalid date object');
+    }
+
+    const formattedDateArray = [
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+    ];
+    return formattedDateArray;
+  };
+  const formattedAndDate = convertDateToArray(startDate);
+
   return (
     <View
       style={{
@@ -511,12 +535,7 @@ const SalesTeamScreen = props => {
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
-
-                paddingHorizontal:
-                  //   Platform.OS == 'ios'
-                  //     ?
-                  Dimension.padding10,
-                // : Dimension.padding6,
+                paddingHorizontal: Dimension.padding10,
                 paddingVertical: Dimension.padding8,
               }}>
               <Text style={styles.fltrtxt}>
@@ -660,7 +679,13 @@ const SalesTeamScreen = props => {
                         label={'To Date'}
                         fromSalesTab
                         mode={'date'}
-                        minDate={parseDateString(startDate)}
+                        minDate={
+                          new Date(
+                            formattedAndDate[0],
+                            formattedAndDate[1],
+                            formattedAndDate[2],
+                          )
+                        }
                         fromSalesTabToDate
                       />
                     </>
@@ -756,14 +781,18 @@ const SalesTeamScreen = props => {
                   ]}>
                   {salesPerson?.appUser?.name}
                 </Text>
-                <Text
-                  style={{
-                    paddingHorizontal: Dimension.padding15,
-                    fontSize: 12,
-                  }}>
-                  {salesPerson?.appUser?.region} -{' '}
-                  {salesPerson?.appUser?.branch}
-                </Text>
+                {salesPerson?.appUser?.region ? (
+                  <Text
+                    style={{
+                      paddingHorizontal: Dimension.padding15,
+                      fontSize: 12,
+                    }}>
+                    {salesPerson?.appUser?.region}{' '}
+                    {salesPerson?.appUser?.branch ? (
+                      <Text>- {salesPerson?.appUser?.branch}</Text>
+                    ) : null}
+                  </Text>
+                ) : null}
                 <View
                   style={{
                     flexDirection: 'row',

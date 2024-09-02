@@ -26,17 +26,17 @@ const CustomeDatePicker = props => {
   const [text, setText] = useState('Select Date');
 
   const onchangeDate = (event, selectedDate) => {
-    const currentDate =
-      Platform.OS == 'ios'
-        ? selectedDate.toISOString().split('T')[0]
-        : selectedDate;
+    const currentDate = selectedDate;
     setShow(Platform.OS === 'ios');
     if (event.type != 'dismissed') {
       setDate(currentDate);
-
-      let tempDate = Platform.OS == 'ios' ? currentDate : new Date(currentDate);
-      let fDate = tempDate.split('-').reverse().join('-');
-
+      let tempDate = new Date(currentDate);
+      let fDate =
+        tempDate.getDate() +
+        '-' +
+        (tempDate.getMonth() + 1) +
+        '-' +
+        tempDate.getFullYear();
       props.onChange(fDate);
       setText(fDate);
     }
@@ -47,8 +47,6 @@ const CustomeDatePicker = props => {
     if (props.autoFocus) {
       handleFocus();
     }
-    let x = new Date(dateConverter(date)) || new Date(dateConverter(value));
-    // alert(`${dateConverter(date)} ${dateConverter(value)} wertfghfedef`);
   }, []);
 
   const showMode = currentMode => {
@@ -82,49 +80,106 @@ const CustomeDatePicker = props => {
     showMode('date');
   };
 
-  const dateConverter = (paramDate, dateType, fromTo) => {
-    if (paramDate) {
-      let updatedparams =
-        typeof paramDate == 'string' ? paramDate : paramDate.toDateString();
-      let date =
-        String(updatedparams.split('-')[0]).length > 2
-          ? `${String(updatedparams.split('-')[0])}-${
-              String(updatedparams.split('-')[1]).length > 1
-                ? String(updatedparams.split('-')[1])
-                : 0 + String(updatedparams.split('-')[1])
-            }-${
-              String(updatedparams.split('-')[2]) > 1
-                ? String(updatedparams.split('-')[2])
-                : 0 + String(updatedparams.split('-')[2])
-            }`
-          : `${String(updatedparams.split('-')[2])}-${
-              String(updatedparams.split('-')[1]).length > 1
-                ? String(updatedparams.split('-')[1])
-                : 0 + String(updatedparams.split('-')[1])
-            }-${
-              String(updatedparams.split('-')[0]) > 1
-                ? String(updatedparams.split('-')[0])
-                : 0 + String(updatedparams.split('-')[0])
-            }`;
+  // const dateConverter = (paramDate, dateType, fromTo) => {
+  //   if (paramDate) {
+  //     let updatedparams =
+  //       typeof paramDate == 'string' ? paramDate : paramDate.toDateString();
+  //     let date =
+  //       String(updatedparams.split('-')[0]).length > 2
+  //         ? updatedparams
+  //         : updatedparams.split('-')[2] +
+  //           '-' +
+  //           updatedparams.split('-')[1] +
+  //           '-' +
+  //           updatedparams.split('-')[0];
+  //     let month =
+  //       String(new Date(date).getMonth() + 1).length > 1
+  //         ? String(new Date(date).getMonth() + 1)
+  //         : 0 + String(new Date(date).getMonth() + 1);
+  //     let day =
+  //       String(new Date(date).getDate()).length > 1
+  //         ? String(new Date(date).getDate())
+  //         : 0 + String(new Date(date).getDate());
+  //     if (dateType == 'datetime') {
+  //       return `${new Date(date).getFullYear()}-${month}-${day} ${
+  //         fromTo == 'from' ? '00:00:00' : '23:59:59'
+  //       }`;
+  //     } else {
+  //       return `${new Date(date).getFullYear()}-${month}-${day}`;
+  //     }
+  //   }
+  //   return '';
+  // };
 
-      let month =
-        String(new Date(date).getMonth() + 1).length > 1
-          ? String(new Date(date).getMonth() + 1)
-          : '0' + String(new Date(date).getMonth() + 1);
-      let day =
-        String(new Date(date).getDate()).length > 1
-          ? String(new Date(date).getDate())
-          : '0' + String(new Date(date).getDate());
-      if (dateType == 'datetime') {
-        return `${new Date(date).getFullYear()}-${month}-${day} ${
-          fromTo == 'from' ? '00:00:00' : '23:59:59'
-        }`;
-      } else {
-        return `${new Date(date).getFullYear()}-${month}-${day}`;
+  //  valueOfDateTimePicker =
+  //   new Date(dateConverter(date)) ||
+  //   new Date(dateConverter(value)) ||
+  //   new Date();
+
+  const dateConverter = (paramDate, dateType, fromTo) => {
+    if (!paramDate) return new Date();
+
+    // Convert input to string and trim whitespace
+    let dateStr =
+      typeof paramDate === 'string'
+        ? paramDate.trim()
+        : paramDate.toDateString();
+
+    // Handle "dd-mm-yyyy" format specifically
+    const datePattern = /^(\d{2})-(\d{2})-(\d{4})$/;
+    let match = dateStr.match(datePattern);
+
+    if (match) {
+      // Convert to "yyyy-mm-dd" format
+      dateStr = `${match[3]}-${match[2]}-${match[1]}`;
+    } else {
+      // Handle other formats and default to ISO format
+      try {
+        let parsedDate = new Date(paramDate);
+        if (isNaN(parsedDate.getTime())) throw new Error('Invalid date');
+        dateStr = parsedDate.toISOString().split('T')[0];
+      } catch (e) {
+        console.error('Date parsing error:', e.message);
+        return '';
       }
     }
-    return '';
+
+    // Create a Date object
+    let date = new Date(dateStr);
+    if (isNaN(date.getTime())) {
+      console.error('Invalid date format:', dateStr);
+      return '';
+    }
+
+    // Format the date components
+    let year = date.getFullYear();
+    let month = String(date.getMonth() + 1).padStart(2, '0');
+    let day = String(date.getDate()).padStart(2, '0');
+
+    if (dateType === 'datetime') {
+      let time = fromTo === 'from' ? '00:00:00' : '23:59:59';
+      // Construct ISO 8601 datetime string
+      let dateTimeStr = `${year}-${month}-${day}T${time}`;
+      try {
+        let dateTime = new Date(dateTimeStr);
+        if (isNaN(dateTime.getTime())) {
+          console.error('Invalid time value:', dateTimeStr);
+          return '';
+        }
+        return dateTimeStr; // Return in 'yyyy-mm-ddTHH:MM:SS' format
+      } catch (error) {
+        console.error('DateTime parsing error:', error.message);
+        return '';
+      }
+    } else {
+      return `${year}-${month}-${day}`;
+    }
   };
+
+  // Usage in value prop
+  // const dateValue =
+  //   new Date(dateConverter(date, 'datetime', 'from')) ||
+  //   new Date(dateConverter(value, 'datetime', 'to'));
 
   const renderDatePicker = () => {
     return (
@@ -136,14 +191,7 @@ const CustomeDatePicker = props => {
                 {...props}
                 label={() => (
                   <View style={{flexDirection: 'row'}}>
-                    <Text
-                      style={
-                        props.fromSalesTab
-                          ? styles.labelStyleCopy
-                          : styles.labelStyle
-                      }>
-                      {props.label}
-                    </Text>
+                    <Text style={styles.labelStyle}>{props.label}</Text>
                     {props.isImp ? (
                       <Text style={styles.starIcon}>*</Text>
                     ) : null}
@@ -156,11 +204,7 @@ const CustomeDatePicker = props => {
                 onFocus={handleFocus}
                 onBlur={() => handleBlur(true)}
                 containerStyle={styles.WrapperStyle}
-                inputContainerStyle={
-                  props.fromSalesTab
-                    ? styles.inputContainerStyleCopy
-                    : styles.inputContainerStyle
-                }
+                inputContainerStyle={styles.inputContainerStyle}
                 inputStyle={styles.inputStyle}
                 errorStyle={styles.errorText}
                 disabledInputStyle={styles.disabledInputStyle}
@@ -179,25 +223,23 @@ const CustomeDatePicker = props => {
         ) : (
           <View style={styles.WrapperStyle}>
             <Text>{props.label}</Text>
-            <TouchableOpacity
-              // onPress={()=>}
-
-              style={[styles.inputContainerStyle]}>
+            <TouchableOpacity style={[styles.inputContainerStyle]}>
               <View style={[styles.inputStyle, styles.inputStylesIos]}>
                 <DateTimePicker
                   testID="dateTimePicker"
                   value={
-                    // new Date()
-                    new Date(dateConverter(date)) ||
-                    new Date(dateConverter(value))
+                    date
+                    // date ? date : new Date()
+                    // // dateValue
+                    // new Date(dateConverter(date)) ||
+                    // new Date(dateConverter(value))
                   }
-                  style={{width: props.fromSalesTab ? '60%' : '70%'}}
+                  style={{width: '70%'}}
                   mode={mode}
-                  maximumDate={props?.fromSalesTab ? new Date() : maxdate}
-                  minimumDate={props.fromSalesTabToDate ? props.minDate : null}
+                  maximumDate={maxdate}
                   accentColor={'red'}
                   is24Hour={true}
-                  display={display}
+                  display="default"
                   onChange={onchangeDate}
                 />
                 <CustomeIcon
@@ -214,12 +256,10 @@ const CustomeDatePicker = props => {
           <DateTimePicker
             testID="dateTimePicker"
             value={
-              new Date()
-              // new Date(dateConverter(date)) || new Date(dateConverter(value))
+              new Date(dateConverter(date)) || new Date(dateConverter(value))
             }
             mode={mode}
-            maximumDate={props?.fromSalesTab ? new Date() : maxdate}
-            minimumDate={props.fromSalesTabToDate ? props.minDate : null}
+            maximumDate={maxdate}
             is24Hour={true}
             display={display}
             onChange={onchangeDate}
@@ -241,3 +281,262 @@ const CustomeDatePicker = props => {
 };
 
 export default CustomeDatePicker;
+
+// import React, {useEffect, useState} from 'react';
+// import {View, Platform, Text, TouchableOpacity} from 'react-native';
+// import DateTimePicker from '@react-native-community/datetimepicker';
+// import Icon from 'react-native-vector-icons/FontAwesome';
+// import Dimension from '../../Theme/Dimension';
+// import colors from '../../Theme/Colors';
+// import {Input} from 'react-native-elements';
+// import CustomeIcon from '../CustomeIcon';
+// import styles from './styles';
+
+// const CustomeDatePicker = props => {
+//   const {display, value, maxdate, fromCategoryBrand, natureOfBusiness} = props;
+
+//   let currDate = new Date();
+//   currDate =
+//     currDate.getDate() +
+//     '-' +
+//     (currDate.getMonth() + 1) +
+//     '-' +
+//     currDate.getFullYear();
+
+//   const [date, setDate] = useState(value || currDate);
+//   const [isFocused, setIsFocused] = useState(false);
+//   const [mode, setMode] = useState('date');
+//   const [show, setShow] = useState(false);
+//   const [text, setText] = useState('Select Date');
+
+//   const onchangeDate = (event, selectedDate) => {
+//     const currentDate = selectedDate;
+//     setShow(Platform.OS === 'ios');
+//     if (event.type != 'dismissed') {
+//       setDate(currentDate);
+
+//       let tempDate = new Date(currentDate);
+//       let fDate =
+//         tempDate.getDate() +
+//         '-' +
+//         (tempDate.getMonth() + 1) +
+//         '-' +
+//         tempDate.getFullYear();
+
+//       props.onChange(fDate);
+//       setText(fDate);
+//     }
+//   };
+
+//   useEffect(() => {
+//     handleBlur();
+//     if (props.autoFocus) {
+//       handleFocus();
+//     }
+//   }, []);
+
+//   const showMode = currentMode => {
+//     setShow(true);
+//     setMode(currentMode);
+//   };
+
+//   const handleFocus = () => {
+//     setIsFocused(true);
+//     if (props.handleFocus) {
+//       props.handleFocus();
+//     }
+//   };
+
+//   const handleBlur = runOnBlur => {
+//     if (props.hideLabel) {
+//       setIsFocused(true);
+//     } else {
+//       if (!props.value) {
+//         setIsFocused(false);
+//       } else {
+//         setIsFocused(true);
+//       }
+//     }
+//     if (props.onBlur && runOnBlur) {
+//       props.onBlur();
+//     }
+//   };
+
+//   const showDatepicker = () => {
+//     showMode('date');
+//   };
+
+//   // const dateConverter = (paramDate, dateType, fromTo) => {
+//   //   if (paramDate) {
+//   //     let updatedparams =
+//   //       typeof paramDate == 'string' ? paramDate : paramDate.toDateString();
+//   //     let date =
+//   //       String(updatedparams.split('-')[0]).length > 2
+//   //         ? updatedparams
+//   //         : updatedparams.split('-')[2] +
+//   //           '-' +
+//   //           updatedparams.split('-')[1] +
+//   //           '-' +
+//   //           updatedparams.split('-')[0];
+//   //     let month =
+//   //       String(new Date(date).getMonth() + 1).length > 1
+//   //         ? String(new Date(date).getMonth() + 1)
+//   //         : 0 + String(new Date(date).getMonth() + 1);
+//   //     let day =
+//   //       String(new Date(date).getDate()).length > 1
+//   //         ? String(new Date(date).getDate())
+//   //         : 0 + String(new Date(date).getDate());
+//   //     if (dateType == 'datetime') {
+//   //       return `${new Date(date).getFullYear()}-${month}-${day} ${
+//   //         fromTo == 'from' ? '00:00:00' : '23:59:59'
+//   //       }`;
+//   //     } else {
+//   //       return `${new Date(date).getFullYear()}-${month}-${day}`;
+//   //     }
+//   //   }
+//   //   return '';
+//   // };
+
+//   const dateConverter = (paramDate, dateType, fromTo) => {
+//     if (paramDate) {
+//       let updatedparams =
+//         typeof paramDate == 'string' ? paramDate : paramDate.toDateString();
+//       let date =
+//         String(updatedparams.split('-')[0]).length > 2
+//           ? updatedparams
+//           : updatedparams.split('-')[2] +
+//             '-' +
+//             updatedparams.split('-')[1] +
+//             '-' +
+//             updatedparams.split('-')[0];
+//       let month =
+//         String(new Date(date).getMonth() + 1).length > 1
+//           ? String(new Date(date).getMonth() + 1)
+//           : 0 + String(new Date(date).getMonth() + 1);
+//       let day =
+//         String(new Date(date).getDate()).length > 1
+//           ? String(new Date(date).getDate())
+//           : 0 + String(new Date(date).getDate());
+//       if (dateType == 'datetime') {
+//         return `${new Date(date).getFullYear()}-${month}-${day} ${
+//           fromTo == 'from' ? '00:00:00' : '23:59:59'
+//         }`;
+//       } else {
+//         return `${new Date(date).getFullYear()}-${month}-${day}`;
+//       }
+//     }
+//     return '';
+//   };
+
+//   const renderDatePicker = () => {
+//     return (
+//       <>
+//         {Platform.OS == 'android' ? (
+//           <TouchableOpacity onPress={showDatepicker}>
+//             <View style={{flexDirection: 'row'}}>
+//               <Input
+//                 {...props}
+//                 label={() => (
+//                   <View style={{flexDirection: 'row'}}>
+//                     <Text
+//                       style={
+//                         props.fromSalesTab
+//                           ? styles.labelStyleCopy
+//                           : styles.labelStyle
+//                       }>
+//                       {props.label}
+//                     </Text>
+//                     {props.isImp ? (
+//                       <Text style={styles.starIcon}>*</Text>
+//                     ) : null}
+//                   </View>
+//                 )}
+//                 editable={false}
+//                 selectionColor={'#3c3c3c'}
+//                 placeholder={'Select ' + props.label}
+//                 disabled={props.disabled}
+//                 onFocus={handleFocus}
+//                 onBlur={() => handleBlur(true)}
+//                 containerStyle={styles.WrapperStyle}
+//                 inputContainerStyle={
+//                   props.fromSalesTab
+//                     ? styles.inputContainerStyleCopy
+//                     : styles.inputContainerStyle
+//                 }
+//                 inputStyle={styles.inputStyle}
+//                 errorStyle={styles.errorText}
+//                 disabledInputStyle={styles.disabledInputStyle}
+//                 errorMessage={props.showError ? props.errorMessage : null}
+//                 rightIcon={
+//                   <CustomeIcon
+//                     name={'Calendar-blue'}
+//                     size={Dimension.font20}
+//                     color={colors.FontColor}
+//                   />
+//                 }
+//                 rightIconContainerStyle={styles.iconStyle}
+//               />
+//             </View>
+//           </TouchableOpacity>
+//         ) : (
+//           <View style={styles.WrapperStyle}>
+//             <Text>{props.label}</Text>
+//             <TouchableOpacity
+//               // onPress={()=>}
+
+//               style={[styles.inputContainerStyle]}>
+//               <View style={[styles.inputStyle, styles.inputStylesIos]}>
+//                 <DateTimePicker
+//                   testID="dateTimePicker"
+//                   value={
+//                     new Date(dateConverter(date)) ||
+//                     new Date(dateConverter(value))
+//                   }
+//                   style={{width: props.fromSalesTab ? '60%' : '70%'}}
+//                   mode={mode}
+//                   maximumDate={props?.fromSalesTab ? new Date() : maxdate}
+//                   accentColor={'red'}
+//                   is24Hour={true}
+//                   display={display}
+//                   onChange={onchangeDate}
+//                 />
+//                 <CustomeIcon
+//                   name={'Calendar-blue'}
+//                   size={Dimension.font20}
+//                   color={colors.FontColor}
+//                 />
+//               </View>
+//             </TouchableOpacity>
+//           </View>
+//         )}
+
+//         {show && Platform.OS == 'android' && (
+//           <DateTimePicker
+//             testID="dateTimePicker"
+//             value={
+//               new Date(dateConverter(date)) || new Date(dateConverter(value))
+//             }
+//             mode={mode}
+//             maximumDate={props?.fromSalesTab ? new Date() : maxdate}
+//             minimumDate={props.fromSalesTabToDate ? props.minDate : null}
+//             is24Hour={true}
+//             display={display}
+//             onChange={onchangeDate}
+//           />
+//         )}
+//       </>
+//     );
+//   };
+
+//   if (fromCategoryBrand) {
+//     if (natureOfBusiness == 3) {
+//       return renderDatePicker();
+//     } else {
+//       return null;
+//     }
+//   } else {
+//     return renderDatePicker();
+//   }
+// };
+
+// export default CustomeDatePicker;
