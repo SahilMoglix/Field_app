@@ -18,8 +18,8 @@
 	<string>SalesSync would like to access photos</string>
 	<key>NSCameraUsageDescription</key>
 	<string>SalesSync would like to open camera</string>
-	<key>NSContactsUsageDescription</key>
-	<string>SalesSync would like to access contacts</string>
+	<!-- <key>NSContactsUsageDescription</key>
+	<string>SalesSync would like to access contacts</string> -->
 	<key>NSUserTrackingUsageDescription</key>
 	<string>SalesSync would like to track your logs</string>
 	<key>CFBundleName</key>

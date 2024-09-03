@@ -1,7 +1,7 @@
 import {FlashList} from '@shopify/flash-list';
 import React, {useEffect, useState} from 'react';
 import {
-  PermissionsAndroid,
+  // PermissionsAndroid,
   View,
   Dimensions,
   Text,
@@ -91,7 +91,7 @@ const ContactScreen = props => {
   }, []);
   useEffect(() => {
     setContactsLoader(true);
-    getPhoneContacts();
+    // getPhoneContacts();
     pullToRefresh();
   }, []);
 
@@ -260,31 +260,35 @@ const ContactScreen = props => {
     );
   };
 
-  const pullToRefreshContacts = () => {
-    getPhoneContacts();
-  };
+  // commented because Not using phonebook contacts as of now
 
-  const getPhoneContacts = () => {
-    if (Platform.OS == 'android') {
-      try {
-        PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS)
-          .then(res => {
-            readContacts();
-          })
-          .catch(error => {
-            console.error('Permission error: ', error);
-          });
-      } catch (err) {
-        setContactsLoader(false);
-      }
-    } else {
-      try {
-        readContacts();
-      } catch (e) {
-        console.error('Permission error: ', e);
-      }
-    }
-  };
+  // const pullToRefreshContacts = () => {
+  //   getPhoneContacts();
+  // };
+
+  // const getPhoneContacts = () => {
+  //   if (Platform.OS == 'android') {
+  //     try {
+  //       PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_CONTACTS)
+  //         .then(res => {
+  //           readContacts();
+  //         })
+  //         .catch(error => {
+  //           console.error('Permission error: ', error);
+  //         });
+  //     } catch (err) {
+  //       setContactsLoader(false);
+  //     }
+  //   } else {
+
+  //   try {
+  //     readContacts();
+  //   } catch (e) {
+  //     console.error('Permission error: ', e);
+  //   }
+
+  //   // }
+  // };
 
   const readContacts = () => {
     Contacts.getAll()
@@ -702,7 +706,7 @@ const ContactScreen = props => {
           renderItem={renderItem}
           keyExtractor={keyExtractor}
           refreshing={contactsLoader}
-          onRefresh={pullToRefreshContacts}
+          // onRefresh={pullToRefreshContacts}
           ListEmptyComponent={
             <NoDataFound text={'No Contact Found'}></NoDataFound>
           }

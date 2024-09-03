@@ -349,6 +349,42 @@ const FilterModal = props => {
     }
   };
 
+  const isValidDateFormat = dateStr => {
+    console.log(dateStr, 'date str!!');
+    const regex = /^\d{2}-\d{2}-\d{4}$/;
+    if (!regex.test(dateStr)) {
+      return false;
+    }
+    const [day, month, year] = dateStr?.split('-').map(Number);
+    if (
+      day < 1 ||
+      day > 31 ||
+      month < 1 ||
+      month > 12 ||
+      year < 1000 ||
+      year > 9999
+    ) {
+      return false;
+    }
+
+    const date = new Date(year, month - 1, day);
+    return (
+      date.getDate() === day &&
+      date.getMonth() === month - 1 &&
+      date.getFullYear() === year
+    );
+  };
+
+  const parseDate = dateStr => {
+    const [day, month, year] = dateStr.split('-');
+    const formattedDate = `${year}-${month.padStart(2, '0')}-${day.padStart(
+      2,
+      '0',
+    )}`;
+
+    return new Date(formattedDate);
+  };
+
   const applyFilters = fromReset => {
     if (fromReset) {
       let date_today = new Date();
@@ -414,18 +450,46 @@ const FilterModal = props => {
             text1: 'Selected start date must be less than end date',
           });
         } else {
+          let newStartDate =
+            typeof startDate == 'object'
+              ? startDate
+                  .toISOString()
+                  ?.split('T')[0]
+                  ?.split('-')
+                  .reverse()
+                  .join('-')
+              : startDate;
+          let newEndDate =
+            typeof endDate == 'object'
+              ? endDate
+                  .toISOString()
+                  ?.split('T')[0]
+                  ?.split('-')
+                  .reverse()
+                  .join('-')
+              : endDate;
+          console.log(
+            'benedict cumberbatch',
+            newStartDate,
+            newEndDate,
+            parseDate(newStartDate)?.getTime(),
+            parseDate(newEndDate)?.getTime(),
+          );
           props.onApplyFilter({
             designation,
             companyId: company || undefined,
             plantId: plant ? String(plant) : undefined,
-            startDate: new Date(
-              startDate?.split('-').reverse().join('-') + 'T00:00:00Z',
-            ).getTime(),
-            endDate: new Date(
-              endDate?.split('-').reverse().join('-') + 'T00:00:00Z',
-            ).getTime(),
-            fromDate: startDate,
-            toDate: endDate,
+            startDate: parseDate(newStartDate)?.getTime(),
+            //  new Date(
+            //   newStartDate?.split('-')?.reverse()?.join('-'),
+            // )?.getTime(),
+            endDate: parseDate(newEndDate)?.getTime(),
+            // new Date(
+            //   newEndDate?.split('-')?.reverse()?.join('-'),
+            // )?.getTime(),
+            fromDate: newStartDate,
+            toDate: newEndDate,
+
             // fromDate: new Date(
             //   startDate?.split('-').reverse().join('-'),
             // ).toLocaleDateString('en-GB', {

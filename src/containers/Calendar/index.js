@@ -128,7 +128,6 @@ const CalendarScreen = () => {
       }),
     );
   };
-  console.log(meetingsCustomParams, 'custom params!!');
 
   const timestampToFormattedDate = timestamp => {
     let milliseconds = timestamp > 10000000000 ? timestamp : timestamp * 1000;
@@ -198,6 +197,11 @@ const CalendarScreen = () => {
   // };
 
   const getRangeText = () => {
+    console.log(
+      'show dates',
+      meetingsCustomParams.fromDate,
+      meetingsCustomParams?.toDate,
+    );
     if (meetingsCustomParams?.fromDate && meetingsCustomParams?.toDate) {
       return `${formattedDate(
         meetingsCustomParams.fromDate,
@@ -212,9 +216,36 @@ const CalendarScreen = () => {
     }
   };
 
+  const isValidDateFormat = dateStr => {
+    console.log(dateStr, 'date str!!');
+    const regex = /^\d{2}-\d{2}-\d{4}$/;
+    if (!regex.test(dateStr)) {
+      return false;
+    }
+    const [day, month, year] = dateStr?.split('-').map(Number);
+    if (
+      day < 1 ||
+      day > 31 ||
+      month < 1 ||
+      month > 12 ||
+      year < 1000 ||
+      year > 9999
+    ) {
+      return false;
+    }
+
+    const date = new Date(year, month - 1, day);
+    return (
+      date.getDate() === day &&
+      date.getMonth() === month - 1 &&
+      date.getFullYear() === year
+    );
+  };
+
   const formattedDate = dateStr => {
+    console.log(dateStr, 'date Str is present!!');
     if (!dateStr) return '';
-    const [day, month, year] = dateStr.split('-').map(Number);
+    const [day, month, year] = dateStr?.split('-').map(Number);
     return `${day} ${
       [
         'Jan',
