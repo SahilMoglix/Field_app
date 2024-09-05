@@ -65,7 +65,7 @@ const CalendarScreen = () => {
   };
 
   const applyFilters = async params => {
-    console.log('params', params);
+    console.log('params on calendar', params);
     await logAnalytics('Calendar_ApplyFilter', {
       Selected_Fields: JSON.stringify(params),
     });
@@ -243,7 +243,6 @@ const CalendarScreen = () => {
   };
 
   const formattedDate = dateStr => {
-    console.log(dateStr, 'date Str is present!!');
     if (!dateStr) return '';
     const [day, month, year] = dateStr?.split('-').map(Number);
     return `${day} ${

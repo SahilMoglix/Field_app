@@ -331,6 +331,19 @@ const styles = StyleSheet.create({
     width: '70%',
     // alignSelf: 'center',
   },
+  inputContainerStyleAnd: {
+    borderWidth: 1,
+    borderColor: colors.FontColor,
+    borderRadius: 4,
+    height: Dimension.height40,
+    paddingBottom: 0,
+    // width: '80%',
+
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+  },
   inputStyle: {
     fontSize: Dimension.font12,
     color: colors.FontColor,
@@ -343,6 +356,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: Dimension.margin12,
+  },
+  container: {
+    // flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  box: {
+    width: 200,
+    padding: 20,
+    margin: 10,
+    backgroundColor: '#e0e0e0',
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  text: {
+    fontSize: 14,
+    paddingHorizontal: 15,
   },
 });
 

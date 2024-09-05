@@ -441,97 +441,57 @@ const FilterModal = props => {
       });
     } else {
       if (startDate && endDate) {
-        if (
-          new Date(dateConverter(startDate, 'datetime', 'from')).getTime() >
-          new Date(dateConverter(endDate, 'datetime', 'to')).getTime()
-        ) {
-          Toast.show({
-            type: 'error',
-            text1: 'Selected start date must be less than end date',
-          });
-        } else {
-          let newStartDate =
-            typeof startDate == 'object'
-              ? startDate
-                  .toISOString()
-                  ?.split('T')[0]
-                  ?.split('-')
-                  .reverse()
-                  .join('-')
-              : startDate;
-          let newEndDate =
-            typeof endDate == 'object'
-              ? endDate
-                  .toISOString()
-                  ?.split('T')[0]
-                  ?.split('-')
-                  .reverse()
-                  .join('-')
-              : endDate;
-          console.log(
-            'benedict cumberbatch',
-            newStartDate,
-            newEndDate,
-            parseDate(newStartDate)?.getTime(),
-            parseDate(newEndDate)?.getTime(),
-          );
-          props.onApplyFilter({
-            designation,
-            companyId: company || undefined,
-            plantId: plant ? String(plant) : undefined,
-            startDate: parseDate(newStartDate)?.getTime(),
-            //  new Date(
-            //   newStartDate?.split('-')?.reverse()?.join('-'),
-            // )?.getTime(),
-            endDate: parseDate(newEndDate)?.getTime(),
-            // new Date(
-            //   newEndDate?.split('-')?.reverse()?.join('-'),
-            // )?.getTime(),
-            fromDate: newStartDate,
-            toDate: newEndDate,
+        // if (
+        //   new Date(dateConverter(startDate, 'datetime', 'from')).getTime() >
+        //   new Date(dateConverter(endDate, 'datetime', 'to')).getTime()
+        // ) {
+        //   Toast.show({
+        //     type: 'error',
+        //     text1: 'Selected start date must be less than end date',
+        //   });
+        // } else {
+        let newStartDate =
+          typeof startDate == 'object'
+            ? startDate
+                .toISOString()
+                ?.split('T')[0]
+                ?.split('-')
+                .reverse()
+                .join('-')
+            : startDate;
+        let newEndDate =
+          typeof endDate == 'object'
+            ? endDate
+                .toISOString()
+                ?.split('T')[0]
+                ?.split('-')
+                .reverse()
+                .join('-')
+            : endDate;
+        console.log(
+          'benedict cumberbatch',
+          newStartDate,
+          newEndDate,
+          parseDate(newStartDate)?.getTime(),
+          parseDate(newEndDate)?.getTime(),
+        );
 
-            // fromDate: new Date(
-            //   startDate?.split('-').reverse().join('-'),
-            // ).toLocaleDateString('en-GB', {
-            //   day: '2-digit',
-            //   month: 'short',
-            //   year: 'numeric',
-            // }),
-            // toDate: new Date(
-            //   endDate?.split('-').reverse().join('-'),
-            // ).toLocaleDateString('en-GB', {
-            //   day: '2-digit',
-            //   month: 'short',
-            //   year: 'numeric',
-            // }),
-            // startDate:   new Date(
-            //   dateConverter(startDate, 'datetime', 'from'),
-            // ).getTime(),
-            // endDate: new Date(
-            //   dateConverter(endDate, 'datetime', 'to'),
-            // ).getTime(),
-            // fromDate: startDate,
-            // toDate: endDate,
-            // fromDate: new Date(
-            //   dateConverter(startDate, 'datetime', 'from'),
-            // ).getTime(),
-            // toDate: new Date(
-            //   dateConverter(endDate, 'datetime', 'to'),
-            // ).getTime(),
-
-            // start_date_format: new Date(
-            //   new Date(
-            //     new Date(
-            //       dateConverter(startDate, 'datetime', 'from'),
-            //     ).getTime(),
-            //   ),
-            // )?.toDateString(),
-
-            // end_date_format: new Date(
-            //   new Date(dateConverter(endDate, 'datetime', 'to')).getTime(),
-            // )?.toDateString(),
-          });
-        }
+        props.onApplyFilter({
+          designation,
+          companyId: company || undefined,
+          plantId: plant ? String(plant) : undefined,
+          startDate: parseDate(newStartDate)?.getTime(),
+          //  new Date(
+          //   newStartDate?.split('-')?.reverse()?.join('-'),
+          // )?.getTime(),
+          endDate: parseDate(newEndDate)?.getTime(),
+          // new Date(
+          //   newEndDate?.split('-')?.reverse()?.join('-'),
+          // )?.getTime(),
+          fromDate: newStartDate,
+          toDate: newEndDate,
+        });
+        // }
       }
     }
   };

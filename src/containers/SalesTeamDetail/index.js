@@ -59,6 +59,10 @@ const SalesTeamScreen = props => {
 
   const [fromDate, setFromDate] = useState(new Date());
   const [toDate, setToDate] = useState(new Date());
+  const [showStartDatePicker, setShowStartDatePicker] = useState(false);
+  const [showEndDatePicker, setShowEndDatePicker] = useState(false);
+  const [startDt, setStartDt] = useState(new Date());
+  const [endDt, setEndDt] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
   const [filtersList, setFiltersList] = useState({
@@ -105,15 +109,6 @@ const SalesTeamScreen = props => {
     setFiltersModal(false);
   };
 
-  const toggleStartDate = date => {
-    setShowCheck(true);
-    setStartDate(date);
-  };
-  const toggleEndDate = date => {
-    setShowCheck(true);
-    setEndDate(date);
-  };
-
   const setCallType = type => {
     let IconName;
     if (type == 'INCOMING') {
@@ -132,11 +127,6 @@ const SalesTeamScreen = props => {
         color={type == 'MISSED' ? '#D9232D' : '#272727'}
         style={{marginTop: 4}}></CustomeIcon>
     );
-  };
-
-  const parseDate = dateStr => {
-    const [day, month, year] = dateStr?.split('-').map(Number);
-    return new Date(year, month - 1, day);
   };
 
   const calculateDaysBetweenDates = (startDate, endDate) => {
@@ -185,12 +175,24 @@ const SalesTeamScreen = props => {
 
   const totalNoOfDays = () => {
     try {
-      let days = calculateDaysBetween(fromDate, toDate);
-      setNumberOfDays(days);
-      let startTimestamp = convertToTimestamp(fromDate);
-      let endTimestamp = convertToTimestamp(toDate);
-      setTimestamps({start: startTimestamp, end: endTimestamp});
-      getSalesTeamContacts(startTimestamp, endTimestamp);
+      if (Platform.OS === 'ios') {
+        let days = calculateDaysBetween(fromDate, toDate);
+        setNumberOfDays(days);
+        let startTimestamp = convertToTimestamp(fromDate);
+        let endTimestamp = convertToTimestamp(toDate);
+        setTimestamps({start: startTimestamp, end: endTimestamp});
+        getSalesTeamContacts(startTimestamp, endTimestamp);
+      } else {
+        console.log('start date', startDt, endDt);
+        let fromDate = startDt;
+        let toDate = endDt;
+        let days = calculateDaysBetween(fromDate, toDate);
+        setNumberOfDays(days);
+        let startTimestamp = startOfDayFn(fromDate);
+        let endTimestamp = endOfDayFn(toDate);
+        setTimestamps({start: startTimestamp, end: endTimestamp});
+        getSalesTeamContacts(startTimestamp, endTimestamp);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -198,8 +200,56 @@ const SalesTeamScreen = props => {
     setShowCheck(false);
   };
 
+  const startOfDayFn = date => {
+    return new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+    ).getTime();
+  };
+
+  const endOfDayFn = date => {
+    return new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+      23,
+      59,
+      59,
+      999,
+    ).getTime();
+  };
+
+  const onChangeStartDate = (event, selectedDate) => {
+    const currentDate = selectedDate || startDt;
+    if (event.type === 'set') {
+      setStartDt(currentDate);
+      setShowCheck(true);
+    }
+    setShowStartDatePicker(Platform.OS === 'ios' && event.type === 'set');
+  };
+
+  const onChangeEndDate = (event, selectedDate) => {
+    const currentDate = selectedDate || endDt;
+    if (event.type === 'set') {
+      setEndDt(currentDate);
+      setShowCheck(true);
+    }
+    setShowEndDatePicker(Platform.OS === 'ios' && event.type === 'set');
+  };
+
+  const formatDate = dateString => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+
+    return `${day}-${month}-${year}`;
+  };
+
   const computeTimeStamp = range => {
     const now = new Date();
+
     let startOfDay = date => {
       return new Date(
         date.getFullYear(),
@@ -262,8 +312,8 @@ const SalesTeamScreen = props => {
   useEffect(() => {
     if (dateFilterValue === 'Custom') {
     } else {
+      console.log('date filter value', dateFilterValue);
       const {start, end} = computeTimeStamp(dateFilterValue || 'Last 7 Days');
-
       setTimestamps({start, end});
       getSalesTeamContacts(start, end);
     }
@@ -498,6 +548,8 @@ const SalesTeamScreen = props => {
   const minimumDate = createDate(convertDateToYYYYMMDD(fromDate));
   const maximumDate = new Date();
 
+  const minimumDateAndroid = createDate(convertDateToYYYYMMDD(startDt));
+
   const convertDateToArray = dateString => {
     const [day, month, year] = dateString?.split('-').map(Number);
 
@@ -618,7 +670,7 @@ const SalesTeamScreen = props => {
                 <View style={styles.WrapperStyle}>
                   {Platform.OS == 'ios' ? (
                     <>
-                      <Text style={{}}>From Date</Text>
+                      <Text>From Date</Text>
                       <TouchableOpacity style={[styles.inputContainerStyle]}>
                         <View
                           style={[styles.inputStyle, styles.inputStylesIos]}>
@@ -664,51 +716,85 @@ const SalesTeamScreen = props => {
                     </>
                   ) : (
                     <>
-                      <CustomeDatePicker
-                        value={startDate}
-                        onChange={startDate => {
-                          toggleStartDate(startDate);
-                        }}
-                        label={'From Date'}
-                        fromSalesTab
-                        mode={'date'}
-                      />
-                      <CustomeDatePicker
-                        value={endDate}
-                        onChange={endDate => toggleEndDate(endDate)}
-                        label={'To Date'}
-                        fromSalesTab
-                        mode={'date'}
-                        minDate={
-                          new Date(
-                            formattedAndDate[0],
-                            formattedAndDate[1],
-                            formattedAndDate[2],
-                          )
-                        }
-                        fromSalesTabToDate
-                      />
+                      <View style={{paddingBottom: 5}}>
+                        <Text>From Date</Text>
+                        <View style={styles.inputContainerStyleAnd}>
+                          <TouchableOpacity
+                            onPress={() => setShowStartDatePicker(true)}>
+                            <Text style={styles.text}>
+                              {formatDate(startDt)}
+                            </Text>
+                          </TouchableOpacity>
+                          <CustomeIcon
+                            name={'Calendar-blue'}
+                            size={Dimension.font20}
+                            color={colors.FontColor}
+                          />
+                        </View>
+                      </View>
+                      <Text>To Date</Text>
+                      <View style={styles.inputContainerStyleAnd}>
+                        <TouchableOpacity
+                          onPress={() => setShowEndDatePicker(true)}>
+                          <Text style={styles.text}>{formatDate(endDt)}</Text>
+                        </TouchableOpacity>
+                        <CustomeIcon
+                          name={'Calendar-blue'}
+                          size={Dimension.font20}
+                          color={colors.FontColor}
+                        />
+                      </View>
+                      {showStartDatePicker && (
+                        <DateTimePicker
+                          testID="startDatePicker"
+                          value={startDt}
+                          mode="date"
+                          is24Hour={true}
+                          display="default"
+                          onChange={onChangeStartDate}
+                        />
+                      )}
+                      {showEndDatePicker && (
+                        <DateTimePicker
+                          testID="endDatePicker"
+                          value={endDt}
+                          mode="date"
+                          is24Hour={true}
+                          display="default"
+                          onChange={onChangeEndDate}
+                          minimumDate={minimumDateAndroid}
+                        />
+                      )}
+                      {/* </View> */}
                     </>
+                    // <>
+                    //   <CustomeDatePicker
+                    //     value={fromDate}
+                    //     onChange={startDate => {
+                    //       toggleStartDate(startDate);
+                    //     }}
+                    //     label={'From Date'}
+                    //     fromSalesTab
+                    //     mode={'date'}
+                    //   />
+                    //   <CustomeDatePicker
+                    //     value={toDate}
+                    //     onChange={endDate => toggleEndDate(endDate)}
+                    //     label={'To Date'}
+                    //     fromSalesTab
+                    //     mode={'date'}
+                    //     minDate={
+                    //       new Date(
+                    //         formattedAndDate[0],
+                    //         formattedAndDate[1],
+                    //         formattedAndDate[2],
+                    //       )
+                    //     }
+                    //     fromSalesTabToDate
+                    //   />
+                    // </>
                   )}
 
-                  {/* <CustomeDatePicker
-                  value={startDate}
-                  onChange={startDate => {
-                    toggleStartDate(startDate);
-                  }}
-                  label={'From Date'}
-                  fromSalesTab
-                  mode={'date'}
-                />
-                <CustomeDatePicker
-                  value={endDate}
-                  onChange={endDate => toggleEndDate(endDate)}
-                  label={'To Date'}
-                  fromSalesTab
-                  mode={'date'}
-                  minDate={parseDateString(startDate)}
-                  fromSalesTabToDate
-                /> */}
                   <>
                     <TouchableOpacity
                       onPress={() => {
