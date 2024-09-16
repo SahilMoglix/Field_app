@@ -240,15 +240,6 @@ const ContactScreen = props => {
         <TouchableOpacity
           style={styles.arrowBtn}
           onPress={() => {
-            //   await logAnalytics('Open_Dialer', {
-            //     Contact: item.phone,
-            //     Screen_Name: 'Contacts',
-            //   });
-            //   phoneCallDetector(item);
-            //   Linking.openURL(
-            //     `${Platform.OS == 'android' ? 'tel' : 'telprompt'}:${item.phone}`,
-            //   );
-
             Platform.OS == 'android' ? openDialerFn(item) : showModalFn(item);
           }}>
           <CustomeIcon

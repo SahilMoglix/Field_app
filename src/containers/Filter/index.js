@@ -11,7 +11,7 @@ import {
   SafeAreaView,
   Keyboard,
 } from 'react-native';
-import Contacts from 'react-native-contacts';
+//import Contacts from 'react-native-contacts';
 import Modal from 'react-native-modal';
 import Dimension from '../../Theme/Dimension';
 import styles from './style';
